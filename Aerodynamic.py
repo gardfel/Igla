@@ -3,6 +3,12 @@ import math as kk
 
 def Cy_nos(*args):
 
+    """
+    Расчет Су головной части
+    :param args:
+    :return:
+    """
+
     Cy1 = args[0]
     Cy1_1 = args[1]
     Cy2 = args[2]
@@ -26,3 +32,9 @@ def Cy_nos(*args):
     Cy_iz = Cy1_2 * (2 * r / D) ** 2 + Cy_ob
 
     return Cy_iz
+
+
+"""def Cy_(*args):"""
+
+
+

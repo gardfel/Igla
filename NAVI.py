@@ -51,11 +51,15 @@ class Rocket(object):
         l_kr = 1.46
         c_k = 0.03
 
+        b_ak_kr = 0.094
+        x_otn_op_kr = 0.846 / b_ak_kr
+
         M = self.v / 335
         Cyy_nos = [Aerodynamic.Cy_nos(Tabl.tab_3_2(M, l_nos, l_cil), Tabl.tab_3_4(M, 0, l_cil),
                                   Tabl.tab_3_2(M, 1.32, 22.43), Tabl.tab_3_4(M, 0, 22.43),
                                   Tabl.tab_3_4(M, 1, 23.75))]
-        Cyy_kr = [Tabl.tab_3_5(M, l_kr, c_k, tan_05)]
+        Cyy_kr = [Tabl.tab_3_5(M * kk.sqrt(Tabl.tab_3_22(M, x_otn_op_kr)), l_kr, c_k, tan_05)]
+
 
         #while (abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5):
         while self.v < 887:
@@ -69,7 +73,7 @@ class Rocket(object):
                                     Tabl.tab_3_2(M, 1.32, 22.43), Tabl.tab_3_4(M, 0, 22.43),
                                     Tabl.tab_3_4(M, 1, 23.75))
             Cyy_nos.append(Cy_nos)
-            Cy_kr = Tabl.tab_3_5(M, l_kr, c_k, tan_05)
+            Cy_kr = Tabl.tab_3_5(M * kk.sqrt(Tabl.tab_3_22(M, x_otn_op_kr)), l_kr, c_k, tan_05)
             Cyy_kr.append(Cy_kr)
             t += dt
             xx.append(self.x)
