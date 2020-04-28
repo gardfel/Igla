@@ -142,11 +142,6 @@ def tab_3_5(*args):
     c_ = args[2]
     tg_khi_05 = args[3]
 
-    if (Mah ** 2 - 1) >= 0:
-        razmm = lambd_k * (Mah ** 2 - 1) ** 0.5
-    else:
-        razmm = -lambd_k * (1 - Mah ** 2) ** 0.5
-
 
     # lambd*tan_0.5 = 0
     Cy1_iz_kr_a_000 = [0.0176, 0.0187, 0.0200, 0.0216, 0.0235, 0.0258, 0.0288, 0.0325, 0.0365, 0.0350, 0.0306, 0.0265,
@@ -187,21 +182,29 @@ def tab_3_5(*args):
     # lambd*tan_0.5 = 3
     Cy1_iz_kr_g_000 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0200, 0.0220, 0.0245, 0.0265, 0.0274, 0.0265, 0.0245,
                        0.0220, 0.0197, 0.0178, 0.0160, 0.0146]
-    Cy1_iz_kr_v_025 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0200, 0.0215, 0.0236, 0.0250, 0.0245, 0.0226, 0.0208,
+    Cy1_iz_kr_g_025 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0200, 0.0215, 0.0236, 0.0250, 0.0245, 0.0226, 0.0208,
                        0.0190, 0.0175, 0.0162, 0.0150, 0.0139]
-    Cy1_iz_kr_v_050 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0200, 0.0216, 0.0233, 0.0239, 0.0231, 0.0218, 0.0202,
+    Cy1_iz_kr_g_050 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0200, 0.0216, 0.0233, 0.0239, 0.0231, 0.0218, 0.0202,
                        0.0185, 0.0172, 0.0158, 0.0147, 0.0138]
-    Cy1_iz_kr_v_100 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0204, 0.0215, 0.0221, 0.0217, 0.0209, 0.0199, 0.0187,
+    Cy1_iz_kr_g_100 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0204, 0.0215, 0.0221, 0.0217, 0.0209, 0.0199, 0.0187,
                        0.0175, 0.0163, 0.0153, 0.0143, 0.0134]
-    Cy1_iz_kr_v_150 = [0.0136, 0.0145, 0.0158, 0.0174, 0.0187, 0.0197, 0.0200, 0.0198, 0.0194, 0.0188, 0.0181, 0.0172,
+    Cy1_iz_kr_g_150 = [0.0136, 0.0145, 0.0158, 0.0174, 0.0187, 0.0197, 0.0200, 0.0198, 0.0194, 0.0188, 0.0181, 0.0172,
                        0.0162, 0.0153, 0.0144, 0.0136, 0.0127]
 
     razm = [-3.5, -3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5]
 
-    k = 0
-    i = 0
+    if (Mah ** 2 - 1) <= 0:
+        razmm = -lambd_k * (-Mah ** 2 + 1) ** 0.5
+    elif (lambd_k * kk.sqrt(Mah ** 2 - 1)) >= 10:
+        return 4 / (57.3 * (kk.sqrt(Mah ** 2 - 1)))
+    else:
+        razmm = lambd_k * (Mah ** 2 - 1) ** 0.5
 
     k = int(razmm // 0.5 + 8)
+    if k >= 14:
+        k = 14
+    if k <= 0:
+        k = 0
 
     '''while (k == 0) and (i <= len(razm)):
         if razmm <= razm[i]:
@@ -213,7 +216,7 @@ def tab_3_5(*args):
 
     krit = lambd_k * c_ ** (1 / 3)
 
-    Cy_a_025 = interpol(Cy1_iz_kr_a_025[k], Cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k]))
+    '''Cy_a_025 = interpol(Cy1_iz_kr_a_025[k], Cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k]))
     Cy_a_050 = interpol(Cy1_iz_kr_a_050[k], Cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k]))
     Cy_a = interpol(Cy_a_050, Cy_a_025, procent(krit, 0.25, 0.5))
 
@@ -221,9 +224,183 @@ def tab_3_5(*args):
     Cy_b_050 = interpol(Cy1_iz_kr_b_050[k], Cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k]))
     Cy_b = interpol(Cy_b_050, Cy_b_025, procent(krit, 0.25, 0.5))
 
-    cy1 = interpol(Cy_b, Cy_a, otnos)
+    cy1 = interpol(Cy_b, Cy_a, otnos)'''
 
-    return cy1 * lambd_k
+    if otnos <= 0:
+        if krit == 0:
+            Cy1 = interpol(Cy1_iz_kr_a_000[k], Cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+        elif (krit >= 0) and (krit <= 0.25):
+            Cy1 = interpol(interpol(Cy1_iz_kr_a_025[k], Cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(Cy1_iz_kr_a_000[k], Cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           procent(krit, 0, 0.25))
+        elif (krit >= 0.25) and (krit <= 0.5):
+            Cy1 = interpol(interpol(Cy1_iz_kr_a_050[k], Cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(Cy1_iz_kr_a_025[k], Cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           procent(krit, 0.25, 0.5))
+        elif (krit >= 0.5) and (krit <= 1):
+            Cy1 = interpol(interpol(Cy1_iz_kr_a_100[k], Cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(Cy1_iz_kr_a_050[k], Cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           procent(krit, 0.5, 1))
+        elif (krit >= 1) and (krit <= 1.5):
+            Cy1 = interpol(interpol(Cy1_iz_kr_a_150[k], Cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(Cy1_iz_kr_a_100[k], Cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           procent(krit, 1, 1.5))
+        else:
+            Cy1 = interpol(Cy1_iz_kr_a_150[k], Cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+
+    elif (otnos >= 0) and (otnos <= 1):
+        param = procent(otnos, 0, 1)
+        if krit == 0:
+            Cy1a = interpol(Cy1_iz_kr_a_000[k], Cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1b = interpol(Cy1_iz_kr_b_000[k], Cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 0) and (krit <= 0.25):
+            Cy1a = interpol(interpol(Cy1_iz_kr_a_025[k], Cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_a_000[k], Cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0, 0.25))
+            Cy1b = interpol(interpol(Cy1_iz_kr_b_025[k], Cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_b_000[k], Cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0, 0.25))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 0.25) and (krit <= 0.5):
+            Cy1a = interpol(interpol(Cy1_iz_kr_a_050[k], Cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_a_025[k], Cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.25, 0.5))
+            Cy1b = interpol(interpol(Cy1_iz_kr_b_050[k], Cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_b_025[k], Cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.25, 0.5))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 0.5) and (krit <= 1):
+            Cy1a = interpol(interpol(Cy1_iz_kr_a_100[k], Cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_a_050[k], Cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.5, 1))
+            Cy1b = interpol(interpol(Cy1_iz_kr_b_100[k], Cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_b_050[k], Cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.5, 1))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 1) and (krit <= 1.5):
+            Cy1a = interpol(interpol(Cy1_iz_kr_a_150[k], Cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_a_100[k], Cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 1, 1.5))
+            Cy1b = interpol(interpol(Cy1_iz_kr_b_150[k], Cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_b_100[k], Cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 1, 1.5))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        else:
+            Cy1a = interpol(Cy1_iz_kr_a_150[k], Cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1b = interpol(Cy1_iz_kr_b_150[k], Cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+
+    elif (otnos >= 1) and (otnos <= 2):
+        param = procent(otnos, 1, 2)
+        if krit == 0:
+            Cy1a = interpol(Cy1_iz_kr_b_000[k], Cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1b = interpol(Cy1_iz_kr_v_000[k], Cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 0) and (krit <= 0.25):
+            Cy1a = interpol(interpol(Cy1_iz_kr_b_025[k], Cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_b_000[k], Cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0, 0.25))
+            Cy1b = interpol(interpol(Cy1_iz_kr_v_025[k], Cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_v_000[k], Cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0, 0.25))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 0.25) and (krit <= 0.5):
+            Cy1a = interpol(interpol(Cy1_iz_kr_b_050[k], Cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_b_025[k], Cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.25, 0.5))
+            Cy1b = interpol(interpol(Cy1_iz_kr_v_050[k], Cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_v_025[k], Cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.25, 0.5))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 0.5) and (krit <= 1):
+            Cy1a = interpol(interpol(Cy1_iz_kr_b_100[k], Cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_b_050[k], Cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.5, 1))
+            Cy1b = interpol(interpol(Cy1_iz_kr_v_100[k], Cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_v_050[k], Cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.5, 1))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 1) and (krit <= 1.5):
+            Cy1a = interpol(interpol(Cy1_iz_kr_b_150[k], Cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_b_100[k], Cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 1, 1.5))
+            Cy1b = interpol(interpol(Cy1_iz_kr_v_150[k], Cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_v_100[k], Cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 1, 1.5))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        else:
+            Cy1a = interpol(Cy1_iz_kr_b_150[k], Cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1b = interpol(Cy1_iz_kr_v_150[k], Cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+
+    elif (otnos >= 2) and (otnos <= 3):
+        param = procent(otnos, 2, 3)
+        if krit == 0:
+            Cy1a = interpol(Cy1_iz_kr_v_000[k], Cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1b = interpol(Cy1_iz_kr_g_000[k], Cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 0) and (krit <= 0.25):
+            Cy1a = interpol(interpol(Cy1_iz_kr_v_025[k], Cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_v_000[k], Cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0, 0.25))
+            Cy1b = interpol(interpol(Cy1_iz_kr_g_025[k], Cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_g_000[k], Cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0, 0.25))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 0.25) and (krit <= 0.5):
+            Cy1a = interpol(interpol(Cy1_iz_kr_v_050[k], Cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_v_025[k], Cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.25, 0.5))
+            Cy1b = interpol(interpol(Cy1_iz_kr_g_050[k], Cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_g_025[k], Cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.25, 0.5))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 0.5) and (krit <= 1):
+            Cy1a = interpol(interpol(Cy1_iz_kr_v_100[k], Cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_v_050[k], Cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.5, 1))
+            Cy1b = interpol(interpol(Cy1_iz_kr_g_100[k], Cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_g_050[k], Cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 0.5, 1))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        elif (krit >= 1) and (krit <= 1.5):
+            Cy1a = interpol(interpol(Cy1_iz_kr_v_150[k], Cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_v_100[k], Cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 1, 1.5))
+            Cy1b = interpol(interpol(Cy1_iz_kr_g_150[k], Cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(Cy1_iz_kr_g_100[k], Cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            procent(krit, 1, 1.5))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+        else:
+            Cy1a = interpol(Cy1_iz_kr_v_150[k], Cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1b = interpol(Cy1_iz_kr_g_150[k], Cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            Cy1 = interpol(Cy1b, Cy1a, param)
+
+    else:
+        if krit == 0:
+            Cy1 = interpol(Cy1_iz_kr_g_000[k], Cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+        elif (krit >= 0) and (krit <= 0.25):
+            Cy1 = interpol(interpol(Cy1_iz_kr_g_025[k], Cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(Cy1_iz_kr_g_000[k], Cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           procent(krit, 0, 0.25))
+        elif (krit >= 0.25) and (krit <= 0.5):
+            Cy1 = interpol(interpol(Cy1_iz_kr_g_050[k], Cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(Cy1_iz_kr_g_025[k], Cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           procent(krit, 0.25, 0.5))
+        elif (krit >= 0.5) and (krit <= 1):
+            Cy1 = interpol(interpol(Cy1_iz_kr_g_100[k], Cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(Cy1_iz_kr_g_050[k], Cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           procent(krit, 0.5, 1))
+        elif (krit >= 1) and (krit <= 1.5):
+            Cy1 = interpol(interpol(Cy1_iz_kr_g_150[k], Cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(Cy1_iz_kr_g_100[k], Cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           procent(krit, 1, 1.5))
+        elif krit >= 1.5:
+            Cy1 = interpol(Cy1_iz_kr_g_150[k], Cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+
+
+    return Cy1 * lambd_k
 
 
 def tab_3_16(*args):
@@ -1461,6 +1638,51 @@ def tab_5_11(*args):
         k = int(D_ // 0.1 + 5)
 
     return interpol(f1[k], f1[k - 1], procent(D_, D_tab[k - 1], D_tab[k])) * l_k / 2
+
+def tab_atm(*args):
+
+    """
+    вывод параметров стандартной атмосферы при определенной высоте
+    :param args: высота [м], выбор параметра (1 - Температура [к], 2 - местная скорость звука [м / с],
+    3 - давление [Па], 4 - плотность [кг / м^3], 5 - кинематическая вязкость [м ^ 2 / с])
+    :return:
+    """
+
+    H = args[0]
+    param = args[1]
+
+    H_tab = [-2000, -1500, -1000, -500, 0, 500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]
+
+    T_atm = [301.2, 297.9, 294.7, 291.4, 288.2, 284.9, 281.7, 278.4, 275.2, 271.9, 268.7, 262.2, 255.7, 249.2, 242.7,
+             236.2, 229.7, 223.3]
+    a_atm = [347.9, 346.0, 344.1, 342.2, 340.3, 338.4, 336.4, 334.5, 332.5, 330.6, 328.6, 324.6, 320.6, 316.5, 312.3,
+             308.1, 303.9, 299.6]
+    P_atm = [127783, 120696, 113931, 107478, 101330, 95464, 89877, 84559, 79499, 74690, 70123, 61661, 54052, 47217,
+             41106, 35653, 30801, 26500]
+    ro_atm = [1.48, 1.41, 1.35, 1.28, 1.23, 1.17, 1.11, 1.06, 1.01, 0.96, 0.91, 0.82, 0.74, 0.66, 0.59, 0.53, 0.47,
+              0.41]
+    ni_atm = [1.253 * 10 ** -5, 1.301 * 10 ** -5, 1.352 * 10 ** -5, 1.405 * 10 ** -5, 1.46 * 10 ** -5, 1.52 * 10 ** -5,
+              1.58 * 10 ** -5, 1.65 * 10 ** -5, 1.71 * 10 ** -5, 1.79 * 10 ** -5, 1.86 * 10 ** -5, 2.03 * 10 ** -5,
+              2.21 * 10 ** -5, 2.42 * 10 ** -5, 2.65 * 10 ** -5, 2.9 * 10 ** -5, 3.2 * 10 ** -5, 3.53 * 10 ** -5]
+
+    if H <= 3000:
+        k = int(H // 500 + 5)
+    else:
+        k = int(H // 1000 + 8)
+
+    if param == 1:
+        return interpol(T_atm[k], T_atm[k - 1], procent(H, H_tab[k - 1], H_tab[k]))
+    elif param == 2:
+        return interpol(a_atm[k], a_atm[k - 1], procent(H, H_tab[k - 1], H_tab[k]))
+    elif param == 3:
+        return interpol(P_atm[k], P_atm[k - 1], procent(H, H_tab[k - 1], H_tab[k]))
+    elif param == 4:
+        return interpol(ro_atm[k], ro_atm[k - 1], procent(H, H_tab[k - 1], H_tab[k]))
+    elif param == 5:
+        return interpol(ni_atm[k], ni_atm[k - 1], procent(H, H_tab[k - 1], H_tab[k]))
+    else:
+        print("Ошибка: неверное значение при выборе параметра")
+
 
 
 '''V = 650
