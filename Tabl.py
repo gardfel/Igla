@@ -1685,6 +1685,71 @@ def tab_atm(*args):
 
 
 
+def graph_test_3_5():
+    from math import sqrt
+    import numpy as np
+
+    def convert_foo_3_5(a1, a2, a3):
+        lambd_k = 1.2
+        if a1 < 0:
+            while (a1 / lambd_k)**2 > 1:
+                lambd_k *= 1.5 
+            mach = sqrt(1 - (a1 / lambd_k)**2) 
+        else:
+            mach = sqrt((a1 / lambd_k)**2 + 1)
+        c_ = (a2 / lambd_k)**3 
+        tg_khi_05 = a3 / lambd_k 
+        return tab_3_5(mach, lambd_k, c_, tg_khi_05) / lambd_k
+    
+    def plot_line(ax, a2, a3):
+        xs = np.linspace(-3, 9, 1000)
+        ys = [convert_foo_3_5(a1, a2, a3) for a1 in xs]
+        ax.plot(xs, ys, label=f'a2 = {a2}')
+        ax.grid(True)
+        ax.legend()
+    
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2,2)
+    a3 = 0
+    ax = ax1
+    plot_line(ax, 0.25, a3)
+    plot_line(ax, 0.5, a3)
+    plot_line(ax, 1, a3)
+    plot_line(ax, 1.5, a3)
+    plot_line(ax, 1.7, a3)
+
+    a3 = 1
+    ax = ax2
+    plot_line(ax, 0.25, a3)
+    plot_line(ax, 0.5, a3)
+    plot_line(ax, 1, a3)
+    plot_line(ax, 1.5, a3)
+    plot_line(ax, 1.7, a3)
+
+    a3 = 2
+    ax = ax3
+    plot_line(ax, 0.25, a3)
+    plot_line(ax, 0.5, a3)
+    plot_line(ax, 1, a3)
+    plot_line(ax, 1.5, a3)
+    plot_line(ax, 1.7, a3)
+
+    a3 = 3
+    ax = ax4
+    plot_line(ax, 0.25, a3)
+    plot_line(ax, 0.5, a3)
+    plot_line(ax, 1, a3)
+    plot_line(ax, 1.5, a3)
+    plot_line(ax, 1.7, a3)
+
+    plt.show()
+
+
+if __name__ == "__main__":
+    graph_test_3_5()
+
+    
+
+
 '''V = 650
 a = 335
 r = 4
