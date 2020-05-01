@@ -445,11 +445,11 @@ def tab_3_21(*args):
 
 def tab_3_22(*args):
 
-    '''
+    """
     Функция вывода коэффициента торможения потока, вызванного обтеканием передних несущих поверхностей
     :param args: Число Маха, относительное расстояние между оперением и крыльями
     :return:
-    '''
+    """
 
     mah = args[0]
     x_ = args[1]
@@ -666,34 +666,42 @@ def tab_4_11(*args):
     mah_tab = [0.6, 0.7, 0.8, 0.9, 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.5,
                3, 3.5, 4, 4.5, 5, 5.5]
     k = 0
+    '''plt.plot(mah_tab, cx_nos_20)
+    plt.show()'''
     if mah <= 0.6:
-        k = 0
-    else:
-        for i in range(len(mah_tab)):
-            if (mah <= mah_tab[i]) and (mah >= mah_tab[i - 1]):
-                k = i
+        k = 1
+    elif mah <= 1:
+        k = int(mah // 0.1 - 5)
+    elif mah <= 1.4:
+        k = int(mah // 0.05 - 15)
+    elif mah <= 2:
+        k = int(mah // 0.1 - 1)
+    elif mah <= 5.5:
+        k = int(mah // 0.5 + 15)
+    elif mah >= 5.5:
+        k = len(mah_tab) - 1
 
     if lambd <= 1.5:
         cx_nos = interpol(cx_nos_15[k], cx_nos_15[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k]))
-    elif (lambd <= 2) and (lambd >= 1.5):
-        cx_nos = interpol(interpol(cx_nos_20[k], cx_nos_20[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
-                          interpol(cx_nos_15[k], cx_nos_15[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
+    elif (lambd <= 2) and (lambd > 1.5):
+        cx_nos = interpol(interpol(cx_nos_20[k], cx_nos_20[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_15[k], cx_nos_15[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 1.5, 2))
-    elif (lambd <= 2.5) and (lambd >= 2):
-        cx_nos = interpol(interpol(cx_nos_25[k], cx_nos_25[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
-                          interpol(cx_nos_20[k], cx_nos_20[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
+    elif (lambd <= 2.5) and (lambd > 2):
+        cx_nos = interpol(interpol(cx_nos_25[k], cx_nos_25[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_20[k], cx_nos_20[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 2, 2.5))
-    elif (lambd <= 3) and (lambd >= 2.5):
-        cx_nos = interpol(interpol(cx_nos_30[k], cx_nos_30[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
-                          interpol(cx_nos_25[k], cx_nos_25[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
+    elif (lambd <= 3) and (lambd > 2.5):
+        cx_nos = interpol(interpol(cx_nos_30[k], cx_nos_30[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_25[k], cx_nos_25[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 2.5, 3))
-    elif (lambd <= 4) and (lambd >= 3):
-        cx_nos = interpol(interpol(cx_nos_40[k], cx_nos_40[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
-                          interpol(cx_nos_30[k], cx_nos_30[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
+    elif (lambd <= 4) and (lambd > 3):
+        cx_nos = interpol(interpol(cx_nos_40[k], cx_nos_40[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_30[k], cx_nos_30[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 3, 4))
-    elif (lambd <= 5) and (lambd >= 4):
-        cx_nos = interpol(interpol(cx_nos_50[k], cx_nos_50[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
-                          interpol(cx_nos_40[k], cx_nos_40[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
+    elif (lambd <= 5) and (lambd > 4):
+        cx_nos = interpol(interpol(cx_nos_50[k], cx_nos_50[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_40[k], cx_nos_40[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 4, 5))
     else:
         cx_nos = interpol(cx_nos_50[k], cx_nos_50[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k]))
@@ -801,7 +809,8 @@ def tab_4_24(*args):
                            interpol(cx_korm_nu_000_20[k], cx_korm_nu_000_20[k - 1], procent(mah, mah_tab[k - 1],
                                                                                             mah_tab[k])),
                            procent(lambd, 2, 3))
-    if (nu_korm <= 0.5) and (nu_korm >= 0):
+
+    elif (nu_korm <= 0.5) and (nu_korm >= 0):
         proc = procent(nu_korm, 0, 0.5)
         if lambd <= 1.5:
             cx_korm = interpol(interpol(cx_korm_nu_050_15[k], cx_korm_nu_050_15[k - 1], procent(mah, mah_tab[k - 1],
@@ -844,7 +853,7 @@ def tab_4_24(*args):
             cx_nu_00 = interpol(cx_korm_nu_000_30[k], cx_korm_nu_000_30[k - 1],
                                 procent(mah, mah_tab[k - 1], mah_tab[k]))
             cx_korm = interpol(cx_nu_05, cx_nu_00, proc)
-    if (nu_korm <= 0.75) and (nu_korm >= 0.5):
+    elif (nu_korm <= 0.75) and (nu_korm >= 0.5):
         proc = procent(nu_korm, 0.5, 0.75)
         if lambd <= 1:
             cx_korm = interpol(interpol(cx_korm_nu_075_10[k], cx_korm_nu_075_10[k - 1], procent(mah, mah_tab[k - 1],
@@ -1343,7 +1352,7 @@ def tab_4_40(*args):
 
     if param == 0:
         ksi = interpol(ksi_ozhiv[k], ksi_ozhiv[k - 1], procent(razmm, razm[k - 1], razm[k]))
-    if param == 0:
+    if param == 1:
         ksi = interpol(ksi_konic[k], ksi_konic[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
     return ksi
