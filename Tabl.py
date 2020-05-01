@@ -8,47 +8,47 @@ def procent(*args):
     tab1 = args[1]
     tab2 = args[2]
 
-    return ((var1 - tab1) / (tab2 - tab1))
+    return (var1 - tab1) / (tab2 - tab1)
 
 
 def interpol(*args):
 
-    tab2 = args[0]
-    tab1 = args[1]
+    tab1 = args[0]
+    tab2 = args[1]
     proc = args[2]
 
-    return (tab2 + (tab2 - tab1) * proc)
+    return tab2 + (tab1 - tab2) * proc
 
 
 def tab_3_2(*args):
-    '''
+    """
     Функция для вывода Су для конической ГЧ
     :param args: число Маха, относительное удлинение носка и цилиндрической части
     :return: Значение Су ГЧ
-    '''
+    """
 
-    M = args[0]
+    mah = args[0]
     lambd_nos = args[1]
     lambd_cil = args[2]
 
-    Cy1iz_alf_0 = [0.0350, 0.0350, 0.0350, 0.0348, 0.0338, 0.0335, 0.0333, 0.0327, 0.0323, 0.0321, 0.0321, 0.0321, 0.0320,
-                   0.0320, 0.0320, 0.0320, 0.0320, 0.0320]
-    Cy1iz_alf_05 = [0.0350, 0.0350, 0.0350, 0.0358, 0.0380, 0.0426, 0.0455, 0.0465, 0.0460, 0.0448, 0.0435, 0.0425, 0.0417,
-                    0.0410, 0.0402, 0.0400, 0.0395, 0.0390]
-    Cy1iz_alf_1 = [0.0350, 0.0350, 0.0350, 0.0358, 0.0380, 0.0430, 0.0477, 0.0505, 0.0512, 0.0507, 0.0500, 0.0490, 0.0480,
-                   0.0473, 0.0465, 0.0460, 0.0450, 0.0448]
-    Cy1iz_alf_2 = [0.0350, 0.0350, 0.0350, 0.0358, 0.0380, 0.0430, 0.0477, 0.0517, 0.0540, 0.0560, 0.0565, 0.0560, 0.0555,
-                   0.0550, 0.0545, 0.0537, 0.0530, 0.0525]
-    Cy1iz_alf_3 = [0.0350, 0.0350, 0.0350, 0.0358, 0.0380, 0.0430, 0.0477, 0.0517, 0.0548, 0.0570, 0.0580, 0.0585, 0.0587,
-                   0.0587, 0.0585, 0.0583, 0.0580, 0.0575]
-    Cy1iz_alf_4 = [0.0350, 0.0350, 0.0350, 0.0358, 0.0380, 0.0430, 0.0477, 0.0517, 0.0548, 0.0570, 0.0584, 0.0594, 0.0599,
-                   0.0600, 0.0600, 0.0600, 0.0600, 0.0600]
+    cy1iz_alf_0 = [0.0350, 0.0350, 0.0350, 0.0348, 0.0338, 0.0335, 0.0333, 0.0327, 0.0323, 0.0321, 0.0321, 0.0321,
+                   0.0320, 0.0320, 0.0320, 0.0320, 0.0320, 0.0320]
+    cy1iz_alf_05 = [0.0350, 0.0350, 0.0350, 0.0358, 0.0380, 0.0426, 0.0455, 0.0465, 0.0460, 0.0448, 0.0435, 0.0425,
+                    0.0417, 0.0410, 0.0402, 0.0400, 0.0395, 0.0390]
+    cy1iz_alf_1 = [0.0350, 0.0350, 0.0350, 0.0358, 0.0380, 0.0430, 0.0477, 0.0505, 0.0512, 0.0507, 0.0500, 0.0490,
+                   0.0480, 0.0473, 0.0465, 0.0460, 0.0450, 0.0448]
+    cy1iz_alf_2 = [0.0350, 0.0350, 0.0350, 0.0358, 0.0380, 0.0430, 0.0477, 0.0517, 0.0540, 0.0560, 0.0565, 0.0560,
+                   0.0555, 0.0550, 0.0545, 0.0537, 0.0530, 0.0525]
+    cy1iz_alf_3 = [0.0350, 0.0350, 0.0350, 0.0358, 0.0380, 0.0430, 0.0477, 0.0517, 0.0548, 0.0570, 0.0580, 0.0585,
+                   0.0587, 0.0587, 0.0585, 0.0583, 0.0580, 0.0575]
+    cy1iz_alf_4 = [0.0350, 0.0350, 0.0350, 0.0358, 0.0380, 0.0430, 0.0477, 0.0517, 0.0548, 0.0570, 0.0584, 0.0594,
+                   0.0599, 0.0600, 0.0600, 0.0600, 0.0600, 0.0600]
     razm = [-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6]
 
-    if (M ** 2 - 1) >= 0:
-        razmm = kk.sqrt(M ** 2 - 1) / lambd_nos
+    if (mah ** 2 - 1) >= 0:
+        razmm = kk.sqrt(mah ** 2 - 1) / lambd_nos
     else:
-        razmm = -kk.sqrt(1 - M ** 2) / lambd_nos
+        razmm = -kk.sqrt(1 - mah ** 2) / lambd_nos
 
     otnos = lambd_cil / lambd_nos
 
@@ -57,359 +57,324 @@ def tab_3_2(*args):
     if k >= 17:
         k = 17
 
-    '''while (k == 0) and (i <= len(razm)):
-        if razmm <= razm[i]:
-            if razmm >= razm[i - 1]:
-                k = i
-        i += 1'''
-
-
     if otnos == 0:
-        Cy1 = interpol(Cy1iz_alf_0[k], Cy1iz_alf_0[k -1], procent(razmm, razm[k - 1], razm[k]))
+        cy1 = interpol(cy1iz_alf_0[k], cy1iz_alf_0[k - 1], procent(razmm, razm[k - 1], razm[k]))
     elif (otnos <= 0.5) and (otnos >= 0):
-        Cy1 = interpol(interpol(Cy1iz_alf_05[k], Cy1iz_alf_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                       interpol(Cy1iz_alf_0[k], Cy1iz_alf_0[k - 1], procent(razmm, razm[k - 1], razm[k])),(otnos / 0.5))
+        cy1 = interpol(interpol(cy1iz_alf_05[k], cy1iz_alf_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                       interpol(cy1iz_alf_0[k], cy1iz_alf_0[k - 1], procent(razmm, razm[k - 1], razm[k])),(otnos / 0.5))
     elif (otnos <= 1) and (otnos >= 0.5):
-        Cy1 = interpol(interpol(Cy1iz_alf_1[k], Cy1iz_alf_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                       interpol(Cy1iz_alf_05[k], Cy1iz_alf_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+        cy1 = interpol(interpol(cy1iz_alf_1[k], cy1iz_alf_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                       interpol(cy1iz_alf_05[k], cy1iz_alf_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                        (otnos - 0.5) / 0.5)
     elif (otnos <= 2) and (otnos >= 1):
-        Cy1 = interpol(interpol(Cy1iz_alf_2[k], Cy1iz_alf_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                       interpol(Cy1iz_alf_1[k], Cy1iz_alf_1[k - 1], procent(razmm, razm[k - 1], razm[k])), otnos - 1)
+        cy1 = interpol(interpol(cy1iz_alf_2[k], cy1iz_alf_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                       interpol(cy1iz_alf_1[k], cy1iz_alf_1[k - 1], procent(razmm, razm[k - 1], razm[k])), otnos - 1)
     elif (otnos <= 3) and (otnos >= 2):
-        Cy1 = interpol(interpol(Cy1iz_alf_3[k], Cy1iz_alf_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                       interpol(Cy1iz_alf_2[k], Cy1iz_alf_2[k - 1], procent(razmm, razm[k - 1], razm[k])), otnos - 2)
+        cy1 = interpol(interpol(cy1iz_alf_3[k], cy1iz_alf_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                       interpol(cy1iz_alf_2[k], cy1iz_alf_2[k - 1], procent(razmm, razm[k - 1], razm[k])), otnos - 2)
     elif (otnos <= 4) and (otnos >= 3):
-        Cy1 = interpol(interpol(Cy1iz_alf_4[k], Cy1iz_alf_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                       interpol(Cy1iz_alf_3[k], Cy1iz_alf_3[k - 1], procent(razmm, razm[k - 1], razm[k])), otnos - 3)
+        cy1 = interpol(interpol(cy1iz_alf_4[k], cy1iz_alf_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                       interpol(cy1iz_alf_3[k], cy1iz_alf_3[k - 1], procent(razmm, razm[k - 1], razm[k])), otnos - 3)
     else:
-        Cy1 = interpol(Cy1iz_alf_4[k], Cy1iz_alf_4[k -1], procent(razmm, razm[k - 1], razm[k]))
+        cy1 = interpol(cy1iz_alf_4[k], cy1iz_alf_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
-    return Cy1
+    return cy1
 
 
 def tab_3_4(*args):
-    '''
+    """
     Функция для вывода Су плоской и сферической ГЧ
     :param args: число маха, 0 - для сферической, 1 - для плоской, относительное удлинение цилиндрической части
     :return: Значение Су ГЧ
-    '''
+    """
 
-    M = args[0]
+    mah = args[0]
     krit = args[1]
     lambd_cil = args[2]
 
-    Cy1iz_sph = [0.0345, 0.0345, 0.0350, 0.0355, 0.0383, 0.0433, 0.0440, 0.0427, 0.0408, 0.0390, 0.0370,
+    cy1iz_sph = [0.0345, 0.0345, 0.0350, 0.0355, 0.0383, 0.0433, 0.0440, 0.0427, 0.0408, 0.0390, 0.0370,
                  0.0355, 0.0335, 0.0318, 0.0300]
-    Cy1iz_cil = [0.0345, 0.0345, 0.0350, 0.0350, 0.0365, 0.0375, 0.0370, 0.0355, 0.0333, 0.0315, 0.0300,
+    cy1iz_cil = [0.0345, 0.0345, 0.0350, 0.0350, 0.0365, 0.0375, 0.0370, 0.0355, 0.0333, 0.0315, 0.0300,
                  0.0283, 0.0270, 0.0255, 0.0240]
     razm = [-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 
-    if (M ** 2 - 1) >= 0:
-        razmm = kk.sqrt(M ** 2 - 1) / lambd_cil
+    if (mah ** 2 - 1) >= 0:
+        razmm = kk.sqrt(mah ** 2 - 1) / lambd_cil
     else:
-        razmm = -kk.sqrt(1 - M ** 2) / lambd_cil
-
-    k = 0
-    i = 0
+        razmm = -kk.sqrt(1 - mah ** 2) / lambd_cil
 
     k = int(razmm // 0.1 + 5)
 
-    """while (k == 0) and (i <= len(razm)):
-        if razmm <= razm[i]:
-            if razmm >= razm[i - 1]:
-                k = i
-        i += 1"""
-
     if krit == 0:
-        cy1 = interpol(Cy1iz_sph[k], Cy1iz_sph[k - 1], procent(razmm, razm[k - 1], razm[k]))
+        cy1 = interpol(cy1iz_sph[k], cy1iz_sph[k - 1], procent(razmm, razm[k - 1], razm[k]))
     elif krit == 1:
-        cy1 = interpol(Cy1iz_cil[k], Cy1iz_cil[k - 1], procent(razmm, razm[k - 1], razm[k]))
+        cy1 = interpol(cy1iz_cil[k], cy1iz_cil[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
     return cy1
 
 
 def tab_3_5(*args):
 
-    '''
+    """
     Функиця для вывода значения Су крыльев
     :param args: Число Маха, удлинение крыльев, относительная толщина профиля крыла, тангенс угла средней стреловидности
     :return: Значение Су для изолированных крыльев
-    '''
+    """
 
-    Mah = args[0]
+    mah = args[0]
     lambd_k = args[1]
     c_ = args[2]
     tg_khi_05 = args[3]
 
-
     # lambd*tan_0.5 = 0
-    Cy1_iz_kr_a_000 = [0.0176, 0.0187, 0.0200, 0.0216, 0.0235, 0.0258, 0.0288, 0.0325, 0.0365, 0.0350, 0.0306, 0.0265,
+    cy1_iz_kr_a_000 = [0.0176, 0.0187, 0.0200, 0.0216, 0.0235, 0.0258, 0.0288, 0.0325, 0.0365, 0.0350, 0.0306, 0.0265,
                        0.0228, 0.0200, 0.0178, 0.0158, 0.0145]
-    Cy1_iz_kr_a_025 = [0.0176, 0.0187, 0.0200, 0.0216, 0.0235, 0.0258, 0.0288, 0.0321, 0.0344, 0.0330, 0.0298, 0.0260,
+    cy1_iz_kr_a_025 = [0.0176, 0.0187, 0.0200, 0.0216, 0.0235, 0.0258, 0.0288, 0.0321, 0.0344, 0.0330, 0.0298, 0.0260,
                        0.0227, 0.0200, 0.0178, 0.0158, 0.0145]
-    Cy1_iz_kr_a_050 = [0.0176, 0.0187, 0.0200, 0.0216, 0.0235, 0.0258, 0.0288, 0.0321, 0.0320, 0.0304, 0.0278, 0.0249,
+    cy1_iz_kr_a_050 = [0.0176, 0.0187, 0.0200, 0.0216, 0.0235, 0.0258, 0.0288, 0.0321, 0.0320, 0.0304, 0.0278, 0.0249,
                        0.0218, 0.0196, 0.0175, 0.0155, 0.0140]
-    Cy1_iz_kr_a_100 = [0.0176, 0.0187, 0.0200, 0.0216, 0.0238, 0.0265, 0.0280, 0.0285, 0.0277, 0.0264, 0.0248, 0.0229,
+    cy1_iz_kr_a_100 = [0.0176, 0.0187, 0.0200, 0.0216, 0.0238, 0.0265, 0.0280, 0.0285, 0.0277, 0.0264, 0.0248, 0.0229,
                        0.0208, 0.0188, 0.0168, 0.0152, 0.0138]
-    Cy1_iz_kr_a_150 = [0.0170, 0.0183, 0.0198, 0.0222, 0.0243, 0.0253, 0.0250, 0.0245, 0.0236, 0.0225, 0.0214, 0.0200,
+    cy1_iz_kr_a_150 = [0.0170, 0.0183, 0.0198, 0.0222, 0.0243, 0.0253, 0.0250, 0.0245, 0.0236, 0.0225, 0.0214, 0.0200,
                        0.0188, 0.0173, 0.0160, 0.0146, 0.0134]
 
     # lambd*tan_0.5 = 1
-    Cy1_iz_kr_b_000 = [0.0165, 0.0175, 0.0190, 0.0205, 0.0220, 0.0240, 0.0265, 0.0295, 0.0330, 0.0330, 0.0300, 0.0260,
+    cy1_iz_kr_b_000 = [0.0165, 0.0175, 0.0190, 0.0205, 0.0220, 0.0240, 0.0265, 0.0295, 0.0330, 0.0330, 0.0300, 0.0260,
                        0.0225, 0.0200, 0.0175, 0.0158, 0.0145]
-    Cy1_iz_kr_b_025 = [0.0165, 0.0175, 0.0190, 0.0205, 0.0222, 0.0240, 0.0264, 0.0290, 0.0315, 0.0310, 0.0282, 0.0248,
+    cy1_iz_kr_b_025 = [0.0165, 0.0175, 0.0190, 0.0205, 0.0222, 0.0240, 0.0264, 0.0290, 0.0315, 0.0310, 0.0282, 0.0248,
                        0.0220, 0.0194, 0.0172, 0.0155, 0.0141]
-    Cy1_iz_kr_b_050 = [0.0168, 0.0179, 0.0194, 0.0207, 0.0224, 0.0244, 0.0270, 0.0296, 0.0302, 0.0288, 0.0263, 0.0235,
+    cy1_iz_kr_b_050 = [0.0168, 0.0179, 0.0194, 0.0207, 0.0224, 0.0244, 0.0270, 0.0296, 0.0302, 0.0288, 0.0263, 0.0235,
                        0.0211, 0.0190, 0.0170, 0.0155, 0.0141]
-    Cy1_iz_kr_b_100 = [0.0165, 0.0175, 0.0190, 0.0205, 0.0225, 0.0251, 0.0266, 0.0270, 0.0262, 0.0248, 0.0233, 0.0215,
+    cy1_iz_kr_b_100 = [0.0165, 0.0175, 0.0190, 0.0205, 0.0225, 0.0251, 0.0266, 0.0270, 0.0262, 0.0248, 0.0233, 0.0215,
                        0.0200, 0.0184, 0.0170, 0.0156, 0.0142]
-    Cy1_iz_kr_b_150 = [0.0168, 0.0179, 0.0193, 0.0211, 0.0232, 0.0244, 0.0240, 0.0235, 0.0225, 0.0216, 0.0205, 0.0194,
+    cy1_iz_kr_b_150 = [0.0168, 0.0179, 0.0193, 0.0211, 0.0232, 0.0244, 0.0240, 0.0235, 0.0225, 0.0216, 0.0205, 0.0194,
                        0.0180, 0.0170, 0.0158, 0.0146, 0.0134]
 
     # lambd*tan_0.5 = 2
-    Cy1_iz_kr_v_000 = [0.0155, 0.0165, 0.0177, 0.0190, 0.0202, 0.0220, 0.0240, 0.0276, 0.0296, 0.0298, 0.0281, 0.0254,
+    cy1_iz_kr_v_000 = [0.0155, 0.0165, 0.0177, 0.0190, 0.0202, 0.0220, 0.0240, 0.0276, 0.0296, 0.0298, 0.0281, 0.0254,
                        0.0220, 0.0194, 0.0175, 0.0157, 0.0143]
-    Cy1_iz_kr_v_025 = [0.0155, 0.0165, 0.0177, 0.0190, 0.0202, 0.0220, 0.0244, 0.0274, 0.0285, 0.0279, 0.0256, 0.0233,
+    cy1_iz_kr_v_025 = [0.0155, 0.0165, 0.0177, 0.0190, 0.0202, 0.0220, 0.0244, 0.0274, 0.0285, 0.0279, 0.0256, 0.0233,
                        0.0208, 0.0190, 0.0172, 0.0155, 0.0142]
-    Cy1_iz_kr_v_050 = [0.0156, 0.0167, 0.0178, 0.0190, 0.0207, 0.0225, 0.0248, 0.0271, 0.0272, 0.0259, 0.0242, 0.0221,
+    cy1_iz_kr_v_050 = [0.0156, 0.0167, 0.0178, 0.0190, 0.0207, 0.0225, 0.0248, 0.0271, 0.0272, 0.0259, 0.0242, 0.0221,
                        0.0201, 0.0184, 0.0169, 0.0153, 0.0141]
-    Cy1_iz_kr_v_100 = [0.0155, 0.0164, 0.0176, 0.0190, 0.0205, 0.0227, 0.0243, 0.0247, 0.0242, 0.0232, 0.0218, 0.0205,
+    cy1_iz_kr_v_100 = [0.0155, 0.0164, 0.0176, 0.0190, 0.0205, 0.0227, 0.0243, 0.0247, 0.0242, 0.0232, 0.0218, 0.0205,
                        0.0189, 0.0175, 0.0162, 0.0150, 0.0137]
-    Cy1_iz_kr_v_150 = [0.0152, 0.0162, 0.0173, 0.0190, 0.0210, 0.0220, 0.0222, 0.0219, 0.0212, 0.0202, 0.0192, 0.0183,
+    cy1_iz_kr_v_150 = [0.0152, 0.0162, 0.0173, 0.0190, 0.0210, 0.0220, 0.0222, 0.0219, 0.0212, 0.0202, 0.0192, 0.0183,
                        0.0172, 0.0163, 0.0153, 0.0142, 0.0133]
 
     # lambd*tan_0.5 = 3
-    Cy1_iz_kr_g_000 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0200, 0.0220, 0.0245, 0.0265, 0.0274, 0.0265, 0.0245,
+    cy1_iz_kr_g_000 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0200, 0.0220, 0.0245, 0.0265, 0.0274, 0.0265, 0.0245,
                        0.0220, 0.0197, 0.0178, 0.0160, 0.0146]
-    Cy1_iz_kr_g_025 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0200, 0.0215, 0.0236, 0.0250, 0.0245, 0.0226, 0.0208,
+    cy1_iz_kr_g_025 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0200, 0.0215, 0.0236, 0.0250, 0.0245, 0.0226, 0.0208,
                        0.0190, 0.0175, 0.0162, 0.0150, 0.0139]
-    Cy1_iz_kr_g_050 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0200, 0.0216, 0.0233, 0.0239, 0.0231, 0.0218, 0.0202,
+    cy1_iz_kr_g_050 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0200, 0.0216, 0.0233, 0.0239, 0.0231, 0.0218, 0.0202,
                        0.0185, 0.0172, 0.0158, 0.0147, 0.0138]
-    Cy1_iz_kr_g_100 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0204, 0.0215, 0.0221, 0.0217, 0.0209, 0.0199, 0.0187,
+    cy1_iz_kr_g_100 = [0.0135, 0.0144, 0.0158, 0.0170, 0.0184, 0.0204, 0.0215, 0.0221, 0.0217, 0.0209, 0.0199, 0.0187,
                        0.0175, 0.0163, 0.0153, 0.0143, 0.0134]
-    Cy1_iz_kr_g_150 = [0.0136, 0.0145, 0.0158, 0.0174, 0.0187, 0.0197, 0.0200, 0.0198, 0.0194, 0.0188, 0.0181, 0.0172,
+    cy1_iz_kr_g_150 = [0.0136, 0.0145, 0.0158, 0.0174, 0.0187, 0.0197, 0.0200, 0.0198, 0.0194, 0.0188, 0.0181, 0.0172,
                        0.0162, 0.0153, 0.0144, 0.0136, 0.0127]
 
     razm = [-3.5, -3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5]
 
-    if (Mah ** 2 - 1) <= 0:
-        razmm = -lambd_k * (-Mah ** 2 + 1) ** 0.5
-    elif (lambd_k * kk.sqrt(Mah ** 2 - 1)) >= 10:
-        return 4 / (57.3 * (kk.sqrt(Mah ** 2 - 1)))
+    if (mah ** 2 - 1) <= 0:
+        razmm = -lambd_k * (-mah ** 2 + 1) ** 0.5
+    elif (lambd_k * kk.sqrt(mah ** 2 - 1)) >= 10:
+        return 4 / (57.3 * (kk.sqrt(mah ** 2 - 1)))
     else:
-        razmm = lambd_k * (Mah ** 2 - 1) ** 0.5
+        razmm = lambd_k * (mah ** 2 - 1) ** 0.5
 
     k = int(razmm // 0.5 + 8)
-    if k >= 14:
-        k = 14
+    if k >= 16:
+        k = 16
     if k <= 0:
         k = 0
-
-    '''while (k == 0) and (i <= len(razm)):
-        if razmm <= razm[i]:
-            if razmm >= razm[i - 1]:
-                k = i
-        i += 1'''
 
     otnos = lambd_k * tg_khi_05
 
     krit = lambd_k * c_ ** (1 / 3)
 
-    '''Cy_a_025 = interpol(Cy1_iz_kr_a_025[k], Cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k]))
-    Cy_a_050 = interpol(Cy1_iz_kr_a_050[k], Cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k]))
-    Cy_a = interpol(Cy_a_050, Cy_a_025, procent(krit, 0.25, 0.5))
-
-    Cy_b_025 = interpol(Cy1_iz_kr_b_025[k], Cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k]))
-    Cy_b_050 = interpol(Cy1_iz_kr_b_050[k], Cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k]))
-    Cy_b = interpol(Cy_b_050, Cy_b_025, procent(krit, 0.25, 0.5))
-
-    cy1 = interpol(Cy_b, Cy_a, otnos)'''
-
     if otnos <= 0:
         if krit == 0:
-            Cy1 = interpol(Cy1_iz_kr_a_000[k], Cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1 = interpol(cy1_iz_kr_a_000[k], cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
         elif (krit >= 0) and (krit <= 0.25):
-            Cy1 = interpol(interpol(Cy1_iz_kr_a_025[k], Cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                           interpol(Cy1_iz_kr_a_000[k], Cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1 = interpol(interpol(cy1_iz_kr_a_025[k], cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(cy1_iz_kr_a_000[k], cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0, 0.25))
         elif (krit >= 0.25) and (krit <= 0.5):
-            Cy1 = interpol(interpol(Cy1_iz_kr_a_050[k], Cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                           interpol(Cy1_iz_kr_a_025[k], Cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1 = interpol(interpol(cy1_iz_kr_a_050[k], cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(cy1_iz_kr_a_025[k], cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0.25, 0.5))
         elif (krit >= 0.5) and (krit <= 1):
-            Cy1 = interpol(interpol(Cy1_iz_kr_a_100[k], Cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                           interpol(Cy1_iz_kr_a_050[k], Cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1 = interpol(interpol(cy1_iz_kr_a_100[k], cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(cy1_iz_kr_a_050[k], cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0.5, 1))
         elif (krit >= 1) and (krit <= 1.5):
-            Cy1 = interpol(interpol(Cy1_iz_kr_a_150[k], Cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                           interpol(Cy1_iz_kr_a_100[k], Cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1 = interpol(interpol(cy1_iz_kr_a_150[k], cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(cy1_iz_kr_a_100[k], cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 1, 1.5))
         else:
-            Cy1 = interpol(Cy1_iz_kr_a_150[k], Cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1 = interpol(cy1_iz_kr_a_150[k], cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
     elif (otnos >= 0) and (otnos <= 1):
         param = procent(otnos, 0, 1)
         if krit == 0:
-            Cy1a = interpol(Cy1_iz_kr_a_000[k], Cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1b = interpol(Cy1_iz_kr_b_000[k], Cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1a = interpol(cy1_iz_kr_a_000[k], cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1b = interpol(cy1_iz_kr_b_000[k], cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 0) and (krit <= 0.25):
-            Cy1a = interpol(interpol(Cy1_iz_kr_a_025[k], Cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_a_000[k], Cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_a_025[k], cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_a_000[k], cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
-            Cy1b = interpol(interpol(Cy1_iz_kr_b_025[k], Cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_b_000[k], Cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_b_025[k], cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_b_000[k], cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 0.25) and (krit <= 0.5):
-            Cy1a = interpol(interpol(Cy1_iz_kr_a_050[k], Cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_a_025[k], Cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_a_050[k], cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_a_025[k], cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
-            Cy1b = interpol(interpol(Cy1_iz_kr_b_050[k], Cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_b_025[k], Cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_b_050[k], cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_b_025[k], cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 0.5) and (krit <= 1):
-            Cy1a = interpol(interpol(Cy1_iz_kr_a_100[k], Cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_a_050[k], Cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_a_100[k], cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_a_050[k], cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
-            Cy1b = interpol(interpol(Cy1_iz_kr_b_100[k], Cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_b_050[k], Cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_b_100[k], cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_b_050[k], cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 1) and (krit <= 1.5):
-            Cy1a = interpol(interpol(Cy1_iz_kr_a_150[k], Cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_a_100[k], Cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_a_150[k], cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_a_100[k], cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 1, 1.5))
-            Cy1b = interpol(interpol(Cy1_iz_kr_b_150[k], Cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_b_100[k], Cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_b_150[k], cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_b_100[k], cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 1, 1.5))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         else:
-            Cy1a = interpol(Cy1_iz_kr_a_150[k], Cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1b = interpol(Cy1_iz_kr_b_150[k], Cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1a = interpol(cy1_iz_kr_a_150[k], cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1b = interpol(cy1_iz_kr_b_150[k], cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1 = interpol(cy1b, cy1a, param)
 
     elif (otnos >= 1) and (otnos <= 2):
         param = procent(otnos, 1, 2)
         if krit == 0:
-            Cy1a = interpol(Cy1_iz_kr_b_000[k], Cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1b = interpol(Cy1_iz_kr_v_000[k], Cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1a = interpol(cy1_iz_kr_b_000[k], cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1b = interpol(cy1_iz_kr_v_000[k], cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 0) and (krit <= 0.25):
-            Cy1a = interpol(interpol(Cy1_iz_kr_b_025[k], Cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_b_000[k], Cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_b_025[k], cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_b_000[k], cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
-            Cy1b = interpol(interpol(Cy1_iz_kr_v_025[k], Cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_v_000[k], Cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_v_025[k], cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_v_000[k], cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 0.25) and (krit <= 0.5):
-            Cy1a = interpol(interpol(Cy1_iz_kr_b_050[k], Cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_b_025[k], Cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_b_050[k], cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_b_025[k], cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
-            Cy1b = interpol(interpol(Cy1_iz_kr_v_050[k], Cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_v_025[k], Cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_v_050[k], cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_v_025[k], cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 0.5) and (krit <= 1):
-            Cy1a = interpol(interpol(Cy1_iz_kr_b_100[k], Cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_b_050[k], Cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_b_100[k], cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_b_050[k], cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
-            Cy1b = interpol(interpol(Cy1_iz_kr_v_100[k], Cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_v_050[k], Cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_v_100[k], cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_v_050[k], cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 1) and (krit <= 1.5):
-            Cy1a = interpol(interpol(Cy1_iz_kr_b_150[k], Cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_b_100[k], Cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_b_150[k], cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_b_100[k], cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 1, 1.5))
-            Cy1b = interpol(interpol(Cy1_iz_kr_v_150[k], Cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_v_100[k], Cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_v_150[k], cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_v_100[k], cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 1, 1.5))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         else:
-            Cy1a = interpol(Cy1_iz_kr_b_150[k], Cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1b = interpol(Cy1_iz_kr_v_150[k], Cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1a = interpol(cy1_iz_kr_b_150[k], cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1b = interpol(cy1_iz_kr_v_150[k], cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1 = interpol(cy1b, cy1a, param)
 
     elif (otnos >= 2) and (otnos <= 3):
         param = procent(otnos, 2, 3)
         if krit == 0:
-            Cy1a = interpol(Cy1_iz_kr_v_000[k], Cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1b = interpol(Cy1_iz_kr_g_000[k], Cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1a = interpol(cy1_iz_kr_v_000[k], cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1b = interpol(cy1_iz_kr_g_000[k], cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 0) and (krit <= 0.25):
-            Cy1a = interpol(interpol(Cy1_iz_kr_v_025[k], Cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_v_000[k], Cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_v_025[k], cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_v_000[k], cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
-            Cy1b = interpol(interpol(Cy1_iz_kr_g_025[k], Cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_g_000[k], Cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_g_025[k], cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_g_000[k], cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 0.25) and (krit <= 0.5):
-            Cy1a = interpol(interpol(Cy1_iz_kr_v_050[k], Cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_v_025[k], Cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_v_050[k], cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_v_025[k], cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
-            Cy1b = interpol(interpol(Cy1_iz_kr_g_050[k], Cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_g_025[k], Cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_g_050[k], cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_g_025[k], cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 0.5) and (krit <= 1):
-            Cy1a = interpol(interpol(Cy1_iz_kr_v_100[k], Cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_v_050[k], Cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_v_100[k], cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_v_050[k], cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
-            Cy1b = interpol(interpol(Cy1_iz_kr_g_100[k], Cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_g_050[k], Cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_g_100[k], cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_g_050[k], cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         elif (krit >= 1) and (krit <= 1.5):
-            Cy1a = interpol(interpol(Cy1_iz_kr_v_150[k], Cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_v_100[k], Cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1a = interpol(interpol(cy1_iz_kr_v_150[k], cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_v_100[k], cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 1, 1.5))
-            Cy1b = interpol(interpol(Cy1_iz_kr_g_150[k], Cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cy1_iz_kr_g_100[k], Cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1b = interpol(interpol(cy1_iz_kr_g_150[k], cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cy1_iz_kr_g_100[k], cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 1, 1.5))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1 = interpol(cy1b, cy1a, param)
         else:
-            Cy1a = interpol(Cy1_iz_kr_v_150[k], Cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1b = interpol(Cy1_iz_kr_g_150[k], Cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cy1 = interpol(Cy1b, Cy1a, param)
+            cy1a = interpol(cy1_iz_kr_v_150[k], cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1b = interpol(cy1_iz_kr_g_150[k], cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1 = interpol(cy1b, cy1a, param)
 
     else:
         if krit == 0:
-            Cy1 = interpol(Cy1_iz_kr_g_000[k], Cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1 = interpol(cy1_iz_kr_g_000[k], cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
         elif (krit >= 0) and (krit <= 0.25):
-            Cy1 = interpol(interpol(Cy1_iz_kr_g_025[k], Cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                           interpol(Cy1_iz_kr_g_000[k], Cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1 = interpol(interpol(cy1_iz_kr_g_025[k], cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(cy1_iz_kr_g_000[k], cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0, 0.25))
         elif (krit >= 0.25) and (krit <= 0.5):
-            Cy1 = interpol(interpol(Cy1_iz_kr_g_050[k], Cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                           interpol(Cy1_iz_kr_g_025[k], Cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1 = interpol(interpol(cy1_iz_kr_g_050[k], cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(cy1_iz_kr_g_025[k], cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0.25, 0.5))
         elif (krit >= 0.5) and (krit <= 1):
-            Cy1 = interpol(interpol(Cy1_iz_kr_g_100[k], Cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                           interpol(Cy1_iz_kr_g_050[k], Cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1 = interpol(interpol(cy1_iz_kr_g_100[k], cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(cy1_iz_kr_g_050[k], cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0.5, 1))
         elif (krit >= 1) and (krit <= 1.5):
-            Cy1 = interpol(interpol(Cy1_iz_kr_g_150[k], Cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                           interpol(Cy1_iz_kr_g_100[k], Cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cy1 = interpol(interpol(cy1_iz_kr_g_150[k], cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                           interpol(cy1_iz_kr_g_100[k], cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 1, 1.5))
         elif krit >= 1.5:
-            Cy1 = interpol(Cy1_iz_kr_g_150[k], Cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cy1 = interpol(cy1_iz_kr_g_150[k], cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
-
-    return Cy1 * lambd_k
+    return cy1 * lambd_k
 
 
 def tab_3_16(*args):
-
-    '''
+    """
     Определение относительной координаты вихря
     :param args: число Маха, относительное удлинение, сужение и тангенс угла средней стреловидности передних консолей
     :return:
-    '''
+    """
 
     z_v_1_0 = []
     z_v_1_2 = []
@@ -426,22 +391,22 @@ def tab_3_16(*args):
 
 
 def tab_3_17(*args):
-    '''
+    """
     Функция вывода коэффициента интерференции передних и задних несущих поверхностей
     :param args: относительное сужение задних поверхностей,
     :return:
-    '''
+    """
 
 
 def tab_3_21(*args):
 
-    '''
+    """
     Функция вывода значения коэффициента торможения потока при носовой части
     :param args: Число Маха, относительное удлинение носовой части
     :return:
-    '''
+    """
 
-    Mah = args[0]
+    mah = args[0]
     lambd = args[1]
 
     x_t_2 = [0.920, 0.950, 0.974, 0.983, 0.988, 0.992, 0.994, 0.996, 1.000, 1.000, 1.000, 1.000, 1.000]
@@ -457,21 +422,21 @@ def tab_3_21(*args):
 
     k = int(lambd // 0.2 - 2)
 
-    if Mah <= 2:
+    if mah <= 2:
         k_t = interpol(interpol(x_t_2[k], x_t_2[k - 1], procent(lambd, lambd_tab[k - 1], lambd_tab[k])), 1,
-                       procent(Mah, 0, 2))
-    elif (Mah <= 3) and (Mah >= 2):
+                       procent(mah, 0, 2))
+    elif (mah <= 3) and (mah >= 2):
         k_t = interpol(interpol(x_t_3[k], x_t_3[k - 1], procent(lambd, lambd_tab[k - 1], lambd_tab[k])),
                        interpol(x_t_2[k], x_t_2[k - 1], procent(lambd, lambd_tab[k - 1], lambd_tab[k])),
-                       procent(Mah, 2, 3))
-    elif (Mah <= 4) and (Mah >= 3):
+                       procent(mah, 2, 3))
+    elif (mah <= 4) and (mah >= 3):
         k_t = interpol(interpol(x_t_4[k], x_t_4[k - 1], procent(lambd, lambd_tab[k - 1], lambd_tab[k])),
                        interpol(x_t_3[k], x_t_3[k - 1], procent(lambd, lambd_tab[k - 1], lambd_tab[k])),
-                       procent(Mah, 3, 4))
-    elif (Mah <= 5) and (Mah >= 4):
+                       procent(mah, 3, 4))
+    elif (mah <= 5) and (mah >= 4):
         k_t = interpol(interpol(x_t_5[k], x_t_5[k - 1], procent(lambd, lambd_tab[k - 1], lambd_tab[k])),
                        interpol(x_t_4[k], x_t_4[k - 1], procent(lambd, lambd_tab[k - 1], lambd_tab[k])),
-                       procent(Mah, 4, 5))
+                       procent(mah, 4, 5))
     else:
         k_t = interpol(x_t_5[k], x_t_5[k - 1], procent(lambd, lambd_tab[k - 1], lambd_tab[k]))
 
@@ -486,7 +451,7 @@ def tab_3_22(*args):
     :return:
     '''
 
-    Mah = args[0]
+    mah = args[0]
     x_ = args[1]
 
     k_t_00 = [0.967, 0.968, 0.967, 0.960, 0.890, 0.775, 0.730, 0.705, 0.690, 0.680, 0.672, 0.670, 0.670]
@@ -495,135 +460,146 @@ def tab_3_22(*args):
     k_t_06 = [0.980, 0.982, 0.981, 0.978, 0.965, 0.925, 0.900, 0.890, 0.885, 0.882, 0.880, 0.880, 0.880]
     k_t_08 = [0.984, 0.986, 0.985, 0.981, 0.970, 0.933, 0.910, 0.905, 0.900, 0.897, 0.895, 0.895, 0.895]
     k_t_10 = [0.987, 0.989, 0.988, 0.985, 0.975, 0.940, 0.920, 0.910, 0.906, 0.905, 0.900, 0.900, 0.900]
-    Mah_tab = [0, 0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+    mah_tab = [0, 0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
 
-    '''for i in range(len(Mah_tab)):
-        if Mah <= Mah_tab[i]:
-            if Mah <= Mah_tab[i - 1]:
+    '''for i in range(len(mah_tab)):
+        if mah <= mah_tab[i]:
+            if mah <= mah_tab[i - 1]:
                 k = i'''
 
-    if Mah <= 1:
-        k = int(Mah // 0.25 + 1)
+    if mah <= 1:
+        k = int(mah // 0.25 + 1)
     else:
-        k = int(Mah // 0.5 + 3)
+        k = int(mah // 0.5 + 3)
 
     if x_ == 0:
-        k_t = interpol(k_t_00[k], k_t_00[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
+        k_t = interpol(k_t_00[k], k_t_00[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k]))
     elif (x_ <= 0.2) and (x_ >= 0):
-        k_t = interpol(interpol(k_t_02[k], k_t_02[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                       interpol(k_t_00[k], k_t_00[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        k_t = interpol(interpol(k_t_02[k], k_t_02[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                       interpol(k_t_00[k], k_t_00[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                        procent(x_, 0, 0.2))
     elif (x_ <= 0.4) and (x_ >= 0.2):
-        k_t = interpol(interpol(k_t_04[k], k_t_04[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                       interpol(k_t_02[k], k_t_02[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        k_t = interpol(interpol(k_t_04[k], k_t_04[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                       interpol(k_t_02[k], k_t_02[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                        procent(x_, 0.2, 0.4))
     elif (x_ <= 0.6) and (x_ >= 0.4):
-        k_t = interpol(interpol(k_t_06[k], k_t_06[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                       interpol(k_t_04[k], k_t_04[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        k_t = interpol(interpol(k_t_06[k], k_t_06[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                       interpol(k_t_04[k], k_t_04[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                        procent(x_, 0.4, 0.6))
     elif (x_ <= 0.8) and (x_ >= 0.6):
-        k_t = interpol(interpol(k_t_08[k], k_t_08[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                       interpol(k_t_06[k], k_t_06[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        k_t = interpol(interpol(k_t_08[k], k_t_08[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                       interpol(k_t_06[k], k_t_06[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                        procent(x_, 0.6, 0.8))
     elif (x_ <= 1) and (x_ >= 0.8):
-        k_t = interpol(interpol(k_t_10[k], k_t_10[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                       interpol(k_t_08[k], k_t_08[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        k_t = interpol(interpol(k_t_10[k], k_t_10[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                       interpol(k_t_08[k], k_t_08[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                        procent(x_, 0.8, 1))
     else:
-        k_t = interpol(k_t_10[k], k_t_10[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
+        k_t = interpol(k_t_10[k], k_t_10[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k]))
 
     return k_t
 
 
 def tab_4_2(*args):
-    '''
+    """
     Вывод коэффициента трения плоской пластины в зависимости от числа Re и относительной координаты перехода ламинарного
     пограничного слоя в турбулентный
     :param args: число Re, относительная координата перехода ламинарного пограничного слоя в турбулентный
     :return:
-    '''
+    """
 
-    Re_ = args[0]
+    re_ = args[0]
     x_t = args[1]
 
-    dCf_0 = [0.00900, 0.00788, 0.00730, 0.00695, 0.00670, 0.00650, 0.00635, 0.00620, 0.00610, 0.00600, 0.00535,
-             0.00505, 0.00485, 0.00470, 0.00457, 0.00445, 0.00435, 0.00430, 0.00422, 0.00380, 0.00365, 0.00350,
-             0.00340]
-    dCf_01 = [0.00855, 0.00750, 0.00690, 0.00660, 0.00635, 0.00615, 0.00595, 0.00580, 0.00570, 0.00560, 0.00500,
-              0.00465, 0.00448, 0.00433, 0.00420, 0.00410, 0.00402, 0.00398, 0.00390, 0.00350, 0.00332, 0.00320,
-              0.00310]
-    dCf_02 = [0.00800, 0.00695, 0.00642, 0.00606, 0.00585, 0.00565, 0.00550, 0.00535, 0.00525, 0.00515, 0.00455,
-              0.00430, 0.00410, 0.00395, 0.00385, 0.00375, 0.00368, 0.00360, 0.00355, 0.00325, 0.00305, 0.00295,
-              0.00285]
-    dCf_03 = [0.00750, 0.00645, 0.00590, 0.00555, 0.00530, 0.00510, 0.00495, 0.00485, 0.00475, 0.00465, 0.00410,
-              0.00383, 0.00365, 0.00355, 0.00345, 0.00335, 0.00330, 0.00325, 0.00320, 0.00290, 0.00274, 0.00265,
-              0.00255]
-    dCf_04 = [0.00690, 0.00585, 0.00535, 0.00500, 0.00478, 0.00460, 0.00445, 0.00435, 0.00425, 0.00415, 0.00365,
-              0.00340, 0.00325, 0.00310, 0.00300, 0.00295, 0.00290, 0.00285, 0.00280, 0.00250, 0.00240, 0.00230,
-              0.00225]
-    dCf_05 = [0.00635, 0.00530, 0.00480, 0.00450, 0.00425, 0.00410, 0.00395, 0.00380, 0.00375, 0.00365, 0.00315,
-              0.00295, 0.00280, 0.00265, 0.00260, 0.00250, 0.00248, 0.00245, 0.00240, 0.00220, 0.00210, 0.00200,
-              0.00195]
-    dCf_06 = [0.00570, 0.00470, 0.00425, 0.00390, 0.00370, 0.00350, 0.00340, 0.00330, 0.00320, 0.00310, 0.00270,
-              0.00245, 0.00235, 0.00225, 0.00220, 0.00215, 0.00210, 0.00205, 0.00200, 0.00185, 0.00174, 0.00168,
-              0.00162]
-    dCf_1 = [0.00275, 0.00200, 0.00160, 0.00140, 0.00125, 0.00115, 0.00105, 0.00100, 0.00095, 0.00090, 0.00065,
-             0.00052, 0.00049, 0.00040, 0.00038, 0.00035, 0.00032, 0.00030, 0.00028, 0.00020, 0.00015, 0.00010,
-             0.00008]
-    Re_mas = [1.0E+06, 2.0E+06, 3.0E+06, 4.0E+06, 5.0E+06, 6.0E+06, 7.0E+06, 8.0E+06, 9.0E+06, 1.0E+07, 2.0E+07,
+    d_cf_0 = [0.00900, 0.00788, 0.00730, 0.00695, 0.00670, 0.00650, 0.00635, 0.00620, 0.00610, 0.00600, 0.00535,
+              0.00505, 0.00485, 0.00470, 0.00457, 0.00445, 0.00435, 0.00430, 0.00422, 0.00380, 0.00365, 0.00350,
+              0.00340]
+    d_cf_01 = [0.00855, 0.00750, 0.00690, 0.00660, 0.00635, 0.00615, 0.00595, 0.00580, 0.00570, 0.00560, 0.00500,
+               0.00465, 0.00448, 0.00433, 0.00420, 0.00410, 0.00402, 0.00398, 0.00390, 0.00350, 0.00332, 0.00320,
+               0.00310]
+    d_cf_02 = [0.00800, 0.00695, 0.00642, 0.00606, 0.00585, 0.00565, 0.00550, 0.00535, 0.00525, 0.00515, 0.00455,
+               0.00430, 0.00410, 0.00395, 0.00385, 0.00375, 0.00368, 0.00360, 0.00355, 0.00325, 0.00305, 0.00295,
+               0.00285]
+    d_cf_03 = [0.00750, 0.00645, 0.00590, 0.00555, 0.00530, 0.00510, 0.00495, 0.00485, 0.00475, 0.00465, 0.00410,
+               0.00383, 0.00365, 0.00355, 0.00345, 0.00335, 0.00330, 0.00325, 0.00320, 0.00290, 0.00274, 0.00265,
+               0.00255]
+    d_cf_04 = [0.00690, 0.00585, 0.00535, 0.00500, 0.00478, 0.00460, 0.00445, 0.00435, 0.00425, 0.00415, 0.00365,
+               0.00340, 0.00325, 0.00310, 0.00300, 0.00295, 0.00290, 0.00285, 0.00280, 0.00250, 0.00240, 0.00230,
+               0.00225]
+    d_cf_05 = [0.00635, 0.00530, 0.00480, 0.00450, 0.00425, 0.00410, 0.00395, 0.00380, 0.00375, 0.00365, 0.00315,
+               0.00295, 0.00280, 0.00265, 0.00260, 0.00250, 0.00248, 0.00245, 0.00240, 0.00220, 0.00210, 0.00200,
+               0.00195]
+    d_cf_06 = [0.00570, 0.00470, 0.00425, 0.00390, 0.00370, 0.00350, 0.00340, 0.00330, 0.00320, 0.00310, 0.00270,
+               0.00245, 0.00235, 0.00225, 0.00220, 0.00215, 0.00210, 0.00205, 0.00200, 0.00185, 0.00174, 0.00168,
+               0.00162]
+    d_cf_1 = [0.00275, 0.00200, 0.00160, 0.00140, 0.00125, 0.00115, 0.00105, 0.00100, 0.00095, 0.00090, 0.00065,
+              0.00052, 0.00049, 0.00040, 0.00038, 0.00035, 0.00032, 0.00030, 0.00028, 0.00020, 0.00015, 0.00010,
+              0.00008]
+    re_mas = [1.0E+06, 2.0E+06, 3.0E+06, 4.0E+06, 5.0E+06, 6.0E+06, 7.0E+06, 8.0E+06, 9.0E+06, 1.0E+07, 2.0E+07,
               3.0E+07, 4.0E+07, 5.0E+07, 6.0E+07, 7.0E+07, 8.0E+07, 9.0E+07, 1.0E+08, 2.0E+08, 3.0E+08, 4.0E+08,
               5.0E+08]
 
-    for i in range(len(Re_mas)):
-        if Re_ <= Re_mas[i]:
-            if Re_ >= Re_mas[i - 1]:
+    k = 0
+
+    for i in range(len(re_mas)):
+        if re_ <= re_mas[i]:
+            if re_ >= re_mas[i - 1]:
                 k = i
 
     if x_t == 0:
-        dCf = interpol(dCf_0[k], dCf_0[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10)))
+        d_cf = interpol(d_cf_0[k], d_cf_0[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                          kk.log(re_mas[k], 10)))
     elif (x_t <= 0.1) and (x_t >= 0):
-        dCf = interpol(interpol(dCf_01[k], dCf_01[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       interpol(dCf_0[k], dCf_0[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       procent(x_t, 0, 0.1))
+        d_cf = interpol(interpol(d_cf_01[k], d_cf_01[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))),
+                        interpol(d_cf_0[k], d_cf_0[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                   kk.log(re_mas[k], 10))), procent(x_t, 0, 0.1))
     elif (x_t <= 0.2) and (x_t >= 0.1):
-        dCf = interpol(interpol(dCf_02[k], dCf_02[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       interpol(dCf_01[k], dCf_01[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       procent(x_t, 0.1, 0.2))
+        d_cf = interpol(interpol(d_cf_02[k], d_cf_02[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))),
+                        interpol(d_cf_01[k], d_cf_01[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))), procent(x_t, 0.1, 0.2))
     elif (x_t <= 0.3) and (x_t >= 0.2):
-        dCf = interpol(interpol(dCf_03[k], dCf_03[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       interpol(dCf_02[k], dCf_02[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       procent(x_t, 0.2, 0.3))
+        d_cf = interpol(interpol(d_cf_03[k], d_cf_03[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))),
+                        interpol(d_cf_02[k], d_cf_02[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))), procent(x_t, 0.2, 0.3))
     elif (x_t <= 0.4) and (x_t >= 0.3):
-        dCf = interpol(interpol(dCf_04[k], dCf_04[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       interpol(dCf_03[k], dCf_03[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       procent(x_t, 0.3, 0.4))
+        d_cf = interpol(interpol(d_cf_04[k], d_cf_04[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))),
+                        interpol(d_cf_03[k], d_cf_03[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))), procent(x_t, 0.3, 0.4))
     elif (x_t <= 0.5) and (x_t >= 0.4):
-        dCf = interpol(interpol(dCf_05[k], dCf_05[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       interpol(dCf_04[k], dCf_04[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       procent(x_t, 0.4, 0.5))
+        d_cf = interpol(interpol(d_cf_05[k], d_cf_05[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))),
+                        interpol(d_cf_04[k], d_cf_04[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))), procent(x_t, 0.4, 0.5))
     elif (x_t <= 0.6) and (x_t >= 0.5):
-        dCf = interpol(interpol(dCf_06[k], dCf_06[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       interpol(dCf_05[k], dCf_05[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       procent(x_t, 0.5, 0.6))
+        d_cf = interpol(interpol(d_cf_06[k], d_cf_06[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))),
+                        interpol(d_cf_05[k], d_cf_05[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))), procent(x_t, 0.5, 0.6))
     elif (x_t <= 1) and (x_t >= 0.6):
-        dCf = interpol(interpol(dCf_1[k], dCf_1[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       interpol(dCf_06[k], dCf_06[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10))),
-                       procent(x_t, 0.6, 1))
+        d_cf = interpol(interpol(d_cf_1[k], d_cf_1[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                   kk.log(re_mas[k], 10))),
+                        interpol(d_cf_06[k], d_cf_06[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                                     kk.log(re_mas[k], 10))), procent(x_t, 0.6, 1))
     else:
-        dCf = interpol(dCf_1[k], dCf_1[k - 1], procent(kk.log(Re_, 10), kk.log(Re_mas[k - 1], 10), kk.log(Re_mas[k], 10)))
+        d_cf = interpol(d_cf_1[k], d_cf_1[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
+                                                          kk.log(re_mas[k], 10)))
 
-    return dCf / 2
+    return d_cf / 2
 
 
 def tab_4_3(*args):
 
-    '''
+    """
     Функция для вывода коэффициента трения плоской пластины в зависимости от числа Маха
     :param args: Число Маха, координата перехода ламинарного в турбулентный слой
     :return: значение коэффициента трения плоской пластины
-    '''
+    """
 
-    Mah = args[0]
+    mah = args[0]
     x_t = args[1]
 
     nu_m_0 = [1.00, 0.93, 0.77, 0.63, 0.51, 0.42, 0.35]
@@ -632,276 +608,293 @@ def tab_4_3(*args):
     nu_m_06 = [1.00, 0.955, 0.82, 0.68, 0.57, 0.50, 0.45]
     nu_m_08 = [1.00, 0.96, 0.85, 0.74, 0.64, 0.58, 0.52]
     nu_m_1 = [1.00, 0.99, 0.97, 0.93, 0.89, 0.84, 0.80]
-    Mah_tab = [0, 1, 2, 3, 4, 5, 6]
+    mah_tab = [0, 1, 2, 3, 4, 5, 6]
 
-    k = int(Mah // 1 + 1)
+    k = int(mah // 1 + 1)
 
     if x_t == 0:
-        nu_m = interpol(nu_m_0[k], nu_m_0[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
+        nu_m = interpol(nu_m_0[k], nu_m_0[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k]))
     elif (x_t <= 0.2) and (x_t >= 0):
-        nu_m = interpol(interpol(nu_m_02[k], nu_m_02[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                        interpol(nu_m_0[k], nu_m_0[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        nu_m = interpol(interpol(nu_m_02[k], nu_m_02[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                        interpol(nu_m_0[k], nu_m_0[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                         procent(x_t, 0, 0.2))
     elif (x_t <= 0.5) and (x_t >= 0.2):
-        nu_m = interpol(interpol(nu_m_05[k], nu_m_05[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                        interpol(nu_m_02[k], nu_m_02[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        nu_m = interpol(interpol(nu_m_05[k], nu_m_05[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                        interpol(nu_m_02[k], nu_m_02[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                         procent(x_t, 0.2, 0.5))
     elif (x_t <= 0.6) and (x_t >= 0.5):
-        nu_m = interpol(interpol(nu_m_06[k], nu_m_06[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                        interpol(nu_m_05[k], nu_m_05[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        nu_m = interpol(interpol(nu_m_06[k], nu_m_06[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                        interpol(nu_m_05[k], nu_m_05[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                         procent(x_t, 0.5, 0.6))
     elif (x_t <= 0.8) and (x_t >= 0.6):
-        nu_m = interpol(interpol(nu_m_08[k], nu_m_08[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                        interpol(nu_m_06[k], nu_m_06[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        nu_m = interpol(interpol(nu_m_08[k], nu_m_08[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                        interpol(nu_m_06[k], nu_m_06[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                         procent(x_t, 0.6, 0.8))
     elif (x_t <= 1) and (x_t >= 0.8):
-        nu_m = interpol(interpol(nu_m_1[k], nu_m_1[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                        interpol(nu_m_08[k], nu_m_08[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        nu_m = interpol(interpol(nu_m_1[k], nu_m_1[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                        interpol(nu_m_08[k], nu_m_08[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                         procent(x_t, 0.8, 1))
     else:
-        nu_m = interpol(nu_m_1[k], nu_m_1[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
+        nu_m = interpol(nu_m_1[k], nu_m_1[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k]))
 
     return nu_m
 
 
 def tab_4_11(*args):
 
-    '''
+    """
     Вывод Сх для конической ГЧ
     :param args: на вход число Маха и относительное удлинение носовой части
     :return: Значение Сх
-    '''
+    """
 
-    Mah = args[0]
+    mah = args[0]
     lambd = args[1]
 
-    Cx_nos_15 = [0.044, 0.061, 0.110, 0.193, 0.320, 0.373, 0.400, 0.408, 0.412, 0.408, 0.400, 0.390, 0.378, 0.355,
+    cx_nos_15 = [0.044, 0.061, 0.110, 0.193, 0.320, 0.373, 0.400, 0.408, 0.412, 0.408, 0.400, 0.390, 0.378, 0.355,
                  0.335, 0.319, 0.306, 0.296, 0.290, 0.262, 0.250, 0.242, 0.237, 0.235, 0.233, 0.232]
-    Cx_nos_20 = [0.017, 0.032, 0.055, 0.109, 0.230, 0.260, 0.273, 0.276, 0.265, 0.252, 0.238, 0.228, 0.220, 0.206,
+    cx_nos_20 = [0.017, 0.032, 0.055, 0.109, 0.230, 0.260, 0.273, 0.276, 0.265, 0.252, 0.238, 0.228, 0.220, 0.206,
                  0.197, 0.189, 0.184, 0.180, 0.179, 0.164, 0.153, 0.146, 0.141, 0.138, 0.136, 0.134]
-    Cx_nos_25 = [0.014, 0.018, 0.032, 0.064, 0.162, 0.210, 0.216, 0.211, 0.197, 0.186, 0.175, 0.167, 0.160, 0.150,
+    cx_nos_25 = [0.014, 0.018, 0.032, 0.064, 0.162, 0.210, 0.216, 0.211, 0.197, 0.186, 0.175, 0.167, 0.160, 0.150,
                  0.142, 0.137, 0.133, 0.130, 0.129, 0.119, 0.111, 0.105, 0.101, 0.098, 0.096, 0.095]
-    Cx_nos_30 = [0.004, 0.008, 0.017, 0.035, 0.121, 0.167, 0.168, 0.158, 0.147, 0.139, 0.133, 0.127, 0.122, 0.115,
+    cx_nos_30 = [0.004, 0.008, 0.017, 0.035, 0.121, 0.167, 0.168, 0.158, 0.147, 0.139, 0.133, 0.127, 0.122, 0.115,
                  0.110, 0.106, 0.103, 0.100, 0.099, 0.091, 0.084, 0.079, 0.075, 0.073, 0.072, 0.071]
-    Cx_nos_40 = [0.000, 0.004, 0.009, 0.021, 0.075, 0.091, 0.091, 0.088, 0.085, 0.082, 0.080, 0.078, 0.076, 0.073,
+    cx_nos_40 = [0.000, 0.004, 0.009, 0.021, 0.075, 0.091, 0.091, 0.088, 0.085, 0.082, 0.080, 0.078, 0.076, 0.073,
                  0.070, 0.068, 0.066, 0.065, 0.064, 0.059, 0.055, 0.053, 0.051, 0.050, 0.049, 0.047]
-    Cx_nos_50 = [0.000, 0.002, 0.006, 0.010, 0.035, 0.057, 0.059, 0.058, 0.057, 0.056, 0.056, 0.055, 0.054, 0.053,
+    cx_nos_50 = [0.000, 0.002, 0.006, 0.010, 0.035, 0.057, 0.059, 0.058, 0.057, 0.056, 0.056, 0.055, 0.054, 0.053,
                  0.051, 0.050, 0.049, 0.049, 0.048, 0.045, 0.042, 0.040, 0.038, 0.037, 0.036, 0.035]
-    Mah_tab = [0.6, 0.7, 0.8, 0.9, 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.5,
-                 3, 3.5, 4, 4.5, 5, 5.5]
-
-    if Mah <= 0.6:
+    mah_tab = [0.6, 0.7, 0.8, 0.9, 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.5,
+               3, 3.5, 4, 4.5, 5, 5.5]
+    k = 0
+    if mah <= 0.6:
         k = 0
     else:
-        for i in range(len(Mah_tab)):
-            if (Mah <= Mah_tab[i]) and (Mah >= Mah_tab[i - 1]):
+        for i in range(len(mah_tab)):
+            if (mah <= mah_tab[i]) and (mah >= mah_tab[i - 1]):
                 k = i
 
     if lambd <= 1.5:
-        Cx_nos = interpol(Cx_nos_15[k], Cx_nos_15[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
+        cx_nos = interpol(cx_nos_15[k], cx_nos_15[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k]))
     elif (lambd <= 2) and (lambd >= 1.5):
-        Cx_nos = interpol(interpol(Cx_nos_20[k], Cx_nos_20[k - 1] , interpol(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                          interpol(Cx_nos_15[k],Cx_nos_15[k - 1] ,interpol(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        cx_nos = interpol(interpol(cx_nos_20[k], cx_nos_20[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_15[k], cx_nos_15[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 1.5, 2))
     elif (lambd <= 2.5) and (lambd >= 2):
-        Cx_nos = interpol(interpol(Cx_nos_25[k], Cx_nos_25[k - 1], interpol(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                          interpol(Cx_nos_20[k], Cx_nos_20[k - 1], interpol(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        cx_nos = interpol(interpol(cx_nos_25[k], cx_nos_25[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_20[k], cx_nos_20[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 2, 2.5))
     elif (lambd <= 3) and (lambd >= 2.5):
-        Cx_nos = interpol(interpol(Cx_nos_30[k], Cx_nos_30[k - 1], interpol(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                          interpol(Cx_nos_25[k], Cx_nos_25[k - 1], interpol(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        cx_nos = interpol(interpol(cx_nos_30[k], cx_nos_30[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_25[k], cx_nos_25[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 2.5, 3))
     elif (lambd <= 4) and (lambd >= 3):
-        Cx_nos = interpol(interpol(Cx_nos_40[k], Cx_nos_40[k - 1], interpol(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                          interpol(Cx_nos_30[k], Cx_nos_30[k - 1], interpol(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        cx_nos = interpol(interpol(cx_nos_40[k], cx_nos_40[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_30[k], cx_nos_30[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 3, 4))
     elif (lambd <= 5) and (lambd >= 4):
-        Cx_nos = interpol(interpol(Cx_nos_50[k], Cx_nos_50[k - 1], interpol(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                          interpol(Cx_nos_40[k], Cx_nos_40[k - 1], interpol(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        cx_nos = interpol(interpol(cx_nos_50[k], cx_nos_50[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_40[k], cx_nos_40[k - 1], interpol(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 4, 5))
     else:
-        Cx_nos = interpol(Cx_nos_50[k], Cx_nos_50[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
+        cx_nos = interpol(cx_nos_50[k], cx_nos_50[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k]))
 
-    return Cx_nos
+    return cx_nos
 
 
 def tab_4_13(*args):
-    '''
+    """
     Вывод значения Сх носовой части с эллиптической образующей
     :param args: Число Маха, относительное удлинение носовой части
     :return:
-    '''
+    """
 
-    Mah = args[0]
+    mah = args[0]
     lambd = args[1]
 
-    Cx_nos_000 = [0.79, 0.84, 0.92, 1.05, 1.19, 1.29, 1.37, 1.43, 1.47, 1.51, 1.54, 1.56, 1.59, 1.60, 1.61, 1.62, 1.62]
-    Cx_nos_025 = [0.110, 0.210, 0.400, 0.600, 0.740, 0.850, 0.930, 0.980, 1.010, 1.040, 1.060, 1.080, 1.095, 1.105,
+    cx_nos_000 = [0.79, 0.84, 0.92, 1.05, 1.19, 1.29, 1.37, 1.43, 1.47, 1.51, 1.54, 1.56, 1.59, 1.60, 1.61, 1.62, 1.62]
+    cx_nos_025 = [0.110, 0.210, 0.400, 0.600, 0.740, 0.850, 0.930, 0.980, 1.010, 1.040, 1.060, 1.080, 1.095, 1.105,
                   1.110, 1.115, 1.115]
-    Cx_nos_050 = [0.06, 0.04, 0.12, 0.34, 0.51, 0.62, 0.69, 0.74, 0.77, 0.80, 0.81, 0.82, 0.83, 0.84, 0.84, 0.84, 0.84]
-    Cx_nos_100 = [0.000, 0.001, 0.050, 0.180, 0.300, 0.390, 0.450, 0.480, 0.510, 0.520, 0.525, 0.525, 0.530, 0.530,
+    cx_nos_050 = [0.06, 0.04, 0.12, 0.34, 0.51, 0.62, 0.69, 0.74, 0.77, 0.80, 0.81, 0.82, 0.83, 0.84, 0.84, 0.84, 0.84]
+    cx_nos_100 = [0.000, 0.001, 0.050, 0.180, 0.300, 0.390, 0.450, 0.480, 0.510, 0.520, 0.525, 0.525, 0.530, 0.530,
                   0.530, 0.525, 0.520]
-    Cx_nos_200 = [-0.02, -0.02, -0.02, 0.04, 0.16, 0.21, 0.23, 0.24, 0.24, 0.24, 0.24, 0.24, 0.23, 0.23, 0.23, 0.23,
-                  0,22]
-    Mah_tab = [0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6]
+    cx_nos_200 = [-0.02, -0.02, -0.02, 0.04, 0.16, 0.21, 0.23, 0.24, 0.24, 0.24, 0.24, 0.24, 0.23, 0.23, 0.23, 0.23,
+                  0.22]
+    mah_tab = [0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6]
 
-    if Mah <= 0.6:
+    k = 0
+
+    if mah <= 0.6:
         k = 0
     else:
-        for i in range(len(Mah_tab)):
-            if (Mah <= Mah_tab[i]) and (Mah >= Mah_tab[i - 1]):
+        for i in range(len(mah_tab)):
+            if (mah <= mah_tab[i]) and (mah >= mah_tab[i - 1]):
                 k = i
 
     if lambd == 0:
-        Cx_nos = interpo(Cx_nos_000[k], Cx_nos_000[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
+        cx_nos = interpol(cx_nos_000[k], cx_nos_000[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k]))
     elif (lambd <= 0.25) and (lambd >= 0):
-        Cx_nos = interpol(interpol(Cx_nos_025[k], Cx_nos_025[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                          interpol(Cx_nos_000[k], Cx_nos_000[k - 1] , procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        cx_nos = interpol(interpol(cx_nos_025[k], cx_nos_025[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_000[k], cx_nos_000[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 0, 0.25))
     elif (lambd <= 0.5) and (lambd >= 0.25):
-        Cx_nos = interpol(interpol(Cx_nos_050[k], Cx_nos_050[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                          interpol(Cx_nos_025[k], Cx_nos_025[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        cx_nos = interpol(interpol(cx_nos_050[k], cx_nos_050[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_025[k], cx_nos_025[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 0.25, 0.5))
     elif (lambd <= 1) and (lambd >= 0.5):
-        Cx_nos = interpol(interpol(Cx_nos_100[k], Cx_nos_100[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                          interpol(Cx_nos_050[k], Cx_nos_050[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        cx_nos = interpol(interpol(cx_nos_100[k], cx_nos_100[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_050[k], cx_nos_050[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 0.5, 1))
     elif (lambd <= 2) and (lambd >= 1):
-        Cx_nos = interpol(interpol(Cx_nos_200[k], Cx_nos_200[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                          interpol(Cx_nos_100[k], Cx_nos_100[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
+        cx_nos = interpol(interpol(cx_nos_200[k], cx_nos_200[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
+                          interpol(cx_nos_100[k], cx_nos_100[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k])),
                           procent(lambd, 1, 2))
     else:
-        Cx_nos = interpo(Cx_nos_200[k], Cx_nos_200[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
+        cx_nos = interpol(cx_nos_200[k], cx_nos_200[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k]))
 
-    return Cx_nos
+    return cx_nos
 
 
 def tab_4_24(*args):
-
-    '''
+    """
     Вывод значения Сх для кормовой части
     :param args: число Маха, относительное сужение кормовой части, относительное удлинение кормовой части
     :return: значение коэффициента Сх кормовой части
-    '''
+    """
 
-    Mah = args[0]
+    mah = args[0]
     nu_korm = args[1]
     lambd = args[2]
 
-    Cx_korm_nu_000_20 = [0.068, 0.075, 0.085, 0.100, 0.123, 0.140, 0.143, 0.143, 0.137, 0.130, 0.122, 0.116, 0.111,
+    cx_korm_nu_000_20 = [0.068, 0.075, 0.085, 0.100, 0.123, 0.140, 0.143, 0.143, 0.137, 0.130, 0.122, 0.116, 0.111,
                          0.107, 0.103, 0.100, 0.085, 0.074, 0.066, 0.060, 0.055, 0.051, 0.049]
-    Cx_korm_nu_000_30 = [0.061, 0.067, 0.075, 0.086, 0.103, 0.107, 0.108, 0.106, 0.102, 0.097, 0.092, 0.089, 0.086,
+    cx_korm_nu_000_30 = [0.061, 0.067, 0.075, 0.086, 0.103, 0.107, 0.108, 0.106, 0.102, 0.097, 0.092, 0.089, 0.086,
                          0.083, 0.080, 0.078, 0.069, 0.063, 0.058, 0.054, 0.051, 0.049, 0.048]
 
-    Cx_korm_nu_050_15 = [0.089, 0.089, 0.091, 0.093, 0.097, 0.099, 0.102, 0.105, 0.104, 0.102, 0.099, 0.095, 0.092,
+    cx_korm_nu_050_15 = [0.089, 0.089, 0.091, 0.093, 0.097, 0.099, 0.102, 0.105, 0.104, 0.102, 0.099, 0.095, 0.092,
                          0.088, 0.083, 0.080, 0.064, 0.052, 0.043, 0.036, 0.030, 0.026, 0.022]
-    Cx_korm_nu_050_20 = [0.060, 0.060, 0.062, 0.064, 0.068, 0.070, 0.073, 0.076, 0.075, 0.073, 0.070, 0.066, 0.063,
+    cx_korm_nu_050_20 = [0.060, 0.060, 0.062, 0.064, 0.068, 0.070, 0.073, 0.076, 0.075, 0.073, 0.070, 0.066, 0.063,
                          0.060, 0.056, 0.052, 0.044, 0.038, 0.033, 0.028, 0.024, 0.020, 0.017]
-    Cx_korm_nu_050_25 = [0.053, 0.053, 0.053, 0.053, 0.053, 0.050, 0.054, 0.054, 0.054, 0.052, 0.050, 0.048, 0.045,
+    cx_korm_nu_050_25 = [0.053, 0.053, 0.053, 0.053, 0.053, 0.050, 0.054, 0.054, 0.054, 0.052, 0.050, 0.048, 0.045,
                          0.043, 0.041, 0.040, 0.033, 0.028, 0.024, 0.021, 0.018, 0.016, 0.014]
 
-    Cx_korm_nu_075_10 = [0.050, 0.051, 0.052, 0.053, 0.055, 0.056, 0.057, 0.058, 0.059, 0.059, 0.057, 0.055, 0.051,
+    cx_korm_nu_075_10 = [0.050, 0.051, 0.052, 0.053, 0.055, 0.056, 0.057, 0.058, 0.059, 0.059, 0.057, 0.055, 0.051,
                          0.048, 0.044, 0.040, 0.030, 0.024, 0.020, 0.017, 0.014, 0.012, 0.011]
-    Cx_korm_nu_075_15 = [0.043, 0.042, 0.039, 0.036, 0.034, 0.030, 0.034, 0.034, 0.034, 0.033, 0.032, 0.031, 0.030,
+    cx_korm_nu_075_15 = [0.043, 0.042, 0.039, 0.036, 0.034, 0.030, 0.034, 0.034, 0.034, 0.033, 0.032, 0.031, 0.030,
                          0.029, 0.027, 0.025, 0.020, 0.016, 0.013, 0.011, 0.009, 0.008, 0.007]
-    Cx_korm_nu_075_20 = [0.038, 0.036, 0.032, 0.029, 0.026, 0.025, 0.024, 0.023, 0.022, 0.022, 0.021, 0.021, 0.020,
+    cx_korm_nu_075_20 = [0.038, 0.036, 0.032, 0.029, 0.026, 0.025, 0.024, 0.023, 0.022, 0.022, 0.021, 0.021, 0.020,
                          0.019, 0.019, 0.018, 0.013, 0.010, 0.008, 0.007, 0.006, 0.006, 0.006]
 
-    Mah_tab = [0.6, 0.7, 0.8, 0.9, 1, 1.05, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5]
+    mah_tab = [0.6, 0.7, 0.8, 0.9, 1, 1.05, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5]
 
-    if Mah <= 0.6:
+    k = 0
+    cx_korm = 0
+    if mah <= 0.6:
         k = 0
     else:
-        for i in range(len(Mah_tab)):
-            if (Mah <= Mah_tab[i]) and (Mah >= Mah_tab[i - 1]):
+        for i in range(len(mah_tab)):
+            if (mah <= mah_tab[i]) and (mah >= mah_tab[i - 1]):
                 k = i
 
     if nu_korm == 0:
-        Cx_korm = interpol(interpol(Cx_korm_nu_000_30[k], Cx_korm_nu_000_30[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                            interpol(Cx_korm_nu_000_20[k], Cx_korm_nu_000_20[k - 1], procent(Mahm, Mah_tab[k - 1], Mah_tab[k])),
-                            procent(lambd, 2, 3))
+        cx_korm = interpol(interpol(cx_korm_nu_000_30[k], cx_korm_nu_000_30[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                            mah_tab[k])),
+                           interpol(cx_korm_nu_000_20[k], cx_korm_nu_000_20[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                            mah_tab[k])),
+                           procent(lambd, 2, 3))
     if (nu_korm <= 0.5) and (nu_korm >= 0):
         proc = procent(nu_korm, 0, 0.5)
-        if (lambd <= 1.5):
-            Cx_korm = interpol(interpol(Cx_korm_nu_050_15[k], Cx_korm_nu_050_15[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                               interpol(Cx_korm_nu_000_20[k], Cx_korm_nu_000_20[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                               proc)
+        if lambd <= 1.5:
+            cx_korm = interpol(interpol(cx_korm_nu_050_15[k], cx_korm_nu_050_15[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                mah_tab[k])),
+                               interpol(cx_korm_nu_000_20[k], cx_korm_nu_000_20[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                mah_tab[k])), proc)
         elif (lambd <= 2) and (lambd >= 1.5):
             proc1 = procent(lambd, 1.5, 2)
-            Cx_nu_05 = interpol(interpol(Cx_korm_nu_050_20[k], Cx_korm_nu_050_20[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                interpol(Cx_korm_nu_050_15[k], Cx_korm_nu_050_15[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                proc1)
-            Cx_nu_00 = interpol(Cx_korm_nu_000_20[k], Cx_korm_nu_000_20[k - 1],
-                                procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
-            Cx_korm = interpol(Cx_nu_05, Cx_nu_00, proc)
+            cx_nu_05 = interpol(interpol(cx_korm_nu_050_20[k], cx_korm_nu_050_20[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])),
+                                interpol(cx_korm_nu_050_15[k], cx_korm_nu_050_15[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])), proc1)
+            cx_nu_00 = interpol(cx_korm_nu_000_20[k], cx_korm_nu_000_20[k - 1],
+                                procent(mah, mah_tab[k - 1], mah_tab[k]))
+            cx_korm = interpol(cx_nu_05, cx_nu_00, proc)
         elif (lambd <= 2.5) and (lambd >= 2):
             proc1 = procent(lambd, 2, 2.5)
             proc2 = procent(lambd, 2, 3)
-            Cx_nu_05 = interpol(interpol(Cx_korm_nu_050_25[k], Cx_korm_nu_050_25[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                interpol(Cx_korm_nu_050_20[k], Cx_korm_nu_050_20[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                proc1)
-            Cx_nu_00 = interpol(interpol(Cx_korm_nu_000_30[k], Cx_korm_nu_000_30[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                interpol(Cx_korm_nu_000_20[k], Cx_korm_nu_000_20[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                proc2)
-            Cx_korm = interpol(Cx_nu_05, Cx_nu_00, proc)
+            cx_nu_05 = interpol(interpol(cx_korm_nu_050_25[k], cx_korm_nu_050_25[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])),
+                                interpol(cx_korm_nu_050_20[k], cx_korm_nu_050_20[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])), proc1)
+            cx_nu_00 = interpol(interpol(cx_korm_nu_000_30[k], cx_korm_nu_000_30[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])),
+                                interpol(cx_korm_nu_000_20[k], cx_korm_nu_000_20[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])), proc2)
+            cx_korm = interpol(cx_nu_05, cx_nu_00, proc)
         elif (lambd >= 2.5) and (lambd <= 3):
             proc1 = procent(lambd, 2, 3)
-            Cx_nu_05 = interpol(Cx_korm_nu_050_25[k], Cx_korm_nu_050_25[k - 1],
-                                procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
-            Cx_nu_00 = interpol(interpol(Cx_korm_nu_000_30[k], Cx_korm_nu_000_30[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                interpol(Cx_korm_nu_000_20[k], Cx_korm_nu_000_20[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                proc1)
-            Cx_korm = interpol(Cx_nu_05, Cx_nu_00, proc)
+            cx_nu_05 = interpol(cx_korm_nu_050_25[k], cx_korm_nu_050_25[k - 1],
+                                procent(mah, mah_tab[k - 1], mah_tab[k]))
+            cx_nu_00 = interpol(interpol(cx_korm_nu_000_30[k], cx_korm_nu_000_30[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])),
+                                interpol(cx_korm_nu_000_20[k], cx_korm_nu_000_20[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])), proc1)
+            cx_korm = interpol(cx_nu_05, cx_nu_00, proc)
         else:
-            Cx_nu_05 = interpol(Cx_korm_nu_050_25[k], Cx_korm_nu_050_25[k - 1],
-                                procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
-            Cx_nu_00 = interpol(Cx_korm_nu_000_30[k], Cx_korm_nu_000_30[k - 1],
-                                procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
-            Cx_korm = interpol(Cx_nu_05, Cx_nu_00, proc)
+            cx_nu_05 = interpol(cx_korm_nu_050_25[k], cx_korm_nu_050_25[k - 1],
+                                procent(mah, mah_tab[k - 1], mah_tab[k]))
+            cx_nu_00 = interpol(cx_korm_nu_000_30[k], cx_korm_nu_000_30[k - 1],
+                                procent(mah, mah_tab[k - 1], mah_tab[k]))
+            cx_korm = interpol(cx_nu_05, cx_nu_00, proc)
     if (nu_korm <= 0.75) and (nu_korm >= 0.5):
         proc = procent(nu_korm, 0.5, 0.75)
-        if (lambd <= 1):
-            Cx_korm = interpol(interpol(Cx_korm_nu_075_10[k], Cx_korm_nu_075_10[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                               interpol(Cx_korm_nu_050_15[k], Cx_korm_nu_050_15[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                               proc)
+        if lambd <= 1:
+            cx_korm = interpol(interpol(cx_korm_nu_075_10[k], cx_korm_nu_075_10[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                mah_tab[k])),
+                               interpol(cx_korm_nu_050_15[k], cx_korm_nu_050_15[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                mah_tab[k])), proc)
         elif (lambd >= 1) and (lambd <= 1.5):
             proc1 = procent(lambd, 1, 1.5)
-            Cx_nu_075 = interpol(interpol(Cx_korm_nu_075_15[k], Cx_korm_nu_075_15[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                 interpol(Cx_korm_nu_075_10[k], Cx_korm_nu_075_10[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                 proc1)
-            Cx_nu_05 = interpol(Cx_korm_nu_050_15[k], Cx_korm_nu_050_15[k - 1], Mah, Mah_tab[k - 1], Mah_tab[k])
-            Cx_korm = interpol(Cx_nu_075, Cx_nu_05, proc)
+            cx_nu_075 = interpol(interpol(cx_korm_nu_075_15[k], cx_korm_nu_075_15[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                  mah_tab[k])),
+                                 interpol(cx_korm_nu_075_10[k], cx_korm_nu_075_10[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                  mah_tab[k])), proc1)
+            cx_nu_05 = interpol(cx_korm_nu_050_15[k], cx_korm_nu_050_15[k - 1], mah, mah_tab[k - 1], mah_tab[k])
+            cx_korm = interpol(cx_nu_075, cx_nu_05, proc)
         elif (lambd >= 2) and (lambd <= 1.5):
             proc1 = procent(lambd, 1.5, 2)
-            Cx_nu_075 = interpol(interpol(Cx_korm_nu_075_20[k], Cx_korm_nu_075_20[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                 interpol(Cx_korm_nu_075_15[k], Cx_korm_nu_075_15[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                 proc1)
-            Cx_nu_05 = interpol(interpol(Cx_korm_nu_050_20[k], Cx_korm_nu_050_20[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                interpol(Cx_korm_nu_050_15[k], Cx_korm_nu_050_15[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                proc1)
-            Cx_korm = interpol(Cx_nu_075, Cx_nu_05, proc)
+            cx_nu_075 = interpol(interpol(cx_korm_nu_075_20[k], cx_korm_nu_075_20[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                  mah_tab[k])),
+                                 interpol(cx_korm_nu_075_15[k], cx_korm_nu_075_15[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                  mah_tab[k])), proc1)
+            cx_nu_05 = interpol(interpol(cx_korm_nu_050_20[k], cx_korm_nu_050_20[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])),
+                                interpol(cx_korm_nu_050_15[k], cx_korm_nu_050_15[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])), proc1)
+            cx_korm = interpol(cx_nu_075, cx_nu_05, proc)
         elif (lambd >= 2.5) and (lambd <= 2):
             proc1 = procent(lambd, 2, 2.5)
-            Cx_nu_075 = interpol(Cx_korm_nu_075_20[k], Cx_korm_nu_075_20[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
-            Cx_nu_05 = interpol(interpol(Cx_korm_nu_050_25[k], Cx_korm_nu_050_25[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                interpol(Cx_korm_nu_050_20[k], Cx_korm_nu_050_20[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k])),
-                                proc1)
-            Cx_korm = interpol(Cx_nu_075, Cx_nu_05, proc)
+            cx_nu_075 = interpol(cx_korm_nu_075_20[k], cx_korm_nu_075_20[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                         mah_tab[k]))
+            cx_nu_05 = interpol(interpol(cx_korm_nu_050_25[k], cx_korm_nu_050_25[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])),
+                                interpol(cx_korm_nu_050_20[k], cx_korm_nu_050_20[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                                 mah_tab[k])), proc1)
+            cx_korm = interpol(cx_nu_075, cx_nu_05, proc)
         else:
-            Cx_nu_075 = interpol(Cx_korm_nu_075_20[k], Cx_korm_nu_075_20[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
-            Cx_nu_05 = interpol(Cx_korm_nu_050_25[k], Cx_korm_nu_050_25[k - 1], procent(Mah, Mah_tab[k - 1], Mah_tab[k]))
-            Cx_korm = interpol(Cx_nu_075, Cx_nu_05, proc)
+            cx_nu_075 = interpol(cx_korm_nu_075_20[k], cx_korm_nu_075_20[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                         mah_tab[k]))
+            cx_nu_05 = interpol(cx_korm_nu_050_25[k], cx_korm_nu_050_25[k - 1], procent(mah, mah_tab[k - 1],
+                                                                                        mah_tab[k]))
+            cx_korm = interpol(cx_nu_075, cx_nu_05, proc)
 
-    return Cx_korm
+    return cx_korm
 
 
 def tab_4_28(*args):
-    '''
+    """
     Вывод поправочного коэффициента, учитывающего влияние толщины профиля
     :param args: относительное положение точки перехода ламинарного пограничного слоя в турбулентный (Х_т_),
     относительная толщина профиля
-    :return: Значение поправочного коэффициента
-    '''
+    :return: Значение поправочного коэффициента"""
 
     x_t = args[0]
     c_ = args[1]
@@ -931,58 +924,57 @@ def tab_4_28(*args):
 
 
 def tab_4_30(*args):
-
-    '''
+    """
     Функция вывода волнового сопротивления крыльев с ромбовидным профилем
     :param args: число Маха, относительное сужение крыла, относительное удлинение крыла, тангенс угла передней
      стреловидности, относительная толщина профиля крыла,
     :return: Знаение волнового сопротивления для профиля крыла
-    '''
+    """
 
-    Mah = args[0]
+    mah = args[0]
     nu_k = args[1]
     lambd_k = args[2]
     tan_05x = args[3]
     c_ = args[4]
 
 # а - для относительного сужения крыла = 1
-    Cx_v_a_0_05 = [2.81, 3.20, 3.10, 2.50, 1.90, 1.60, 1.33, 1.13, 0.97, 0.83, 0.73, 0.67, 0.62, 0.58, 0.55, 0.52]
-    Cx_v_a_0_10 = [2.73, 2.71, 2.65, 2.37, 1.90, 1.60, 1.33, 1.13, 0.97, 0.83, 0.73, 0.67, 0.62, 0.58, 0.55, 0.52]
-    Cx_v_a_0_15 = [2.10, 2.09, 2.07, 1.95, 1.75, 1.58, 1.33, 1.13, 0.97, 0.83, 0.73, 0.67, 0.62, 0.58, 0.55, 0.52]
-    Cx_v_a_1 = [1.520, 1.680, 1.880, 2.070, 2.000, 1.700, 1.430, 1.220, 1.050, 0.910, 0.802, 0.750, 0.680, 0.650,
+    cx_v_a_0_05 = [2.81, 3.20, 3.10, 2.50, 1.90, 1.60, 1.33, 1.13, 0.97, 0.83, 0.73, 0.67, 0.62, 0.58, 0.55, 0.52]
+    cx_v_a_0_10 = [2.73, 2.71, 2.65, 2.37, 1.90, 1.60, 1.33, 1.13, 0.97, 0.83, 0.73, 0.67, 0.62, 0.58, 0.55, 0.52]
+    cx_v_a_0_15 = [2.10, 2.09, 2.07, 1.95, 1.75, 1.58, 1.33, 1.13, 0.97, 0.83, 0.73, 0.67, 0.62, 0.58, 0.55, 0.52]
+    cx_v_a_1 = [1.520, 1.680, 1.880, 2.070, 2.000, 1.700, 1.430, 1.220, 1.050, 0.910, 0.802, 0.750, 0.680, 0.650,
                 0.600, 0.570]
-    Cx_v_a_2 = [0.85, 0.90, 0.98, 1.13, 1.37, 1,50, 1.50, 1.40, 1.19, 1.02, 0.90, 0.80, 0.72, 0.66, 0.60, 0.57]
-    Cx_v_a_3 = [0.440, 0.470, 0.510, 0.600, 0.720, 0.850, 1.040, 1.180, 1.190, 1.130, 1.000, 0.880, 0.790, 0.700,
+    cx_v_a_2 = [0.85, 0.90, 0.98, 1.13, 1.37, 1.50, 1.50, 1.40, 1.19, 1.02, 0.90, 0.80, 0.72, 0.66, 0.60, 0.57]
+    cx_v_a_3 = [0.440, 0.470, 0.510, 0.600, 0.720, 0.850, 1.040, 1.180, 1.190, 1.130, 1.000, 0.880, 0.790, 0.700,
                 0.650, 0.600]
-    Cx_v_a_4 = [0.22, 0.24, 0.26, 0.30, 0.38, 0.45, 0.57, 0.70, 0.82, 0.92, 0.99, 0.97, 0.89, 0.79, 0.70, 0.64]
+    cx_v_a_4 = [0.22, 0.24, 0.26, 0.30, 0.38, 0.45, 0.57, 0.70, 0.82, 0.92, 0.99, 0.97, 0.89, 0.79, 0.70, 0.64]
 # б - для относительного сужения крыла = 5
-    Cx_v_b_0_05 = [2.80, 3.12, 2.95, 2.35, 1.90, 1.58, 1.34, 1.15, 1.00, 0.88, 0.80, 0.70, 0.64, 0.60, 0.55, 0.52]
-    Cx_v_b_0_10 = [2.68, 2.63, 2.56, 2.25, 1.90, 1.58, 1.34, 1.15, 1.00, 0.88, 0.80, 0.70, 0.64, 0.60, 0.55, 0.52]
-    Cx_v_b_0_15 = [2.12, 2.09, 2.05, 1.95, 1.76, 1.52, 1.34, 1.15, 1.00, 0.88, 0.80, 0.70, 0.64, 0.60, 0.55, 0.52]
-    Cx_v_b_1 = [1.830, 1.930, 1.990, 1.990, 1.850, 1.600, 1.400, 1.220, 1.070, 0.930, 0.830, 0.740, 0.680, 0.640,
+    cx_v_b_0_05 = [2.80, 3.12, 2.95, 2.35, 1.90, 1.58, 1.34, 1.15, 1.00, 0.88, 0.80, 0.70, 0.64, 0.60, 0.55, 0.52]
+    cx_v_b_0_10 = [2.68, 2.63, 2.56, 2.25, 1.90, 1.58, 1.34, 1.15, 1.00, 0.88, 0.80, 0.70, 0.64, 0.60, 0.55, 0.52]
+    cx_v_b_0_15 = [2.12, 2.09, 2.05, 1.95, 1.76, 1.52, 1.34, 1.15, 1.00, 0.88, 0.80, 0.70, 0.64, 0.60, 0.55, 0.52]
+    cx_v_b_1 = [1.830, 1.930, 1.990, 1.990, 1.850, 1.600, 1.400, 1.220, 1.070, 0.930, 0.830, 0.740, 0.680, 0.640,
                 0.580, 0.550]
-    Cx_v_b_2 = [1.08, 1.15, 1.24, 1.37, 1.46, 1.46, 1.40, 1.28, 1.17, 1.02, 0.91, 0.81, 0.74, 0.66, 0.60, 0.56]
-    Cx_v_b_3 = [0.600, 0.650, 0.700, 0.800, 0.880, 1.000, 1.080, 1.100, 1.090, 1.040, 0.970, 0.880, 0.800, 0.720,
+    cx_v_b_2 = [1.08, 1.15, 1.24, 1.37, 1.46, 1.46, 1.40, 1.28, 1.17, 1.02, 0.91, 0.81, 0.74, 0.66, 0.60, 0.56]
+    cx_v_b_3 = [0.600, 0.650, 0.700, 0.800, 0.880, 1.000, 1.080, 1.100, 1.090, 1.040, 0.970, 0.880, 0.800, 0.720,
                 0.650, 0.600]
-    Cx_v_b_4 = [0.330, 0.360, 0.385, 0.450, 0.490, 0.560, 0.650, 0.720, 0.800, 0.850, 0.890, 0.890, 0.860, 0.820,
+    cx_v_b_4 = [0.330, 0.360, 0.385, 0.450, 0.490, 0.560, 0.650, 0.720, 0.800, 0.850, 0.890, 0.890, 0.860, 0.820,
                 0.750, 0.650]
 # в - для относительного сужения крыла = бесконечности
-    Cx_v_v_0_05 = [2.85, 2.98, 2.70, 2.25, 1.85, 1.59, 1.39, 1.19, 1.04, 0.91, 0.81, 0.74, 0.67, 0.61, 0.57, 0.52]
-    Cx_v_v_0_10 = [2.60, 2.54, 2.44, 2.13, 1.84, 1.59, 1.39, 1.19, 1.04, 0.91, 0.81, 0.74, 0.67, 0.61, 0.57, 0.52]
-    Cx_v_v_0_15 = [2.10, 2.05, 2.00, 1.85, 1.70, 1.51, 1.32, 1.15, 1.00, 0.90, 0.81, 0.74, 0.67, 0.61, 0.57, 0.52]
-    Cx_v_v_1 = [1.930, 1.925, 1.910, 1.850, 1.730, 1.570, 1.375, 1.215, 1.090, 0.970, 0.870, 0.780, 0.710, 0.640,
+    cx_v_v_0_05 = [2.85, 2.98, 2.70, 2.25, 1.85, 1.59, 1.39, 1.19, 1.04, 0.91, 0.81, 0.74, 0.67, 0.61, 0.57, 0.52]
+    cx_v_v_0_10 = [2.60, 2.54, 2.44, 2.13, 1.84, 1.59, 1.39, 1.19, 1.04, 0.91, 0.81, 0.74, 0.67, 0.61, 0.57, 0.52]
+    cx_v_v_0_15 = [2.10, 2.05, 2.00, 1.85, 1.70, 1.51, 1.32, 1.15, 1.00, 0.90, 0.81, 0.74, 0.67, 0.61, 0.57, 0.52]
+    cx_v_v_1 = [1.930, 1.925, 1.910, 1.850, 1.730, 1.570, 1.375, 1.215, 1.090, 0.970, 0.870, 0.780, 0.710, 0.640,
                 0.580, 0.550]
-    Cx_v_v_2 = [1.31, 1.35, 1.37, 1.40, 1.38, 1.33, 1.26, 1.18, 1.09, 1.00, 0.90, 0.80, 0.73, 0.66, 0.60, 0.57]
-    Cx_v_v_3 = [0.800, 0.815, 0.840, 0.890, 0.930, 0.970, 0.990, 0.995, 0.980, 0.940, 0.890, 0.840, 0.780, 0.710,
+    cx_v_v_2 = [1.31, 1.35, 1.37, 1.40, 1.38, 1.33, 1.26, 1.18, 1.09, 1.00, 0.90, 0.80, 0.73, 0.66, 0.60, 0.57]
+    cx_v_v_3 = [0.800, 0.815, 0.840, 0.890, 0.930, 0.970, 0.990, 0.995, 0.980, 0.940, 0.890, 0.840, 0.780, 0.710,
                 0.650, 0.600]
-    Cx_v_v_4 = [0.46, 0.47, 0.48, 0.50, 0.53, 0.57, 0.61, 0.65, 0.70, 0.73, 0.76, 0.77, 0.76, 0.75, 0.71, 0.64]
+    cx_v_v_4 = [0.46, 0.47, 0.48, 0.50, 0.53, 0.57, 0.61, 0.65, 0.70, 0.73, 0.76, 0.77, 0.76, 0.75, 0.71, 0.64]
 
     razm = [0, 0.25, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7]
 
-    if (Mah ** 2 - 1) >= 0:
-        razmm = lambd_k * (Mah ** 2 - 1) ** 0.5
+    if (mah ** 2 - 1) >= 0:
+        razmm = lambd_k * (mah ** 2 - 1) ** 0.5
     else:
-        razmm = -lambd_k * (1 - Mah ** 2) ** 0.5
+        razmm = -lambd_k * (1 - mah ** 2) ** 0.5
         return 0
 
     otnos = lambd_k * tan_05x
@@ -996,330 +988,330 @@ def tab_4_30(*args):
     if nu_k == 0:
         if otnos == 0:
             if param <= 0.5:
-                Cx_v = interpol(Cx_v_a_0_05[k], Cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_v = interpol(cx_v_a_0_05[k], cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
             elif (param <= 1) and (param >= 0.5):
-                Cx_v = interpol(interpol(Cx_v_a_0_10[k], Cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                interpol(Cx_v_a_0_05[k], Cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v = interpol(interpol(cx_v_a_0_10[k], cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                interpol(cx_v_a_0_05[k], cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                 procent(param, 0.5, 1))
             elif (param <= 1.5) and (param >= 1):
-                Cx_v = interpol(interpol(Cx_v_a_0_15[k], Cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                interpol(Cx_v_a_0_10[k], Cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v = interpol(interpol(cx_v_a_0_15[k], cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                interpol(cx_v_a_0_10[k], cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                 procent(param, 1, 1.5))
             else:
-                Cx_v = interpol(Cx_v_a_0_15[k], Cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_v = interpol(cx_v_a_0_15[k], cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
         elif (otnos <= 1) and (otnos >= 0):
             proc2 = procent(otnos, 0, 1)
             if param <= 0.5:
-                Cx_v = interpol(interpol(Cx_v_a_1[k], Cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                interpol(Cx_v_a_0_05[k], Cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v = interpol(interpol(cx_v_a_1[k], cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                interpol(cx_v_a_0_05[k], cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                 proc2)
             elif (param <= 1) and (param >= 0.5):
-                Cx_v1 = interpol(interpol(Cx_v_a_0_10[k], Cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_a_0_05[k], Cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1 = interpol(interpol(cx_v_a_0_10[k], cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_a_0_05[k], cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 0.5, 1))
-                Cx_v = interpol(interpol(Cx_v_a_1[k], Cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1,
+                cx_v = interpol(interpol(cx_v_a_1[k], cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1,
                                 proc2)
             elif (param <= 1.5) and (param >= 1):
-                Cx_v1 = interpol(interpol(Cx_v_a_0_15[k], Cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_a_0_10[k], Cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1 = interpol(interpol(cx_v_a_0_15[k], cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_a_0_10[k], cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 1, 1.5))
-                Cx_v = interpol(interpol(Cx_v_a_1[k], Cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1,
+                cx_v = interpol(interpol(cx_v_a_1[k], cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1,
                                 proc2)
             else:
-                Cx_v = interpol(interpol(Cx_v_a_1[k], Cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                interpol(Cx_v_a_0_15[k], Cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v = interpol(interpol(cx_v_a_1[k], cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                interpol(cx_v_a_0_15[k], cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                 proc2)
 
         elif (otnos <= 2) and (otnos >= 1):
-            Cx_v = interpol(interpol(Cx_v_a_2[k], Cx_v_a_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cx_v_a_1[k], Cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_v = interpol(interpol(cx_v_a_2[k], cx_v_a_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cx_v_a_1[k], cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(otnos, 1, 2))
         elif (otnos <= 3) and (otnos >= 2):
-            Cx_v = interpol(interpol(Cx_v_a_3[k], Cx_v_a_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cx_v_a_2[k], Cx_v_a_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_v = interpol(interpol(cx_v_a_3[k], cx_v_a_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cx_v_a_2[k], cx_v_a_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(otnos, 2, 3))
         elif (otnos <= 4) and (otnos >= 3):
-            Cx_v = interpol(interpol(Cx_v_a_4[k], Cx_v_a_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cx_v_a_3[k], Cx_v_a_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_v = interpol(interpol(cx_v_a_4[k], cx_v_a_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cx_v_a_3[k], cx_v_a_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(otnos, 3, 4))
         else:
-            Cx_v = interpol(Cx_v_a_4[k], Cx_v_a_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cx_v = interpol(cx_v_a_4[k], cx_v_a_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
     elif (nu_k <= 5) and (nu_k >= 0):
         proc1 = procent(nu_k, 0, 5)
         if otnos == 0:
             if param <= 0.5:
-                Cx_va = interpol(Cx_v_a_0_05[k], Cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
-                Cx_vb = interpol(Cx_v_b_0_05[k], Cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
-                Cx_v = interpol(Cx_vb, Cx_va, proc1)
+                cx_va = interpol(cx_v_a_0_05[k], cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_vb = interpol(cx_v_b_0_05[k], cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_v = interpol(cx_vb, cx_va, proc1)
             elif (param <= 1) and (param >= 0.5):
-                Cx_va = interpol(interpol(Cx_v_a_0_10[k], Cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_a_0_05[k], Cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_va = interpol(interpol(cx_v_a_0_10[k], cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_a_0_05[k], cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 0.5, 1))
-                Cx_vb = interpol(interpol(Cx_v_b_0_10[k], Cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_b_0_05[k], Cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vb = interpol(interpol(cx_v_b_0_10[k], cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_b_0_05[k], cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 0.5, 1))
-                Cx_v = interpol(Cx_vb, Cx_va, proc1)
+                cx_v = interpol(cx_vb, cx_va, proc1)
             elif (param <= 1.5) and (param >= 1):
-                Cx_va = interpol(interpol(Cx_v_a_0_15[k], Cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_a_0_10[k], Cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_va = interpol(interpol(cx_v_a_0_15[k], cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_a_0_10[k], cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 1, 1.5))
-                Cx_vb = interpol(interpol(Cx_v_b_0_15[k], Cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_b_0_10[k], Cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vb = interpol(interpol(cx_v_b_0_15[k], cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_b_0_10[k], cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 1, 1.5))
-                Cx_v = interpol(Cx_vb, Cx_va, proc1)
+                cx_v = interpol(cx_vb, cx_va, proc1)
             else:
-                Cx_va = interpol(Cx_v_a_0_15[k], Cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
-                Cx_vb = interpol(Cx_v_b_0_15[k], Cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
-                Cx_v = interpol(Cx_vb, Cx_va, proc1)
+                cx_va = interpol(cx_v_a_0_15[k], cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_vb = interpol(cx_v_b_0_15[k], cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_v = interpol(cx_vb, cx_va, proc1)
 
         elif (otnos <= 1) and (otnos >= 0):
             proc2 = procent(otnos, 0, 1)
             if param <= 0.5:
-                Cx_va = interpol(interpol(Cx_v_a_1[k], Cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_a_0_05[k], Cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_va = interpol(interpol(cx_v_a_1[k], cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_a_0_05[k], cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  proc2)
-                Cx_vb = interpol(interpol(Cx_v_b_1[k], Cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_b_0_05[k], Cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vb = interpol(interpol(cx_v_b_1[k], cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_b_0_05[k], cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  proc2)
-                Cx_v = interpol(Cx_vb, Cx_va, proc1)
+                cx_v = interpol(cx_vb, cx_va, proc1)
             elif (param <= 1) and (param >= 0.5):
-                Cx_v1a = interpol(interpol(Cx_v_a_0_10[k], Cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                  interpol(Cx_v_a_0_05[k], Cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1a = interpol(interpol(cx_v_a_0_10[k], cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                  interpol(cx_v_a_0_05[k], cx_v_a_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                   procent(param, 0.5, 1))
-                Cx_va = interpol(interpol(Cx_v_a_1[k], Cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1a,
+                cx_va = interpol(interpol(cx_v_a_1[k], cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1a,
                                  proc2)
-                Cx_v1b = interpol(interpol(Cx_v_b_0_10[k], Cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                  interpol(Cx_v_b_0_05[k], Cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1b = interpol(interpol(cx_v_b_0_10[k], cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                  interpol(cx_v_b_0_05[k], cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                   procent(param, 0.5, 1))
-                Cx_vb = interpol(interpol(Cx_v_b_1[k], Cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1b,
+                cx_vb = interpol(interpol(cx_v_b_1[k], cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1b,
                                  proc2)
-                Cx_v = interpol(Cx_vb, Cx_va, proc1)
+                cx_v = interpol(cx_vb, cx_va, proc1)
             elif (param <= 1.5) and (param >= 1):
-                Cx_v1a = interpol(interpol(Cx_v_a_0_15[k], Cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                  interpol(Cx_v_a_0_10[k], Cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1a = interpol(interpol(cx_v_a_0_15[k], cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                  interpol(cx_v_a_0_10[k], cx_v_a_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                   procent(param, 1, 1.5))
-                Cx_va = interpol(interpol(Cx_v_a_1[k], Cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1a,
+                cx_va = interpol(interpol(cx_v_a_1[k], cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1a,
                                  proc2)
-                Cx_v1b = interpol(interpol(Cx_v_b_0_15[k], Cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                  interpol(Cx_v_b_0_10[k], Cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1b = interpol(interpol(cx_v_b_0_15[k], cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                  interpol(cx_v_b_0_10[k], cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                   procent(param, 1, 1.5))
-                Cx_vb = interpol(interpol(Cx_v_b_1[k], Cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1b,
+                cx_vb = interpol(interpol(cx_v_b_1[k], cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1b,
                                  proc2)
-                Cx_v = interpol(Cx_vb, Cx_va, proc1)
+                cx_v = interpol(cx_vb, cx_va, proc1)
             else:
-                Cx_va = interpol(interpol(Cx_v_a_1[k], Cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_a_0_15[k], Cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_va = interpol(interpol(cx_v_a_1[k], cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_a_0_15[k], cx_v_a_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  proc2)
-                Cx_vb = interpol(interpol(Cx_v_b_1[k], Cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_b_0_15[k], Cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vb = interpol(interpol(cx_v_b_1[k], cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_b_0_15[k], cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  proc2)
-                Cx_v = interpol(Cx_vb, Cx_va, proc1)
+                cx_v = interpol(cx_vb, cx_va, proc1)
 
         elif (otnos <= 2) and (otnos >= 1):
-            Cx_va = interpol(interpol(Cx_v_a_2[k], Cx_v_a_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_a_1[k], Cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_va = interpol(interpol(cx_v_a_2[k], cx_v_a_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_a_1[k], cx_v_a_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 1, 2))
-            Cx_vb = interpol(interpol(Cx_v_b_2[k], Cx_v_b_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_b_1[k], Cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_vb = interpol(interpol(cx_v_b_2[k], cx_v_b_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_b_1[k], cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 1, 2))
-            Cv_v = interpol(Cx_vb, Cx_va, proc1)
+            cx_v = interpol(cx_vb, cx_va, proc1)
         elif (otnos <= 3) and (otnos >= 2):
-            Cx_va = interpol(interpol(Cx_v_a_3[k], Cx_v_a_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_a_2[k], Cx_v_a_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_va = interpol(interpol(cx_v_a_3[k], cx_v_a_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_a_2[k], cx_v_a_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 2, 3))
-            Cx_vb = interpol(interpol(Cx_v_b_3[k], Cx_v_b_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_b_2[k], Cx_v_b_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_vb = interpol(interpol(cx_v_b_3[k], cx_v_b_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_b_2[k], cx_v_b_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 2, 3))
-            Cv_v = interpol(Cx_vb, Cx_va, proc1)
+            cx_v = interpol(cx_vb, cx_va, proc1)
         elif (otnos <= 4) and (otnos >= 3):
-            Cx_va = interpol(interpol(Cx_v_a_4[k], Cx_v_a_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_a_3[k], Cx_v_a_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_va = interpol(interpol(cx_v_a_4[k], cx_v_a_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_a_3[k], cx_v_a_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 3, 4))
-            Cx_vb = interpol(interpol(Cx_v_b_4[k], Cx_v_b_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_b_3[k], Cx_v_b_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_vb = interpol(interpol(cx_v_b_4[k], cx_v_b_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_b_3[k], cx_v_b_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 2, 3))
-            Cv_v = interpol(Cx_vb, Cx_va, proc1)
+            cx_v = interpol(cx_vb, cx_va, proc1)
         else:
-            Cx_va = interpol(Cx_v_a_4[k], Cx_v_a_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cx_vb = interpol(Cx_v_b_4[k], Cx_v_b_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cv_v = interpol(Cx_vb, Cx_va, proc1)
+            cx_va = interpol(cx_v_a_4[k], cx_v_a_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cx_vb = interpol(cx_v_b_4[k], cx_v_b_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cx_v = interpol(cx_vb, cx_va, proc1)
 
     elif (nu_k <= 1000) and (nu_k >= 5):
         proc1 = procent(nu_k, 5, 1000)
         if otnos == 0:
             if param <= 0.5:
-                Cx_vb = interpol(Cx_v_b_0_05[k], Cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
-                Cx_vv = interpol(Cx_v_v_0_05[k], Cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
-                Cx_v = interpol(Cx_vv, Cx_vb, proc1)
+                cx_vb = interpol(cx_v_b_0_05[k], cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_vv = interpol(cx_v_v_0_05[k], cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_v = interpol(cx_vv, cx_vb, proc1)
             elif (param <= 1) and (param >= 0.5):
-                Cx_vb = interpol(interpol(Cx_v_b_0_10[k], Cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_b_0_05[k], Cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vb = interpol(interpol(cx_v_b_0_10[k], cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_b_0_05[k], cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 0.5, 1))
-                Cx_vv = interpol(interpol(Cx_v_v_0_10[k], Cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_v_0_05[k], Cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vv = interpol(interpol(cx_v_v_0_10[k], cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_v_0_05[k], cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 0.5, 1))
-                Cx_v = interpol(Cx_vv, Cx_vb, proc1)
+                cx_v = interpol(cx_vv, cx_vb, proc1)
             elif (param <= 1.5) and (param >= 1):
-                Cx_vb = interpol(interpol(Cx_v_b_0_15[k], Cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_b_0_10[k], Cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vb = interpol(interpol(cx_v_b_0_15[k], cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_b_0_10[k], cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 1, 1.5))
-                Cx_vv = interpol(interpol(Cx_v_v_0_15[k], Cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_v_0_10[k], Cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vv = interpol(interpol(cx_v_v_0_15[k], cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_v_0_10[k], cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 1, 1.5))
-                Cx_v = interpol(Cx_vv, Cx_vb, proc1)
+                cx_v = interpol(cx_vv, cx_vb, proc1)
             else:
-                Cx_vb = interpol(Cx_v_b_0_15[k], Cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
-                Cx_vv = interpol(Cx_v_v_0_15[k], Cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
-                Cx_v = interpol(Cx_vv, Cx_vb, proc1)
+                cx_vb = interpol(cx_v_b_0_15[k], cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_vv = interpol(cx_v_v_0_15[k], cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_v = interpol(cx_vv, cx_vb, proc1)
 
         elif (otnos <= 1) and (otnos >= 0):
             proc2 = procent(otnos, 0, 1)
             if param <= 0.5:
-                Cx_vb = interpol(interpol(Cx_v_b_1[k], Cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_b_0_05[k], Cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vb = interpol(interpol(cx_v_b_1[k], cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_b_0_05[k], cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  proc2)
-                Cx_vv = interpol(interpol(Cx_v_v_1[k], Cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_v_0_05[k], Cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vv = interpol(interpol(cx_v_v_1[k], cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_v_0_05[k], cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  proc2)
-                Cx_v = interpol(Cx_vv, Cx_vb, proc1)
+                cx_v = interpol(cx_vv, cx_vb, proc1)
             elif (param <= 1) and (param >= 0.5):
-                Cx_v1b = interpol(interpol(Cx_v_b_0_10[k], Cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                  interpol(Cx_v_b_0_05[k], Cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1b = interpol(interpol(cx_v_b_0_10[k], cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                  interpol(cx_v_b_0_05[k], cx_v_b_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                   procent(param, 0.5, 1))
-                Cx_vb = interpol(interpol(Cx_v_b_1[k], Cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1b,
+                cx_vb = interpol(interpol(cx_v_b_1[k], cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1b,
                                  proc2)
-                Cx_v1v = interpol(interpol(Cx_v_v_0_10[k], Cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                  interpol(Cx_v_v_0_05[k], Cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1v = interpol(interpol(cx_v_v_0_10[k], cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                  interpol(cx_v_v_0_05[k], cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                   procent(param, 0.5, 1))
-                Cx_vv = interpol(interpol(Cx_v_v_1[k], Cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1v,
+                cx_vv = interpol(interpol(cx_v_v_1[k], cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1v,
                                  proc2)
-                Cx_v = interpol(Cx_vv, Cx_vb, proc1)
+                cx_v = interpol(cx_vv, cx_vb, proc1)
             elif (param <= 1.5) and (param >= 1):
-                Cx_v1b = interpol(interpol(Cx_v_b_0_15[k], Cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                  interpol(Cx_v_b_0_10[k], Cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1b = interpol(interpol(cx_v_b_0_15[k], cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                  interpol(cx_v_b_0_10[k], cx_v_b_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                   procent(param, 1, 1.5))
-                Cx_vb = interpol(interpol(Cx_v_b_1[k], Cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1b,
+                cx_vb = interpol(interpol(cx_v_b_1[k], cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1b,
                                  proc2)
-                Cx_v1v = interpol(interpol(Cx_v_v_0_15[k], Cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                  interpol(Cx_v_v_0_10[k], Cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1v = interpol(interpol(cx_v_v_0_15[k], cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                  interpol(cx_v_v_0_10[k], cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                   procent(param, 1, 1.5))
-                Cx_vv = interpol(interpol(Cx_v_v_1[k], Cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1v,
+                cx_vv = interpol(interpol(cx_v_v_1[k], cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1v,
                                  proc2)
-                Cx_v = interpol(Cx_vv, Cx_vb, proc1)
+                cx_v = interpol(cx_vv, cx_vb, proc1)
             else:
-                Cx_vb = interpol(interpol(Cx_v_b_1[k], Cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_b_0_15[k], Cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vb = interpol(interpol(cx_v_b_1[k], cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_b_0_15[k], cx_v_b_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  proc2)
-                Cx_vv = interpol(interpol(Cx_v_v_1[k], Cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_v_0_15[k], Cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_vv = interpol(interpol(cx_v_v_1[k], cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_v_0_15[k], cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  proc2)
-                Cx_v = interpol(Cx_vv, Cx_vb, proc1)
+                cx_v = interpol(cx_vv, cx_vb, proc1)
 
         elif (otnos <= 2) and (otnos >= 1):
-            Cx_vb = interpol(interpol(Cx_v_b_2[k], Cx_v_b_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_b_1[k], Cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_vb = interpol(interpol(cx_v_b_2[k], cx_v_b_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_b_1[k], cx_v_b_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 1, 2))
-            Cx_vv = interpol(interpol(Cx_v_v_2[k], Cx_v_v_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_v_1[k], Cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_vv = interpol(interpol(cx_v_v_2[k], cx_v_v_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_v_1[k], cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 1, 2))
-            Cv_v = interpol(Cx_vv, Cx_vb, proc1)
+            cx_v = interpol(cx_vv, cx_vb, proc1)
         elif (otnos <= 3) and (otnos >= 2):
-            Cx_vb = interpol(interpol(Cx_v_b_3[k], Cx_v_b_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_b_2[k], Cx_v_b_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_vb = interpol(interpol(cx_v_b_3[k], cx_v_b_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_b_2[k], cx_v_b_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 2, 3))
-            Cx_vv = interpol(interpol(Cx_v_v_3[k], Cx_v_v_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_v_2[k], Cx_v_v_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_vv = interpol(interpol(cx_v_v_3[k], cx_v_v_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_v_2[k], cx_v_v_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 2, 3))
-            Cv_v = interpol(Cx_vv, Cx_vb, proc1)
+            cx_v = interpol(cx_vv, cx_vb, proc1)
         elif (otnos <= 4) and (otnos >= 3):
-            Cx_vb = interpol(interpol(Cx_v_b_4[k], Cx_v_b_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_b_3[k], Cx_v_b_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_vb = interpol(interpol(cx_v_b_4[k], cx_v_b_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_b_3[k], cx_v_b_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 3, 4))
-            Cx_vv = interpol(interpol(Cx_v_v_4[k], Cx_v_v_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                             interpol(Cx_v_v_3[k], Cx_v_v_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_vv = interpol(interpol(cx_v_v_4[k], cx_v_v_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                             interpol(cx_v_v_3[k], cx_v_v_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
                              procent(otnos, 2, 3))
-            Cv_v = interpol(Cx_vv, Cx_vb, proc1)
+            cx_v = interpol(cx_vv, cx_vb, proc1)
         else:
-            Cx_vb = interpol(Cx_v_b_4[k], Cx_v_b_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cx_vv = interpol(Cx_v_v_4[k], Cx_v_v_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
-            Cv_v = interpol(Cx_vv, Cx_vb, proc1)
+            cx_vb = interpol(cx_v_b_4[k], cx_v_b_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cx_vv = interpol(cx_v_v_4[k], cx_v_v_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cx_v = interpol(cx_vv, cx_vb, proc1)
 
     else:
         if otnos == 0:
             if param <= 0.5:
-                Cx_v = interpol(Cx_v_v_0_05[k], Cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_v = interpol(cx_v_v_0_05[k], cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k]))
             elif (param <= 1) and (param >= 0.5):
-                Cx_v = interpol(interpol(Cx_v_v_0_10[k], Cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                interpol(Cx_v_v_0_05[k], Cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v = interpol(interpol(cx_v_v_0_10[k], cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                interpol(cx_v_v_0_05[k], cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                 procent(param, 0.5, 1))
             elif (param <= 1.5) and (param >= 1):
-                Cx_v = interpol(interpol(Cx_v_v_0_15[k], Cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                interpol(Cx_v_v_0_10[k], Cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v = interpol(interpol(cx_v_v_0_15[k], cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                interpol(cx_v_v_0_10[k], cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                 procent(param, 1, 1.5))
             else:
-                Cx_v = interpol(Cx_v_v_0_15[k], Cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
+                cx_v = interpol(cx_v_v_0_15[k], cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
         elif (otnos <= 1) and (otnos >= 0):
             proc2 = procent(otnos, 0, 1)
             if param <= 0.5:
-                Cx_v = interpol(interpol(Cx_v_v_1[k], Cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                interpol(Cx_v_v_0_05[k], Cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v = interpol(interpol(cx_v_v_1[k], cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                interpol(cx_v_v_0_05[k], cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                 proc2)
             elif (param <= 1) and (param >= 0.5):
-                Cx_v1 = interpol(interpol(Cx_v_v_0_10[k], Cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_v_0_05[k], Cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1 = interpol(interpol(cx_v_v_0_10[k], cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_v_0_05[k], cx_v_v_0_05[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 0.5, 1))
-                Cx_v = interpol(interpol(Cx_v_v_1[k], Cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1,
+                cx_v = interpol(interpol(cx_v_v_1[k], cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1,
                                 proc2)
             elif (param <= 1.5) and (param >= 1):
-                Cx_v1 = interpol(interpol(Cx_v_v_0_15[k], Cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                 interpol(Cx_v_v_0_10[k], Cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v1 = interpol(interpol(cx_v_v_0_15[k], cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                 interpol(cx_v_v_0_10[k], cx_v_v_0_10[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                  procent(param, 1, 1.5))
-                Cx_v = interpol(interpol(Cx_v_v_1[k], Cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])), Cx_v1,
+                cx_v = interpol(interpol(cx_v_v_1[k], cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])), cx_v1,
                                 proc2)
             else:
-                Cx_v = interpol(interpol(Cx_v_v_1[k], Cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                                interpol(Cx_v_v_0_15[k], Cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                cx_v = interpol(interpol(cx_v_v_1[k], cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                                interpol(cx_v_v_0_15[k], cx_v_v_0_15[k - 1], procent(razmm, razm[k - 1], razm[k])),
                                 proc2)
 
         elif (otnos <= 2) and (otnos >= 1):
-            Cx_v = interpol(interpol(Cx_v_v_2[k], Cx_v_v_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cx_v_v_1[k], Cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_v = interpol(interpol(cx_v_v_2[k], cx_v_v_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cx_v_v_1[k], cx_v_v_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(otnos, 1, 2))
         elif (otnos <= 3) and (otnos >= 2):
-            Cx_v = interpol(interpol(Cx_v_v_3[k], Cx_v_v_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cx_v_v_2[k], Cx_v_v_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_v = interpol(interpol(cx_v_v_3[k], cx_v_v_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cx_v_v_2[k], cx_v_v_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(otnos, 2, 3))
         elif (otnos <= 4) and (otnos >= 3):
-            Cx_v = interpol(interpol(Cx_v_v_4[k], Cx_v_v_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
-                            interpol(Cx_v_v_3[k], Cx_v_v_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+            cx_v = interpol(interpol(cx_v_v_4[k], cx_v_v_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                            interpol(cx_v_v_3[k], cx_v_v_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(otnos, 3, 4))
         else:
-            Cx_v = interpol(Cx_v_v_4[k], Cx_v_v_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
+            cx_v = interpol(cx_v_v_4[k], cx_v_v_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
-    return Cx_v
+    return cx_v
 
 
 def tab_4_32(*args):
 
-    '''
+    """
     Функция вывода коэффициента фи
     :param args: число маха,
     :return:
-    '''
+    """
 
-    Mah = args[0]
+    mah = args[0]
     tan_x = args[1]
 
     fi_tab = [0.00, 0.07, 0.20, 0.38, 0.54, 0.67, 0.77, 0.85, 0.91, 0.96, 0.99]
     razm = [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5]
 
-    if (Mah ** 2 - 1) <= 0:
+    if (mah ** 2 - 1) <= 0:
         return 0
     else:
-        razmm = (Mah ** 2 - 1) ** 0.5 - tan_x
+        razmm = (mah ** 2 - 1) ** 0.5 - tan_x
         k = int(razmm // 0.25 + 1)
         fi = interpol(fi_tab[k], fi_tab[k - 1], procent(razmm, razm[k - 1], razm[k]))
         return fi
@@ -1327,13 +1319,13 @@ def tab_4_32(*args):
 
 def tab_4_40(*args):
 
-    '''
+    """
     Функция вывода коэффициента кси (для вычисления индуктивного сопротивления корпуса)
     :param args: число Маха, относительное удлинение носовой части, 0 - оживальная носовая часть / 1 - коническая
     :return: Значение коэффициента для данных условий
-    '''
+    """
 
-    Mah = args[0]
+    mah = args[0]
     lambd_nos = args[1]
     param = args[2]
 
@@ -1341,12 +1333,13 @@ def tab_4_40(*args):
     ksi_konic = [-0.200, -0.200, -0.150, -0.080, 0.000, 0.110, 0.210, 0.300, 0.370, 0.410]
     razm = [-0.8, -0.4, 0, 0.4, 0.8, 1.2, 1.6, 2, 2.4, 2.8]
 
-    if (Mah ** 2 - 1) <= 0:
-        razmm = -kk.sqrt(1 - Mah ** 2) / lambd_nos
+    if (mah ** 2 - 1) <= 0:
+        razmm = -kk.sqrt(1 - mah ** 2) / lambd_nos
     else:
-        razmm = kk.sqrt(Mah ** 2 - 1) / lambd_nos
+        razmm = kk.sqrt(mah ** 2 - 1) / lambd_nos
 
     k = int(razmm // 0.4 + 3)
+    ksi = 0
 
     if param == 0:
         ksi = interpol(ksi_ozhiv[k], ksi_ozhiv[k - 1], procent(razmm, razm[k - 1], razm[k]))
@@ -1358,13 +1351,13 @@ def tab_4_40(*args):
 
 def tab_5_7(*args):
 
-    '''
+    """
     Определение фокуса корпуса
     :param args: число Маха, относительное удлинение носовой части и корпуса, длина носовой части
     :return:
-    '''
+    """
 
-    Mah = args[0]
+    mah = args[0]
     lambd_nos = args[1]
     lambd_korp = args[2]
     l_nos = args[3]
@@ -1381,10 +1374,10 @@ def tab_5_7(*args):
             0.720, 0.745]
     razm = [-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4]
 
-    if (Mah ** 2 - 1) <= 0:
-        razmm = -kk.sqrt(1 - Mah ** 2) / lambd_nos
+    if (mah ** 2 - 1) <= 0:
+        razmm = -kk.sqrt(1 - mah ** 2) / lambd_nos
     else:
-        razmm = kk.sqrt(Mah ** 2 - 1) / lambd_nos
+        razmm = kk.sqrt(mah ** 2 - 1) / lambd_nos
 
     k = int(razmm // 0.2 + 5)
 
@@ -1407,19 +1400,18 @@ def tab_5_7(*args):
     else:
         dx = interpol(dx_4[k], dx_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
-    return dx
+    return dx * l_nos
 
 
 def tab_5_8(*args):
-
-    '''
+    """
     Определение координаты фокуса изолированных крыльев
     :param args: Число маха, относительный размах крыльев, тангенс угла средней стреловидности,
     относительное сужение крыльев
     :return: координата фокуса изолированных крыльев
-    '''
+    """
 
-    Mah = args[0]
+    mah = args[0]
     lambd_k = args[1]
     tan_05 = args[2]
     nu_k = args[3]
@@ -1462,13 +1454,13 @@ def tab_5_8(*args):
 
     razm = [-4, -3.5, -3, -2.5, -2, -1.5, -1.25, -1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]
 
-    if (Mah ** 2 - 1) <= 0:
-        razmm = -kk.sqrt(1 - Mah ** 2) * lambd_k
+    if (mah ** 2 - 1) <= 0:
+        razmm = -kk.sqrt(1 - mah ** 2) * lambd_k
     else:
-        razmm = kk.sqrt(Mah ** 2 - 1) * lambd_k
+        razmm = kk.sqrt(mah ** 2 - 1) * lambd_k
 
     param = lambd_k * tan_05
-
+    k = 0
     for i in range(len(razm)):
         if (razmm <= razm[i]) and (razmm >= razm[i - 1]):
             k = i
@@ -1617,30 +1609,29 @@ def tab_5_8(*args):
     return x_f
 
 
-
 def tab_5_11(*args):
-    '''
+    """
     Определение расстояния между фокусом изолированного крыла и точкой приложения дополнительной нормальной силы консоли
     :param args: , размах консоли
     :return:
-    '''
+    """
 
-    D_ = args[0]
+    d_ = args[0]
     l_k = args[1]
 
     f1 = [0.0150, 0.0279, 0.0314, 0.0328, 0.0332, 0.0325, 0.0315, 0.0300, 0.0285, 0.0240, 0.0190, 0.0140, 0.0095,
           0.0050, 0.0005]
-    D_tab = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+    d_tab = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 
-    if D_ <= 0.4:
-        k = int(D_ // 0.05 + 1)
+    if d_ <= 0.4:
+        k = int(d_ // 0.05 + 1)
     else:
-        k = int(D_ // 0.1 + 5)
+        k = int(d_ // 0.1 + 5)
 
-    return interpol(f1[k], f1[k - 1], procent(D_, D_tab[k - 1], D_tab[k])) * l_k / 2
+    return interpol(f1[k], f1[k - 1], procent(d_, d_tab[k - 1], d_tab[k])) * l_k / 2
+
 
 def tab_atm(*args):
-
     """
     вывод параметров стандартной атмосферы при определенной высоте
     :param args: высота [м], выбор параметра (1 - Температура [к], 2 - местная скорость звука [м / с],
@@ -1648,16 +1639,16 @@ def tab_atm(*args):
     :return:
     """
 
-    H = args[0]
+    h = args[0]
     param = args[1]
 
-    H_tab = [-2000, -1500, -1000, -500, 0, 500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]
+    h_tab = [-2000, -1500, -1000, -500, 0, 500, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]
 
-    T_atm = [301.2, 297.9, 294.7, 291.4, 288.2, 284.9, 281.7, 278.4, 275.2, 271.9, 268.7, 262.2, 255.7, 249.2, 242.7,
+    t_atm = [301.2, 297.9, 294.7, 291.4, 288.2, 284.9, 281.7, 278.4, 275.2, 271.9, 268.7, 262.2, 255.7, 249.2, 242.7,
              236.2, 229.7, 223.3]
     a_atm = [347.9, 346.0, 344.1, 342.2, 340.3, 338.4, 336.4, 334.5, 332.5, 330.6, 328.6, 324.6, 320.6, 316.5, 312.3,
              308.1, 303.9, 299.6]
-    P_atm = [127783, 120696, 113931, 107478, 101330, 95464, 89877, 84559, 79499, 74690, 70123, 61661, 54052, 47217,
+    p_atm = [127783, 120696, 113931, 107478, 101330, 95464, 89877, 84559, 79499, 74690, 70123, 61661, 54052, 47217,
              41106, 35653, 30801, 26500]
     ro_atm = [1.48, 1.41, 1.35, 1.28, 1.23, 1.17, 1.11, 1.06, 1.01, 0.96, 0.91, 0.82, 0.74, 0.66, 0.59, 0.53, 0.47,
               0.41]
@@ -1665,24 +1656,23 @@ def tab_atm(*args):
               1.58 * 10 ** -5, 1.65 * 10 ** -5, 1.71 * 10 ** -5, 1.79 * 10 ** -5, 1.86 * 10 ** -5, 2.03 * 10 ** -5,
               2.21 * 10 ** -5, 2.42 * 10 ** -5, 2.65 * 10 ** -5, 2.9 * 10 ** -5, 3.2 * 10 ** -5, 3.53 * 10 ** -5]
 
-    if H <= 3000:
-        k = int(H // 500 + 5)
+    if h <= 3000:
+        k = int(h // 500 + 5)
     else:
-        k = int(H // 1000 + 8)
+        k = int(h // 1000 + 8)
 
     if param == 1:
-        return interpol(T_atm[k], T_atm[k - 1], procent(H, H_tab[k - 1], H_tab[k]))
+        return interpol(t_atm[k], t_atm[k - 1], procent(h, h_tab[k - 1], h_tab[k]))
     elif param == 2:
-        return interpol(a_atm[k], a_atm[k - 1], procent(H, H_tab[k - 1], H_tab[k]))
+        return interpol(a_atm[k], a_atm[k - 1], procent(h, h_tab[k - 1], h_tab[k]))
     elif param == 3:
-        return interpol(P_atm[k], P_atm[k - 1], procent(H, H_tab[k - 1], H_tab[k]))
+        return interpol(p_atm[k], p_atm[k - 1], procent(h, h_tab[k - 1], h_tab[k]))
     elif param == 4:
-        return interpol(ro_atm[k], ro_atm[k - 1], procent(H, H_tab[k - 1], H_tab[k]))
+        return interpol(ro_atm[k], ro_atm[k - 1], procent(h, h_tab[k - 1], h_tab[k]))
     elif param == 5:
-        return interpol(ni_atm[k], ni_atm[k - 1], procent(H, H_tab[k - 1], H_tab[k]))
+        return interpol(ni_atm[k], ni_atm[k - 1], procent(h, h_tab[k - 1], h_tab[k]))
     else:
         print("Ошибка: неверное значение при выборе параметра")
-
 
 
 def graph_test_3_5():
@@ -1693,21 +1683,22 @@ def graph_test_3_5():
         lambd_k = 1.2
         if a1 < 0:
             while (a1 / lambd_k)**2 > 1:
-                lambd_k *= 1.5 
-            mach = sqrt(1 - (a1 / lambd_k)**2) 
+                lambd_k *= 1.5
+            mach = sqrt(1 - (a1 / lambd_k)**2)
         else:
             mach = sqrt((a1 / lambd_k)**2 + 1)
-        c_ = (a2 / lambd_k)**3 
-        tg_khi_05 = a3 / lambd_k 
+        c_ = (a2 / lambd_k)**3
+        tg_khi_05 = a3 / lambd_k
+        print(lambd_k)
         return tab_3_5(mach, lambd_k, c_, tg_khi_05) / lambd_k
-    
+
     def plot_line(ax, a2, a3):
         xs = np.linspace(-3, 9, 1000)
         ys = [convert_foo_3_5(a1, a2, a3) for a1 in xs]
         ax.plot(xs, ys, label=f'a2 = {a2}')
         ax.grid(True)
         ax.legend()
-    
+
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2,2)
     a3 = 0
     ax = ax1
@@ -1747,41 +1738,3 @@ def graph_test_3_5():
 if __name__ == "__main__":
     graph_test_3_5()
 
-    
-
-
-'''V = 650
-a = 335
-r = 4
-r1 = 32.86
-d = 14
-d1 = 8
-D = 72
-r_ = 2 * r / d
-r_1 = 2 * r1 / D
-d_ = d1 / D
-l_cil = 45.5 / 8
-l_nos = 12.5 / 8
-Mah = V / a
-
-tan_05 = 0.307
-lambd_k = 1.46
-c_k = 0.03'''
-
-'''Cy1 = tab_3_2(Mah, l_nos, l_cil)
-Cy1_1 = tab_3_4(Mah, 0, l_cil)
-Cy2 = tab_3_2(Mah, 1.32, 22.43)
-Cy2_1 = tab_3_4(Mah, 0, 22.43)
-Cy3 = tab_3_4(Mah, 1, 23.75)'''
-"""
-Cy1_2 = Cy1 * (1 - r_ ** 2) + Cy1_1 * r_ ** 2
-print(Cy1_2)
-Cy2_2 = Cy2 * (1 - r_1 ** 2) + Cy2_1 * r_1 ** 2
-Cy_ob = Cy2_2 * (1 - d_ ** 2) + tab_3_4(Mah, 1, 23.75) * d_ ** 2
-print(Cy_ob)
-Cy_iz = Cy1_2 * (2 * r / D) ** 2 + Cy_ob
-
-print(Cy_iz)"""
-
-# Cy1_kr = tab_3_5(Mah, lambd_k, c_k, tan_05)
-# tab_4_2(3.5, 2)
