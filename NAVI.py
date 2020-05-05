@@ -51,6 +51,8 @@ class Rocket(object):
         cxx_tr = []
         cxx_nos = []
         cxx_korm = []
+        cxx_kr_pr = []
+        cxx_op_pr = []
 
         # while (abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5):
 
@@ -62,7 +64,7 @@ class Rocket(object):
                                  Tabl.tab_3_2(mach, 1.32, 22.43), Tabl.tab_3_4(mach, 0, 22.43),
                                  Tabl.tab_3_4(mach, 1, 23.75))
             cyy_nos.append(cy_nos)
-            cy_kr = Tabl.tab_3_5(mach * kk.sqrt(Tabl.tab_3_22(mach, x_otn_op_kr)), l_kr, c_k, tan_05_kr)
+            cy_kr = Tabl.tab_3_5(mach * kk.sqrt(Tabl.tab_3_22(mach, x_otn_op_kr)), l_kr, c_kr, tan_05_kr)
             cyy_kr.append(cy_kr)
             cy_op = Tabl.tab_3_5(mach * kk.sqrt(Tabl.tab_3_21(mach, l_nos)), l_op, c_op, tan_05_op)
             cyy_op.append(cy_op)
@@ -84,14 +86,17 @@ class Rocket(object):
             re_f = self.v * L_f / ni_atm
             # print(re_f * h / L_f)
 
-            re_t = 15 * 10 ** 6  # test (max for current speed and form)
+            re_t = Tabl.tab_4_5(mach, re_f, 7, L_f)  # test (max for current speed and form)
 
-            # x_t = re_t * ni_atm / self.v
+            x_tt = re_t * ni_atm / self.v
+            if x_tt >= (0.26 / L_f):
+                x_tt = f_t / Ff
             # print(x_t)
-            x_t = 0.08  # координата точки перехода (до точного определения)
+            # x_t = 0.08  # координата точки перехода (до точного определения)
 
-            cx_tr = Tabl.tab_4_2(re_f, x_t) / 2 * Ff / Sf
-            cxx_tr.append(cx_tr)
+            # cx_tr = Tabl.tab_4_2(re_f, x_t) / 2 * Ff / Sf
+            # cxx_tr.append(cx_tr)
+            cxx_tr.append(Tabl.tab_4_2(re_f, x_tt) / 2 * Ff / Sf)
 
             cx_con = Tabl.tab_4_11(mach, l_nos_)
             cx_zat = Tabl.tab_4_13(mach, l_zat)
@@ -101,22 +106,24 @@ class Rocket(object):
 
             cx_korm = Tabl.tab_4_24(mach, nu_kor, l_korm)
             cxx_korm.append(cx_korm)
-            """
-            re_k = self.v * l_kr / ni_atm
-            re_k_t =
+
+            re_k = self.v * b_kr / ni_atm
+            re_k_t = Tabl.tab_4_5(mach, re_k, 5, b_kr)
             x_t_kr = re_k_t / re_k
             c_f_kr = Tabl.tab_4_2(re_k, x_t_kr)
-            ni_c_kr = Tabl.tab_4_28()
+            ni_c_kr = Tabl.tab_4_28(x_t_kr, c_kr)
 
-            re_op = self.v * l_op / ni_atm
-            re_op_t = 
+            re_op = self.v * b_op / ni_atm
+            re_op_t = Tabl.tab_4_5(mach, re_op, 5, b_op)
             x_t_op = re_op_t / re_op
             c_f_op = Tabl.tab_4_2(re_op, x_t_op)
-            ni_c_op =
+            ni_c_op = Tabl.tab_4_28(x_t_op, c_op)
 
-            cx_k_pr = 2 * c_f_kr * ni_c_kr
+            cx_kr_pr = c_f_kr * ni_c_kr
+            cxx_kr_pr.append(cx_kr_pr)
             cx_op_pr = c_f_op * ni_c_op
-            # cx_nes ="""
+            cxx_op_pr.append(cx_op_pr)
+            # cx_nes =
 
             # cx_0 = 1.05 * (cx_o_f * S_f + cx_0_op * k_t_op * S_op + cx_0_kr * k_t_kr * S_kr)
 
@@ -155,7 +162,8 @@ class Rocket(object):
         # plt.axis([-0.1, t, 0, 0.4])
         plt.show()"""
 
-        plt.plot(tt, cxx_korm)
+        plt.plot(tt, cxx_op_pr)
+        plt.plot(tt, cxx_kr_pr)
         plt.grid(True)
         plt.show()
 
@@ -180,10 +188,12 @@ l_cil = 45.5 / 8
 l_nos = 12.5 / 8
 tan_05_kr = 0.307  # тангенс среднего угла крыла
 l_kr = 1.46  # относительное удлинение крыла
-c_k = 0.03  # относительная толщина профиля крыла
+b_kr = 0.1061  # ширина крыла у корпуса
+c_kr = 0.03  # относительная толщина профиля крыла
 
 tan_05_op = -0.012  # тангенс среднего угла оперения
 l_op = 7.888  # относительное удлинение оперения l^2/S
+b_op = 0.032  # ширина крыла у корпуса
 c_op = 0.03  # относительная толщина профиля крыла
 
 b_ak_kr = 0.094
@@ -200,6 +210,7 @@ nu_k_op = 1.069  # относительное сужение консоли пе
 L_f = 1.626  # длина корпуса
 Ff = 0.3619  # площадь обтекаемой потоком поверхности корпуса (без донного среза)
 Sf = 0.184  #
+f_t = 0.045216
 
 l_zat = 23.49 / 62.59  # относительное удлинение затупления носовой части
 r_ = 2 * 0.0329 / d

@@ -647,6 +647,7 @@ def tab_4_5(*args):
     :param args: 1 - число Маха, 2 - число Рейнольдса, 3 - класс чистоты (от 4 до 9), 4 - длина тела
     :return: критическое число Рейнольдса
     """
+
     mah = args[0]
     re_ = args[1]
     cla = args[2]
@@ -663,6 +664,33 @@ def tab_4_5(*args):
     razm = [10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000, 2000, 4000]
 
     razmm = re_ * h[cla - 4] / l_t
+    k = 0
+
+    for i in range(len(razm)):
+        if (razmm >= razm[i - 1]) and (razmm <= razm[i]):
+            k = i
+        elif (razmm >= razm[i]):
+            k = i
+
+    if mah == 0:
+        re_t = interpol(re_0[k], re_0[k - 1], procent(razmm, razm[k - 1], razm[k]))
+    elif (mah > 0) and (mah <= 1):
+        re_t = interpol(interpol(re_1[k], re_1[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                        interpol(re_0[k], re_0[k - 1], procent(razmm, razm[k - 1], razm[k])), procent(mah, 0, 1))
+    elif (mah > 1) and (mah <= 2):
+        re_t = interpol(interpol(re_2[k], re_2[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                        interpol(re_1[k], re_1[k - 1], procent(razmm, razm[k - 1], razm[k])), procent(mah, 1, 2))
+    elif (mah > 2) and (mah <= 3):
+        re_t = interpol(interpol(re_3[k], re_3[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                        interpol(re_2[k], re_2[k - 1], procent(razmm, razm[k - 1], razm[k])), procent(mah, 2, 3))
+    elif (mah > 3) and (mah <= 4):
+        re_t = interpol(interpol(re_4[k], re_4[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                        interpol(re_3[k], re_3[k - 1], procent(razmm, razm[k - 1], razm[k])), procent(mah, 3, 4))
+    elif (mah > 4) and (mah <= 5):
+        re_t = interpol(interpol(re_5[k], re_5[k - 1], procent(razmm, razm[k - 1], razm[k])),
+                        interpol(re_4[k], re_4[k - 1], procent(razmm, razm[k - 1], razm[k])), procent(mah, 4, 5))
+    else:
+        re_t = interpol(re_5[k], re_5[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
     return re_t
 
