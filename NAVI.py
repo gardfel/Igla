@@ -41,25 +41,21 @@ class Rocket(object):
         a1 = 29
         target = args[0]
         t = 0
-        yt, xt, xx, yy, tt = [target.y], [target.x], [0], [0], [0]
-        vv = [self.v]
+        yt, xt, xx, yy, tt = [], [], [], [], []
+        vv = []
 
-        mach = self.v / Tabl.tab_atm(self.y, 2)
-
-        cyy_nos = [Aero.Cy_nos(Tabl.tab_3_2(mach, l_nos, l_cil), Tabl.tab_3_4(mach, 0, l_cil),
-                               Tabl.tab_3_2(mach, 1.32, 22.43), Tabl.tab_3_4(mach, 0, 22.43),
-                               Tabl.tab_3_4(mach, 1, 23.75))]
-        cyy_kr = [Tabl.tab_3_5(mach * kk.sqrt(Tabl.tab_3_22(mach, x_otn_op_kr)), l_kr, c_k, tan_05_kr)]
-        cyy_op = [Tabl.tab_3_5(mach * kk.sqrt(Tabl.tab_3_21(mach, l_nos)), l_op, c_op, tan_05_op)]
-        cyy1_alf = [0]
+        cyy_nos = []
+        cyy_kr = []
+        cyy_op = []
+        cyy1_alf = []
+        cxx_tr = []
+        cxx_nos = []
+        cxx_korm = []
 
         # while (abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5):
 
         while self.v < 887:
-            alf = kk.atan((target.y - self.y) / (target.x - self.x))
-            self.x += (self.v + self.v1) / 2 * kk.cos(alf) * dt
-            self.y += (self.v + self.v1) / 2 * kk.sin(alf) * dt
-            target.next_coord()
+
             mach = self.v / Tabl.tab_atm(self.y, 2)
 
             cy_nos = Aero.Cy_nos(Tabl.tab_3_2(mach, l_nos, l_cil), Tabl.tab_3_4(mach, 0, l_cil),
@@ -86,9 +82,49 @@ class Rocket(object):
 
             ni_atm = Tabl.tab_atm(self.y, 5)
             re_f = self.v * L_f / ni_atm
+            # print(re_f * h / L_f)
 
-            # cx_tr = Tabl.tab_4_2(re_f) / 2 * F_f / S_f
+            re_t = 15 * 10 ** 6  # test (max for current speed and form)
+
+            # x_t = re_t * ni_atm / self.v
+            # print(x_t)
+            x_t = 0.08  # координата точки перехода (до точного определения)
+
+            cx_tr = Tabl.tab_4_2(re_f, x_t) / 2 * Ff / Sf
+            cxx_tr.append(cx_tr)
+
+            cx_con = Tabl.tab_4_11(mach, l_nos_)
+            cx_zat = Tabl.tab_4_13(mach, l_zat)
+            cx_nos = cx_con * (1 - r_ ** 2 * kk.cos(teta) ** 2 * (3.1 - 1.4 * r_ * kk.cos(teta) - 0.7 * r_ ** 2 *
+                                                                  kk.cos(teta) ** 2)) + cx_zat * r_ ** 2
+            cxx_nos.append(cx_nos)
+
+            cx_korm = Tabl.tab_4_24(mach, nu_kor, l_korm)
+            cxx_korm.append(cx_korm)
+            """
+            re_k = self.v * l_kr / ni_atm
+            re_k_t =
+            x_t_kr = re_k_t / re_k
+            c_f_kr = Tabl.tab_4_2(re_k, x_t_kr)
+            ni_c_kr = Tabl.tab_4_28()
+
+            re_op = self.v * l_op / ni_atm
+            re_op_t = 
+            x_t_op = re_op_t / re_op
+            c_f_op = Tabl.tab_4_2(re_op, x_t_op)
+            ni_c_op =
+
+            cx_k_pr = 2 * c_f_kr * ni_c_kr
+            cx_op_pr = c_f_op * ni_c_op
+            # cx_nes ="""
+
+            # cx_0 = 1.05 * (cx_o_f * S_f + cx_0_op * k_t_op * S_op + cx_0_kr * k_t_kr * S_kr)
+
             t += dt
+            alf = kk.atan((target.y - self.y) / (target.x - self.x))
+            self.x += (self.v + self.v1) / 2 * kk.cos(alf) * dt
+            self.y += (self.v + self.v1) / 2 * kk.sin(alf) * dt
+            target.next_coord()
             xx.append(self.x)
             yy.append(self.y)
             xt.append(target.x)
@@ -102,7 +138,7 @@ class Rocket(object):
             elif self.v < 887:
                 self.v = self.v1
                 self.v1 += a1 * dt
-        plt.plot(tt, cyy_nos)
+        """plt.plot(tt, cyy_nos)
         plt.axis([-0.1, t, 0, 0.06])
         plt.grid(True)
         plt.show()
@@ -117,7 +153,12 @@ class Rocket(object):
         plt.plot(tt, cyy1_alf)
         plt.grid(True)
         # plt.axis([-0.1, t, 0, 0.4])
+        plt.show()"""
+
+        plt.plot(tt, cxx_korm)
+        plt.grid(True)
         plt.show()
+
         '''plt.plot(xx, yy)
         plt.plot(xt, yt)
         plt.show()
@@ -159,5 +200,18 @@ nu_k_op = 1.069  # относительное сужение консоли пе
 L_f = 1.626  # длина корпуса
 Ff = 0.3619  # площадь обтекаемой потоком поверхности корпуса (без донного среза)
 Sf = 0.184  #
+
+l_zat = 23.49 / 62.59  # относительное удлинение затупления носовой части
+r_ = 2 * 0.0329 / d
+
+l_nos_ = (l_nos - r_ / 2) / kk.sqrt(1 - r_)  # относительное удлинение носовой части без затупления
+print(l_nos_, l_nos)
+teta = kk.atan((1 - r_) / (l_nos - r_ / 2))  # угол наклона образующей носовой части (конуса)
+print(teta * 180 / kk.pi)
+
+h = 6.3 * 10 ** -6  # Примерная высота бугоров на поверхности корпуса (в зависимости от класса чистоты) (для 7-го)
+
+nu_kor = 0.047 / d  # относительное сужение кормовой части
+l_korm = 0.0463 / d  # относительное удлинение кормовой части
 
 igla.navigation(vertel)
