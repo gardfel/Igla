@@ -1041,6 +1041,9 @@ def tab_4_30(*args):
         razmm = -lambd_k * (1 - mah ** 2) ** 0.5
         return 0
 
+    if razmm >= 7:
+        razmm = 7
+
     otnos = lambd_k * tan_05x
     param = lambd_k * c_ ** (1 / 3)
 
@@ -1048,6 +1051,9 @@ def tab_4_30(*args):
         k = int(razmm // 0.25 + 1)
     else:
         k = int(razmm // 0.5 + 2)
+
+    if k >= 15:
+        k = 15
 
     if nu_k == 0:
         if otnos == 0:
@@ -1355,7 +1361,7 @@ def tab_4_30(*args):
         else:
             cx_v = interpol(cx_v_v_4[k], cx_v_v_4[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
-    return cx_v
+    return cx_v * lambd_k * c_ ** 2
 
 
 def tab_4_32(*args):
@@ -1377,6 +1383,8 @@ def tab_4_32(*args):
     else:
         razmm = (mah ** 2 - 1) ** 0.5 - tan_x
         k = int(razmm // 0.25 + 1)
+        if k >= 10:
+            k = 10
         fi = interpol(fi_tab[k], fi_tab[k - 1], procent(razmm, razm[k - 1], razm[k]))
         return fi
 

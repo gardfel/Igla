@@ -34,6 +34,7 @@ class Rocket(object):
         self.y = 0
         self.v = 51
         self.v1 = 51 + 78.9 * dt
+        self.alf = 0
 
     def navigation(self, *args):
 
@@ -53,6 +54,15 @@ class Rocket(object):
         cxx_korm = []
         cxx_kr_pr = []
         cxx_op_pr = []
+        cxx_kr_vol = []
+        cxx_op_vol = []
+        cxx_0f = []
+        cxx_0_kr = []
+        cxx_0_op = []
+        cxx_0 = []
+        f_xx = []
+        cxx_zat = []
+        cxx_con = []
 
         # while (abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5):
 
@@ -96,17 +106,23 @@ class Rocket(object):
 
             # cx_tr = Tabl.tab_4_2(re_f, x_t) / 2 * Ff / Sf
             # cxx_tr.append(cx_tr)
-            cxx_tr.append(Tabl.tab_4_2(re_f, x_tt) / 2 * Ff / Sf)
+            cx_tr = Tabl.tab_4_2(re_f, x_tt) / 2 * Ff / Sf
+            cxx_tr.append(cx_tr)
 
-            cx_con = Tabl.tab_4_11(mach, l_nos_)
-            cx_zat = Tabl.tab_4_13(mach, l_zat)
+            cx_nos = Tabl.tab_4_11(mach, l_nos_)
+            cxx_con.append(cx_nos)
+            """cx_zat = Tabl.tab_4_13(mach, l_zat)
+            cxx_zat.append(cx_zat)
             cx_nos = cx_con * (1 - r_ ** 2 * kk.cos(teta) ** 2 * (3.1 - 1.4 * r_ * kk.cos(teta) - 0.7 * r_ ** 2 *
-                                                                  kk.cos(teta) ** 2)) + cx_zat * r_ ** 2
+                                                                  kk.cos(teta) ** 2)) + cx_zat * r_ ** 2"""
             cxx_nos.append(cx_nos)
 
             cx_korm = Tabl.tab_4_24(mach, nu_kor, l_korm)
             cxx_korm.append(cx_korm)
+            cx_0f = cx_tr + cx_nos + cx_korm
+            cxx_0f.append(cx_0f)
 
+            # профилное сопротивление несущих поверхностей
             re_k = self.v * b_kr / ni_atm
             re_k_t = Tabl.tab_4_5(mach, re_k, 5, b_kr)
             x_t_kr = re_k_t / re_k
@@ -123,9 +139,31 @@ class Rocket(object):
             cxx_kr_pr.append(cx_kr_pr)
             cx_op_pr = c_f_op * ni_c_op
             cxx_op_pr.append(cx_op_pr)
-            # cx_nes =
+            # волновое сопротивление несущих поверхностей
+            if mach < 1.1:
+                cx_op_vol = Tabl.tab_4_30(mach, nu_k_op, l_op, tan_05_op, c_op)
+                cx_kr_vol = Tabl.tab_4_30(mach, nu_k_kr, l_kr, tan_05_kr, c_kr)
+                cxx_kr_vol.append(cx_kr_vol)
+                cxx_op_vol.append(cx_op_vol)
+            elif mach >= 1.1:
 
-            # cx_0 = 1.05 * (cx_o_f * S_f + cx_0_op * k_t_op * S_op + cx_0_kr * k_t_kr * S_kr)
+                cx_kr_vol = (Tabl.tab_4_30(mach, nu_k_kr, l_kr, tan_05_kr, c_kr)) * \
+                            (1 + Tabl.tab_4_32(mach, tan_05_kr) * (koef_kr - 1))
+                cxx_kr_vol.append(cx_kr_vol)
+                cx_op_vol = (Tabl.tab_4_30(mach, nu_k_op, l_op, tan_05_op, c_op)) * \
+                            (1 + Tabl.tab_4_32(mach, tan_05_op) * (koef_op - 1))
+                cxx_op_vol.append(cx_op_vol)
+            # cx_nes =
+            cx_0_op = cx_op_pr + cx_op_vol
+            cx_0_kr = cx_kr_pr + cx_kr_vol
+            cxx_0_kr.append(cx_0_kr)
+            cxx_0_op.append(cx_0_op)
+
+            cx_0 = 1.05 * (cx_0f * S_f + cx_0_op * k_t_op * S_op + cx_0_kr * k_t_kr * S_kr)
+            cxx_0.append(cx_0)
+            f_x = cx_0 * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8
+            f_xx.append(f_x)
+            # индуктивное сопротивление
 
             t += dt
             alf = kk.atan((target.y - self.y) / (target.x - self.x))
@@ -162,8 +200,9 @@ class Rocket(object):
         # plt.axis([-0.1, t, 0, 0.4])
         plt.show()"""
 
-        plt.plot(tt, cxx_op_pr)
-        plt.plot(tt, cxx_kr_pr)
+        # plt.plot(tt, cxx_zat)
+        ##plt.plot(tt, cxx_con)
+        plt.plot(tt, cxx_0)
         plt.grid(True)
         plt.show()
 
@@ -189,12 +228,17 @@ l_nos = 12.5 / 8
 tan_05_kr = 0.307  # тангенс среднего угла крыла
 l_kr = 1.46  # относительное удлинение крыла
 b_kr = 0.1061  # ширина крыла у корпуса
+a_kr = 0.098  # ширина крыла у корпуса (меньшая грань трапеции)
 c_kr = 0.03  # относительная толщина профиля крыла
+koef_kr = 1 / (1 - a_kr / b_kr)  # коэффициент перехода от ромбовидного к шестиугольному профилю крыла
 
 tan_05_op = -0.012  # тангенс среднего угла оперения
 l_op = 7.888  # относительное удлинение оперения l^2/S
-b_op = 0.032  # ширина крыла у корпуса
-c_op = 0.03  # относительная толщина профиля крыла
+b_op = 0.032  # ширина оперения у корпуса
+a_op = 0.015
+c_op = 0.03  # относительная толщина профиля оперения
+koef_op = 1 / (1 - a_op / b_op)
+print(koef_kr, koef_op, "koef")
 
 b_ak_kr = 0.094
 x_otn_op_kr = 0.846 / b_ak_kr  # относительное расстояние между оперением и средней хордой крыльев
