@@ -1421,6 +1421,14 @@ def tab_4_40(*args):
     return ksi
 
 
+def tab_4_43(*args):
+    """
+
+    :param args:
+    :return:
+    """
+
+
 def tab_5_7(*args):
 
     """
