@@ -14,7 +14,7 @@ class Target(object):
         self.ang = 0
         self.x = random.uniform(2900, 3000)
         self.y = random.uniform(1400, 1500)
-        self.alf = 0.3925  # random.uniform(0, 0.3925)
+        self.alf = 0.1925  # random.uniform(0, 0.3925)
 
     def next_coord(self, *args):
 
@@ -43,9 +43,11 @@ class Rocket(object):
         self.d_omega = 0
         self.fi_viz = 0
         self.d_fi_viz = 0
+        self.p = 2768
         self.p1 = 2768  # сила тяги на первом режиме
         self.p2 = 900  # сила тяги на втором режиме
         self.p3 = 0
+        self.x_ct = 0.78
 
     def navigation(self, *args):
 
@@ -81,6 +83,8 @@ class Rocket(object):
         cxx_con = []
         x_ffa_nos_cill = []
         x_ffa_f = []
+        x_ffa_op = []
+        x_ffa_kr = []
 
         # while (abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5):
 
@@ -126,14 +130,17 @@ class Rocket(object):
             cy1_alf = cy1_alf_f * S_f + cy1_alf_kr * S_kr * k_t_kr + cy1_alf_op * S_op * k_t_op
             cyy1_alf.append(cy1_alf)
 
-            K_delt_0 = k_aa_op
+            K_delt_0_op = k_aa_op
+            K_delt_0_kr = k_aa_kr
+            k_delt_0_op = k_aa_op ** 2 / K_aa_op
+            k_delt_0_kr = k_aa_kr ** 2 / K_aa_kr
 
             if mach <= 1.4:
                 k_sh = 0.85
             else:
                 k_sh = 0.99
             n_ef = k_sh * kk.cos(0)
-            cy1_delt_op = cy1_alf_op * K_delt_0 * n_ef
+            cy1_delt_op = cy1_alf_op * K_delt_0_op * n_ef
             cyy1_delt_op.append(cy1_delt_op)
 
             ni_atm = Tabl.tab_atm(self.y, 5)
@@ -214,16 +221,64 @@ class Rocket(object):
             cx_f_ind = cy1_alf_f * kk.sin(self.alf) + delt_cx1 * kk.cos(self.alf)
             # cx_op_ind = cy
 
-            # моменты
-            # фокус носовой части с цилиндром
+            # фокусы отдельных частей ЛА по углу атаки
             x_fa_nos_cill = L_nos - W_nos / S_ff + Tabl.tab_5_7(mach, l_nos, l_cil, L_nos)
             x_ffa_nos_cill.append(x_fa_nos_cill)
             x_fa_korm = L_f - 0.5 * L_korm
-
-            x_fa_f = 1 / cy1_alf_f * (cy_nos * x_fa_nos_cill + cy_korm * x_fa_korm)
+            """ + cy_korm * x_fa_korm"""
+            x_fa_f = 1 / cy1_alf_f * (cy_nos * x_fa_nos_cill)
             # print(cy_korm)
             x_ffa_f.append(x_fa_f)
 
+            if mach < 1:
+                x__iz_op = 0.21
+                x__iz_kr = 0.15
+            else:
+                x__iz_op = 0.4
+                x__iz_kr = 0.21
+
+            x_f_iz_op = x_b_a_op + b_a_op * x__iz_op
+            x_f_delt_op = x_f_iz_op - tan_05_op * Tabl.tab_5_11(D_op, L_k_op)
+            x_f_iz_kr = x_b_a_kr + b_a_kr * x__iz_kr
+            x_f_delt_kr = x_f_iz_kr - tan_05_kr * Tabl.tab_5_11(D_kr, L_k_kr)
+
+            if mach > 1:
+                b__b_op = b_op / (kk.pi / 2 * d * kk.sqrt(mach ** 2 - 1))
+                b__b_kr = b_kr / (kk.pi / 2 * d * kk.sqrt(mach ** 2 - 1))
+                L__hv_op = L_hv_op / (kk.pi * d * kk.sqrt(mach ** 2 - 1))
+                L__hv_kr = L_hv_kr / (kk.pi * d * kk.sqrt(mach ** 2 - 1))
+                F_1_op = 1 - 1 / (c_const_op * b__b_op ** 2) * (kk.e ** (-c_const_op * L__hv_op ** 2) - kk.e ** (-c_const_op * (b__b_op + L__hv_op) ** 2)) + kk.sqrt(kk.pi) / (b__b_op * kk.sqrt(c_const_op)) * Tabl.tab_int_ver(L__hv_op * kk.sqrt(2 * c_const_op))
+
+                F_1_kr = 1 - 1 / (c_const_kr * b__b_kr ** 2) * (kk.e ** (-c_const_kr * L__hv_kr ** 2) - kk.e ** (-c_const_kr * (b__b_kr + L__hv_kr) ** 2)) + kk.sqrt(kk.pi) / (b__b_kr * kk.sqrt(c_const_kr)) * Tabl.tab_int_ver(L__hv_kr * kk.sqrt(2 * c_const_kr))
+
+                F_op = 1 - kk.sqrt(kk.pi) / (2 * b__b_op * kk.sqrt(c_const_op)) * (Tabl.tab_int_ver((b__b_op + L__hv_op) * kk.sqrt(2 * c_const_op)) - Tabl.tab_int_ver(L__hv_op * kk.sqrt(2 * c_const_op)))
+                F_kr = 1 - kk.sqrt(kk.pi) / (2 * b__b_kr * kk.sqrt(c_const_kr)) * (Tabl.tab_int_ver((b__b_kr + L__hv_kr) * kk.sqrt(2 * c_const_kr)) - Tabl.tab_int_ver(L__hv_kr * kk.sqrt(2 * c_const_kr)))
+
+                x_f_b_op = x_f_iz_op + 0.02 * l_op * tan_05_op
+                x_f_b_kr = x_f_iz_kr + 0.02 * l_kr * tan_05_kr
+
+                x_f_ind_op = x_b_op + b_op * x_f_b_op * F_op * F_1_op
+                x_f_ind_kr = x_b_kr + b_kr * x_f_b_kr * F_kr * F_1_kr
+                x_fa_op = 1 / K_aa_op * (x_f_iz_op + (k_aa_op - 1) * x_f_delt_op + (K_aa_op - k_aa_op) * x_f_ind_op)
+                x_fa_kr = 1 / K_aa_kr * (x_f_iz_kr + (k_aa_kr - 1) * x_f_delt_kr + (K_aa_kr - k_aa_kr) * x_f_ind_kr)
+            else:
+                x_f_b_op = x_f_iz_op + 0.02 * l_op * tan_05_op
+                x_f_b_kr = x_f_iz_kr + 0.02 * l_kr * tan_05_kr
+                x_f_ind_op = x_b_op + b_op * x_f_b_op
+                x_f_ind_kr = x_b_kr + b_kr * x_f_b_kr
+                x_fa_op = 1 / K_aa_op * (x_f_iz_op + (k_aa_op - 1) * x_f_delt_op + (K_aa_op - k_aa_op) * x_f_ind_op)
+                x_fa_kr = 1 / K_aa_kr * (x_f_iz_kr + (k_aa_kr - 1) * x_f_delt_kr + (K_aa_kr - k_aa_kr) * x_f_ind_kr)
+
+            print(x_fa_op)
+            x_ffa_op.append(x_fa_op)
+            print(x_fa_kr)
+            x_ffa_kr.append(x_fa_kr)
+
+            # координаты фокусов ЛА по углам отклонения несущих поверхностей
+
+            x_fd_op = 1 / K_delt_0_op * (k_delt_0_op * x_f_iz_op + (K_delt_0_op - k_delt_0_op) * x_f_ind_op)
+
+            # моменты
             # mz_alf = -cy1_alf * (x_fa_f - x_t) / L_f
 
             t += dt
@@ -232,6 +287,8 @@ class Rocket(object):
 
             self.x += (self.v + self.v1) / 2 * kk.cos(self.fi_viz) * dt
             self.y += (self.v + self.v1) / 2 * kk.sin(self.fi_viz) * dt
+            """khi = cy_delt * self.delt / cy1_alf
+            self.alf_potr = (n_y_a * self.m * g) / (cy1_alf * q * Sf * (1 + khi) + p / 57.3)"""
             target.next_coord()
             xx.append(self.x)
             yy.append(self.y)
@@ -243,13 +300,18 @@ class Rocket(object):
             """if (self.v >= 650) and (self.v <= 660):
                 print(t)"""
             if t <= t_st:
+                self.p = self.p1
+                self.x_ct += dx_cm1 * dt
                 self.m -= dm1 * dt
-                self.v_ = 1 / self.m * (self.p1 - f_x) - g * kk.sin(self.omega)
+                self.v_ = 1 / self.m * (self.p - f_x) - g * kk.sin(self.omega)
             elif (t > t_st) and (t <= t_st + t_m):
+                self.p = self.p2
+                self.x_ct += dx_cm2 * dt
                 self.m -= dm2 * dt
-                self.v_ = 1 / self.m * (self.p2 - f_x) - g * kk.sin(self.omega)
+                self.v_ = 1 / self.m * (self.p - f_x) - g * kk.sin(self.omega)
             else:
-                self.v_ = 1 / self.m * (self.p3 - f_x) - g * kk.sin(self.omega)
+                self.p = self.p3
+                self.v_ = 1 / self.m * (self.p - f_x) - g * kk.sin(self.omega)
             self.v += self.v_ * dt
             """if self.v < 650:
                 self.v = self.v1
@@ -275,6 +337,13 @@ class Rocket(object):
         plt.show()"""
         print(v_sr / i)
 
+        plt.plot(x_ffa_op, tt)
+        plt.plot(x_ffa_kr, tt)
+        plt.plot(x_ffa_f, tt)
+        plt.grid(True)
+        plt.axis([0, 1.7, 0, 16])
+        plt.show()
+
         plt.plot(tt, x_ffa_f)
         #plt.plot(tt, cyy_op)
         #plt.plot(tt, cyy1_delt_op)
@@ -299,10 +368,12 @@ class Rocket(object):
 
 dt = 10 ** -4
 g = 9.80665
-t_st = 2
-t_m = 9
+t_st = 2.7
+t_m = 8.3
 dm1 = (11.292 - 8.996) / t_st
-dm2 = (8.996 - 7.3) / (t_m)
+dm2 = (8.996 - 7.3) / t_m
+dx_cm1 = (0.671 - 0.78) / t_st
+dx_cm2 = (0.637 - 0.671) / t_m
 # (abs(target.y - self.y) > 25) or
 vertel = Target()
 igla = Rocket()
@@ -314,18 +385,31 @@ a_m = 2  # коэффициент быстроты реакции ракеты �
 
 l_cil = 45.5 / 8
 l_nos = 12.5 / 8
+
 tan_05_kr = 0.307  # тангенс среднего угла крыла
 l_kr = 1.46  # относительное удлинение крыла
+L_k_kr = 0.146 - 0.072  # размах консолей крыла
 b_kr = 0.1061  # ширина крыла у корпуса
+b_a_kr = 0.101  # САХ консоли крыльев
+x_b_a_kr = 1.183  # координата начала САХ крыла
+x_b_kr = 1.178  # координата начала бортовой хорды крыла
 a_kr = 0.098  # ширина крыла у корпуса (меньшая грань трапеции)
 c_kr = 0.03  # относительная толщина профиля крыла
+L_hv_kr = 0.015  # Расстояние от конца бортовой хорды оперения до кормового среза корпуса
+L1_kr = 1.2311  # Расстояние от носика корпуса до серидины бортовой хорды оперения
 koef_kr = 1 / (1 - a_kr / b_kr)  # коэффициент перехода от ромбовидного к шестиугольному профилю крыла
 
 tan_05_op = -0.012  # тангенс среднего угла оперения
 l_op = 7.888  # относительное удлинение оперения l^2/S
+L_k_op = 0.25 - 0.72  # размах консолей оперения
 b_op = 0.032  # ширина оперения у корпуса
+b_a_op = 0.029  # САХ консоли оперения
+x_b_a_op = 0.334  # коордигата начала САХ консоли опрения
+x_b_op = 0.334  # координата начала бортовой хорды оперения
 a_op = 0.015
 c_op = 0.03  # относительная толщина профиля оперения
+L_hv_op = 0.933  # Расстояние от конца бортовой хорды оперения до кормового среза корпуса
+L1_op = 0.35  # Расстояние от носика корпуса до серидины бортовой хорды оперения
 koef_op = 1 / (1 - a_op / b_op)
 print(koef_kr, koef_op, "koef")
 
@@ -337,8 +421,10 @@ S_kr = 0.015 / (kk.pi * (d ** 2) / 4)  # относительная площад
 
 D_kr = 0.072 / 0.146  # отерсительный диаметр корпуса
 nu_k_kr = 1.322  # относительное сужение консоли задней несущей поверхности
+c_const_kr = (4 + 1 / nu_k_kr) * (1 + 8 * D_kr ** 2)  # коэффициент формы эпюры погонной нагрузки для крыльев
 D_op = 0.072 / 0.25  # относительный диаметр корпуса
 nu_k_op = 1.069  # относительное сужение консоли передней несущей поверхности
+c_const_op = (4 + 1 / nu_k_op) * (1 + 8 * D_op ** 2)  # коэффициент формы эпюры погонной нагрузки для оперения
 
 L_f = 1.626  # длина корпуса
 L_nos = 0.155  # длина носовой части
@@ -349,7 +435,7 @@ n_korm = 0.05 / 0.072
 W_korm = 0.114 * S_dn + 0.000136
 S_ff = kk.pi * d ** 2 / 4
 Ff = 0.3619  # площадь обтекаемой потоком поверхности корпуса (без донного среза)
-Sf = kk.pi * (d ** 2) / 4  #
+Sf = kk.pi * (d ** 2) / 4  # площадь миделя
 f_t = 0.045216
 
 l_zat = 23.49 / 62.59  # относительное удлинение затупления носовой части
