@@ -127,7 +127,7 @@ class Rocket(object):
             k_t_op = Tabl.tab_3_21(mach, l_nos)
             k_t_kr = Tabl.tab_3_22(mach, x_otn_op_kr)
 
-            cy1_alf = cy1_alf_f * S_f + cy1_alf_kr * S_kr * k_t_kr + cy1_alf_op * S_op * k_t_op
+            cy1_alf = cy1_alf_f * S__f + cy1_alf_kr * S_kr * k_t_kr + cy1_alf_op * S_op * k_t_op
             cyy1_alf.append(cy1_alf)
 
             K_delt_0_op = k_aa_op
@@ -210,7 +210,7 @@ class Rocket(object):
             cxx_0_kr.append(cx_0_kr)
             cxx_0_op.append(cx_0_op)
 
-            cx_0 = 1.05 * (cx_0f * S_f + cx_0_op * k_t_op * S_op + cx_0_kr * k_t_kr * S_kr)
+            cx_0 = 1.05 * (cx_0f * S__f + cx_0_op * k_t_op * S_op + cx_0_kr * k_t_kr * S_kr)
             cxx_0.append(cx_0)
             f_x = cx_0 * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8
             f_xx.append(f_x)
@@ -222,7 +222,7 @@ class Rocket(object):
             # cx_op_ind = cy
 
             # фокусы отдельных частей ЛА по углу атаки
-            x_fa_nos_cill = L_nos - W_nos / S_ff + Tabl.tab_5_7(mach, l_nos, l_cil, L_nos)
+            x_fa_nos_cill = L_nos - W_nos / S_f + Tabl.tab_5_7(mach, l_nos, l_cil, L_nos)
             x_ffa_nos_cill.append(x_fa_nos_cill)
             x_fa_korm = L_f - 0.5 * L_korm
             """ + cy_korm * x_fa_korm"""
@@ -274,11 +274,24 @@ class Rocket(object):
             print(x_fa_kr)
             x_ffa_kr.append(x_fa_kr)
 
-            # координаты фокусов ЛА по углам отклонения несущих поверхностей
+            # координаты фокуса рулей (передних консолей) по углам отклонения
 
             x_fd_op = 1 / K_delt_0_op * (k_delt_0_op * x_f_iz_op + (K_delt_0_op - k_delt_0_op) * x_f_ind_op)
 
-            # моменты
+            # Демпфирующие моменты АД поверхностей
+            # x_c_ob - координата центра тяжести объема тела вращения
+            x_c_ob = L_f * ((2 * (l_nos + l_cil)**2 - l_nos**2) / (4*(l_nos+l_cil) * (l_nos+l_cil - 2/3*l_nos)))
+            m_z_wz_f = -2 * (1 - self.x_ct / L_f + (self.x_ct / L_f) ** 2 - x_c_ob / L_f)
+
+            x__ct_op = (self.x_ct - x_b_a_op) / b_a_op  # координата центра тяжести, измеренная от начала САХ рулей
+            m_z_wz_op = -57.3 * (cy1_alf_op * (x__ct_op - 1 / 2) ** 2 * K_aa_op)
+
+            m_z_wz_delt_kr = -57.3 * (cy1_alf_kr * K_aa_kr) * eps_sr_alf * (self.x_ct - x_c_pl_ba) / b_a_kr * (self.x_ct - x_fa_kr) / b_a_kr
+            x__ct_kr = (self.x_ct - x_b_a_kr) / b_a_kr
+            m_z_wz_iz_kr = -57.3 * (cy1_alf_op * (x__ct_kr - 1 / 2) ** 2 * K_aa_kr)
+            m_z_wz_kr = m_z_wz_iz_kr * K_aa_kr + m_z_wz_delt_kr
+            
+
             # mz_alf = -cy1_alf * (x_fa_f - x_t) / L_f
 
             t += dt
@@ -404,6 +417,7 @@ l_op = 7.888  # относительное удлинение оперения l
 L_k_op = 0.25 - 0.72  # размах консолей оперения
 b_op = 0.032  # ширина оперения у корпуса
 b_a_op = 0.029  # САХ консоли оперения
+x_c_pl_ba = 0.349  # координата цт площади передних консолей (середина САХ консолей)
 x_b_a_op = 0.334  # коордигата начала САХ консоли опрения
 x_b_op = 0.334  # координата начала бортовой хорды оперения
 a_op = 0.015
@@ -415,7 +429,7 @@ print(koef_kr, koef_op, "koef")
 
 b_ak_kr = 0.094
 x_otn_op_kr = 0.846 / b_ak_kr  # относительное расстояние между оперением и средней хордой крыльев
-S_f = kk.pi * (d ** 2) / 4 / (kk.pi * (d ** 2) / 4)  # относительная площадь корпуса
+S__f = kk.pi * (d ** 2) / 4 / (kk.pi * (d ** 2) / 4)  # относительная площадь корпуса
 S_op = 0.0078575 / (kk.pi * (d ** 2) / 4)  # относительная площадь передних несущих поверхностей
 S_kr = 0.015 / (kk.pi * (d ** 2) / 4)  # относительная площадь задних несущих поверхностей
 
@@ -433,7 +447,7 @@ L_korm = 0.160
 S_dn = kk.pi * 0.05 ** 2 / 4
 n_korm = 0.05 / 0.072
 W_korm = 0.114 * S_dn + 0.000136
-S_ff = kk.pi * d ** 2 / 4
+S_f = kk.pi * d ** 2 / 4
 Ff = 0.3619  # площадь обтекаемой потоком поверхности корпуса (без донного среза)
 Sf = kk.pi * (d ** 2) / 4  # площадь миделя
 f_t = 0.045216
