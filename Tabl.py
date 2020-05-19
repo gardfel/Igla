@@ -177,11 +177,16 @@ def tab_3_5(*args):
     razm = [-3.5, -3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5]
 
     if (mah ** 2 - 1) <= 0:
-        razmm = -lambd_k * (-mah ** 2 + 1) ** 0.5
-    elif (lambd_k * kk.sqrt(mah ** 2 - 1)) >= 10:
+        razmm = -lambd_k * (1 - mah ** 2) ** 0.5
+    elif (lambd_k * kk.sqrt(mah ** 2 - 1)) >= 5.1:
         return 4 / (57.3 * (kk.sqrt(mah ** 2 - 1)))
     else:
         razmm = lambd_k * (mah ** 2 - 1) ** 0.5
+
+    if razmm >= 5:
+        razmm = 5
+    if razmm <= -3.5:
+        razmm = -3.5
 
     k = int(razmm // 0.5 + 8)
     if k >= 16:
@@ -196,32 +201,32 @@ def tab_3_5(*args):
     if otnos <= 0:
         if krit == 0:
             cy1 = interpol(cy1_iz_kr_a_000[k], cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
-        elif (krit >= 0) and (krit <= 0.25):
+        elif (krit > 0) and (krit <= 0.25):
             cy1 = interpol(interpol(cy1_iz_kr_a_025[k], cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            interpol(cy1_iz_kr_a_000[k], cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0, 0.25))
-        elif (krit >= 0.25) and (krit <= 0.5):
+        elif (krit > 0.25) and (krit <= 0.5):
             cy1 = interpol(interpol(cy1_iz_kr_a_050[k], cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            interpol(cy1_iz_kr_a_025[k], cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0.25, 0.5))
-        elif (krit >= 0.5) and (krit <= 1):
+        elif (krit > 0.5) and (krit <= 1):
             cy1 = interpol(interpol(cy1_iz_kr_a_100[k], cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            interpol(cy1_iz_kr_a_050[k], cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0.5, 1))
-        elif (krit >= 1) and (krit <= 1.5):
+        elif (krit > 1) and (krit <= 1.5):
             cy1 = interpol(interpol(cy1_iz_kr_a_150[k], cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            interpol(cy1_iz_kr_a_100[k], cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 1, 1.5))
         else:
             cy1 = interpol(cy1_iz_kr_a_150[k], cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
-    elif (otnos >= 0) and (otnos <= 1):
+    elif (otnos > 0) and (otnos <= 1):
         param = procent(otnos, 0, 1)
         if krit == 0:
             cy1a = interpol(cy1_iz_kr_a_000[k], cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
             cy1b = interpol(cy1_iz_kr_b_000[k], cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 0) and (krit <= 0.25):
+        elif (krit > 0) and (krit <= 0.25):
             cy1a = interpol(interpol(cy1_iz_kr_a_025[k], cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_a_000[k], cy1_iz_kr_a_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
@@ -229,7 +234,7 @@ def tab_3_5(*args):
                             interpol(cy1_iz_kr_b_000[k], cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 0.25) and (krit <= 0.5):
+        elif (krit > 0.25) and (krit <= 0.5):
             cy1a = interpol(interpol(cy1_iz_kr_a_050[k], cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_a_025[k], cy1_iz_kr_a_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
@@ -237,7 +242,7 @@ def tab_3_5(*args):
                             interpol(cy1_iz_kr_b_025[k], cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 0.5) and (krit <= 1):
+        elif (krit > 0.5) and (krit <= 1):
             cy1a = interpol(interpol(cy1_iz_kr_a_100[k], cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_a_050[k], cy1_iz_kr_a_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
@@ -245,7 +250,7 @@ def tab_3_5(*args):
                             interpol(cy1_iz_kr_b_050[k], cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 1) and (krit <= 1.5):
+        elif (krit > 1) and (krit <= 1.5):
             cy1a = interpol(interpol(cy1_iz_kr_a_150[k], cy1_iz_kr_a_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_a_100[k], cy1_iz_kr_a_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 1, 1.5))
@@ -258,13 +263,13 @@ def tab_3_5(*args):
             cy1b = interpol(cy1_iz_kr_b_150[k], cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
             cy1 = interpol(cy1b, cy1a, param)
 
-    elif (otnos >= 1) and (otnos <= 2):
+    elif (otnos > 1) and (otnos <= 2):
         param = procent(otnos, 1, 2)
         if krit == 0:
             cy1a = interpol(cy1_iz_kr_b_000[k], cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
             cy1b = interpol(cy1_iz_kr_v_000[k], cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 0) and (krit <= 0.25):
+        elif (krit > 0) and (krit <= 0.25):
             cy1a = interpol(interpol(cy1_iz_kr_b_025[k], cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_b_000[k], cy1_iz_kr_b_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
@@ -272,7 +277,7 @@ def tab_3_5(*args):
                             interpol(cy1_iz_kr_v_000[k], cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 0.25) and (krit <= 0.5):
+        elif (krit > 0.25) and (krit <= 0.5):
             cy1a = interpol(interpol(cy1_iz_kr_b_050[k], cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_b_025[k], cy1_iz_kr_b_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
@@ -280,7 +285,7 @@ def tab_3_5(*args):
                             interpol(cy1_iz_kr_v_025[k], cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 0.5) and (krit <= 1):
+        elif (krit > 0.5) and (krit <= 1):
             cy1a = interpol(interpol(cy1_iz_kr_b_100[k], cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_b_050[k], cy1_iz_kr_b_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
@@ -288,7 +293,7 @@ def tab_3_5(*args):
                             interpol(cy1_iz_kr_v_050[k], cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 1) and (krit <= 1.5):
+        elif (krit > 1) and (krit <= 1.5):
             cy1a = interpol(interpol(cy1_iz_kr_b_150[k], cy1_iz_kr_b_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_b_100[k], cy1_iz_kr_b_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 1, 1.5))
@@ -301,13 +306,13 @@ def tab_3_5(*args):
             cy1b = interpol(cy1_iz_kr_v_150[k], cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
             cy1 = interpol(cy1b, cy1a, param)
 
-    elif (otnos >= 2) and (otnos <= 3):
+    elif (otnos > 2) and (otnos <= 3):
         param = procent(otnos, 2, 3)
         if krit == 0:
             cy1a = interpol(cy1_iz_kr_v_000[k], cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
             cy1b = interpol(cy1_iz_kr_g_000[k], cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 0) and (krit <= 0.25):
+        elif (krit > 0) and (krit <= 0.25):
             cy1a = interpol(interpol(cy1_iz_kr_v_025[k], cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_v_000[k], cy1_iz_kr_v_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
@@ -315,7 +320,7 @@ def tab_3_5(*args):
                             interpol(cy1_iz_kr_g_000[k], cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0, 0.25))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 0.25) and (krit <= 0.5):
+        elif (krit > 0.25) and (krit <= 0.5):
             cy1a = interpol(interpol(cy1_iz_kr_v_050[k], cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_v_025[k], cy1_iz_kr_v_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
@@ -323,7 +328,7 @@ def tab_3_5(*args):
                             interpol(cy1_iz_kr_g_025[k], cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.25, 0.5))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 0.5) and (krit <= 1):
+        elif (krit > 0.5) and (krit <= 1):
             cy1a = interpol(interpol(cy1_iz_kr_v_100[k], cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_v_050[k], cy1_iz_kr_v_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
@@ -331,7 +336,7 @@ def tab_3_5(*args):
                             interpol(cy1_iz_kr_g_050[k], cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 0.5, 1))
             cy1 = interpol(cy1b, cy1a, param)
-        elif (krit >= 1) and (krit <= 1.5):
+        elif (krit > 1) and (krit <= 1.5):
             cy1a = interpol(interpol(cy1_iz_kr_v_150[k], cy1_iz_kr_v_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             interpol(cy1_iz_kr_v_100[k], cy1_iz_kr_v_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                             procent(krit, 1, 1.5))
@@ -347,23 +352,23 @@ def tab_3_5(*args):
     else:
         if krit == 0:
             cy1 = interpol(cy1_iz_kr_g_000[k], cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k]))
-        elif (krit >= 0) and (krit <= 0.25):
+        elif (krit > 0) and (krit <= 0.25):
             cy1 = interpol(interpol(cy1_iz_kr_g_025[k], cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            interpol(cy1_iz_kr_g_000[k], cy1_iz_kr_g_000[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0, 0.25))
-        elif (krit >= 0.25) and (krit <= 0.5):
+        elif (krit > 0.25) and (krit <= 0.5):
             cy1 = interpol(interpol(cy1_iz_kr_g_050[k], cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            interpol(cy1_iz_kr_g_025[k], cy1_iz_kr_g_025[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0.25, 0.5))
-        elif (krit >= 0.5) and (krit <= 1):
+        elif (krit > 0.5) and (krit <= 1):
             cy1 = interpol(interpol(cy1_iz_kr_g_100[k], cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            interpol(cy1_iz_kr_g_050[k], cy1_iz_kr_g_050[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 0.5, 1))
-        elif (krit >= 1) and (krit <= 1.5):
+        elif (krit > 1) and (krit <= 1.5):
             cy1 = interpol(interpol(cy1_iz_kr_g_150[k], cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            interpol(cy1_iz_kr_g_100[k], cy1_iz_kr_g_100[k - 1], procent(razmm, razm[k - 1], razm[k])),
                            procent(krit, 1, 1.5))
-        elif krit >= 1.5:
+        elif krit > 1.5:
             cy1 = interpol(cy1_iz_kr_g_150[k], cy1_iz_kr_g_150[k - 1], procent(razmm, razm[k - 1], razm[k]))
 
     return cy1 * lambd_k
@@ -415,11 +420,6 @@ def tab_3_21(*args):
     x_t_5 = [0.540, 0.650, 0.750, 0.835, 0.885, 0.920, 0.940, 0.960, 0.970, 0.980, 0.987, 0.992, 1.000]
     lambd_tab = [0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6, 2.8, 3]
 
-    '''for i in range(len(lambd_tab)):
-        if lambd <= lambd_tab[i]:
-            if lambd >= lambd_tab[i - 1]:
-                k = i'''
-
     k = int(lambd // 0.2 - 2)
 
     if mah <= 2:
@@ -461,11 +461,6 @@ def tab_3_22(*args):
     k_t_08 = [0.984, 0.986, 0.985, 0.981, 0.970, 0.933, 0.910, 0.905, 0.900, 0.897, 0.895, 0.895, 0.895]
     k_t_10 = [0.987, 0.989, 0.988, 0.985, 0.975, 0.940, 0.920, 0.910, 0.906, 0.905, 0.900, 0.900, 0.900]
     mah_tab = [0, 0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
-
-    '''for i in range(len(mah_tab)):
-        if mah <= mah_tab[i]:
-            if mah <= mah_tab[i - 1]:
-                k = i'''
 
     if mah <= 1:
         k = int(mah // 0.25 + 1)
@@ -721,8 +716,7 @@ def tab_4_11(*args):
     mah_tab = [0.6, 0.7, 0.8, 0.9, 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.5,
                3, 3.5, 4, 4.5, 5, 5.5]
     k = 0
-    '''plt.plot(mah_tab, cx_nos_20)
-    plt.show()'''
+
     if mah <= 0.6:
         k = 1
     elif mah <= 1:
@@ -733,7 +727,7 @@ def tab_4_11(*args):
         k = int(mah // 0.1 - 1)
     elif mah <= 5.5:
         k = int(mah // 0.5 + 15)
-    elif mah >= 5.5:
+    elif mah > 5.5:
         k = len(mah_tab) - 1
 
     if lambd <= 1.5:
@@ -1800,67 +1794,3 @@ def tab_int_ver(*args):
         return 0.99999
 
     return interpol(F_x[k], F_x[k - 1], procent(x, xx[k - 1], xx[k]))
-
-def graph_test_3_5():
-    from math import sqrt
-    import numpy as np
-
-    def convert_foo_3_5(a1, a2, a3):
-        lambd_k = 1.2
-        if a1 < 0:
-            while (a1 / lambd_k)**2 > 1:
-                lambd_k *= 1.5
-            mach = sqrt(1 - (a1 / lambd_k)**2)
-        else:
-            mach = sqrt((a1 / lambd_k)**2 + 1)
-        c_ = (a2 / lambd_k)**3
-        tg_khi_05 = a3 / lambd_k
-        print(lambd_k)
-        return tab_3_5(mach, lambd_k, c_, tg_khi_05) / lambd_k
-
-    def plot_line(ax, a2, a3):
-        xs = np.linspace(-3, 9, 1000)
-        ys = [convert_foo_3_5(a1, a2, a3) for a1 in xs]
-        ax.plot(xs, ys, label=f'a2 = {a2}')
-        ax.grid(True)
-        ax.legend()
-
-    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2,2)
-    a3 = 0
-    ax = ax1
-    plot_line(ax, 0.25, a3)
-    plot_line(ax, 0.5, a3)
-    plot_line(ax, 1, a3)
-    plot_line(ax, 1.5, a3)
-    plot_line(ax, 1.7, a3)
-
-    a3 = 1
-    ax = ax2
-    plot_line(ax, 0.25, a3)
-    plot_line(ax, 0.5, a3)
-    plot_line(ax, 1, a3)
-    plot_line(ax, 1.5, a3)
-    plot_line(ax, 1.7, a3)
-
-    a3 = 2
-    ax = ax3
-    plot_line(ax, 0.25, a3)
-    plot_line(ax, 0.5, a3)
-    plot_line(ax, 1, a3)
-    plot_line(ax, 1.5, a3)
-    plot_line(ax, 1.7, a3)
-
-    a3 = 3
-    ax = ax4
-    plot_line(ax, 0.25, a3)
-    plot_line(ax, 0.5, a3)
-    plot_line(ax, 1, a3)
-    plot_line(ax, 1.5, a3)
-    plot_line(ax, 1.7, a3)
-
-    plt.show()
-
-
-if __name__ == "__main__":
-    graph_test_3_5()
-

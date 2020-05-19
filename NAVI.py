@@ -48,6 +48,7 @@ class Rocket(object):
         self.p2 = 900  # сила тяги на втором режиме
         self.p3 = 0
         self.x_ct = 0.78
+        self.q = 0
 
     def navigation(self, *args):
 
@@ -85,34 +86,35 @@ class Rocket(object):
         x_ffa_f = []
         x_ffa_op = []
         x_ffa_kr = []
-
-        # while (abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5):
+        da_ball = []
+        m_zz_wz = []
+        machh = []
+        cyy_korm = []
 
         self.omega = kk.atan((target.y - self.y) / (target.x - self.x))
 
-        # while self.v < 887:
         while ((abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5)) and (t < 16):
-
-            par_1 = self.fi_viz
-            self.fi_viz = kk.atan((target.y - self.y) / (target.x - self.x))
-            self.d_fi_viz = (self.fi_viz - par_1) / dt
-            self.d_omega = a_m * self.d_fi_viz
-
-            n_y_a = self.v * self.d_omega / g + kk.cos(self.omega)
-
-            # alf =
 
             # self.delt = kk.asin()
             mach = self.v / Tabl.tab_atm(self.y, 2)
+            machh.append(mach)
 
             cy_nos = Aero.Cy_nos(Tabl.tab_3_2(mach, l_nos, l_cil), Tabl.tab_3_4(mach, 0, l_cil),
                                  Tabl.tab_3_2(mach, 1.32, 22.43), Tabl.tab_3_4(mach, 0, 22.43),
                                  Tabl.tab_3_4(mach, 1, 23.75))
             cyy_nos.append(cy_nos)
             cy_korm = -0.2 * 2 / 57.3 * (1 - n_korm ** 2)
+            cyy_korm.append(cy_korm)
             cy_kr = Tabl.tab_3_5(mach * kk.sqrt(Tabl.tab_3_22(mach, x_otn_op_kr)), l_kr, c_kr, tan_05_kr)
             cyy_kr.append(cy_kr)
+            # if mach * kk.sqrt(Tabl.tab_3_21(mach, l_nos))<= 1.05:
             cy_op = Tabl.tab_3_5(mach * kk.sqrt(Tabl.tab_3_21(mach, l_nos)), l_op, c_op, tan_05_op)
+            print("otnos", l_op * tan_05_op, "krit", l_op * c_op ** (1 / 3), mach * Tabl.tab_3_21(mach, l_nos), mach)
+            if mach < 1:
+                print(l_op * kk.sqrt(- mach ** 2 + 1))
+            if mach > 1:
+                print(l_op * kk.sqrt(mach ** 2 - 1))
+
             cyy_op.append(cy_op)
             cy1_alf_f = cy_nos + cy_korm
 
@@ -127,7 +129,7 @@ class Rocket(object):
             k_t_op = Tabl.tab_3_21(mach, l_nos)
             k_t_kr = Tabl.tab_3_22(mach, x_otn_op_kr)
 
-            cy1_alf = cy1_alf_f * S__f + cy1_alf_kr * S_kr * k_t_kr + cy1_alf_op * S_op * k_t_op
+            cy1_alf = cy1_alf_f * S__f + cy1_alf_kr * S__kr * k_t_kr + cy1_alf_op * S__op * k_t_op
             cyy1_alf.append(cy1_alf)
 
             K_delt_0_op = k_aa_op
@@ -145,27 +147,17 @@ class Rocket(object):
 
             ni_atm = Tabl.tab_atm(self.y, 5)
             re_f = self.v * L_f / ni_atm
-            # print(re_f * h / L_f)
 
-            re_t = Tabl.tab_4_5(mach, re_f, 7, L_f)  # test (max for current speed and form)
+            re_t = Tabl.tab_4_5(mach, re_f, 7, L_f)
 
             x_tt = re_t * ni_atm / self.v
             if x_tt >= (0.26 / L_f):
                 x_tt = f_t / Ff
-            # print(x_t)
-            # x_t = 0.08  # координата точки перехода (до точного определения)
 
-            # cx_tr = Tabl.tab_4_2(re_f, x_t) / 2 * Ff / Sf
-            # cxx_tr.append(cx_tr)
             cx_tr = Tabl.tab_4_2(re_f, x_tt) / 2 * Ff / Sf
             cxx_tr.append(cx_tr)
 
             cx_nos = Tabl.tab_4_11(mach, l_nos_)
-            cxx_con.append(cx_nos)
-            """cx_zat = Tabl.tab_4_13(mach, l_zat)
-            cxx_zat.append(cx_zat)
-            cx_nos = cx_con * (1 - r_ ** 2 * kk.cos(teta) ** 2 * (3.1 - 1.4 * r_ * kk.cos(teta) - 0.7 * r_ ** 2 *
-                                                                  kk.cos(teta) ** 2)) + cx_zat * r_ ** 2"""
             cxx_nos.append(cx_nos)
 
             cx_korm = Tabl.tab_4_24(mach, nu_kor, l_korm)
@@ -196,7 +188,7 @@ class Rocket(object):
                 cx_kr_vol = Tabl.tab_4_30(mach, nu_k_kr, l_kr, tan_05_kr, c_kr)
                 cxx_kr_vol.append(cx_kr_vol)
                 cxx_op_vol.append(cx_op_vol)
-            elif mach >= 1.1:
+            else:
 
                 cx_kr_vol = (Tabl.tab_4_30(mach, nu_k_kr, l_kr, tan_05_kr, c_kr)) * \
                             (1 + Tabl.tab_4_32(mach, tan_05_kr) * (koef_kr - 1))
@@ -210,7 +202,7 @@ class Rocket(object):
             cxx_0_kr.append(cx_0_kr)
             cxx_0_op.append(cx_0_op)
 
-            cx_0 = 1.05 * (cx_0f * S__f + cx_0_op * k_t_op * S_op + cx_0_kr * k_t_kr * S_kr)
+            cx_0 = 1.05 * (cx_0f * S__f + cx_0_op * k_t_op * S__op + cx_0_kr * k_t_kr * S__kr)
             cxx_0.append(cx_0)
             f_x = cx_0 * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8
             f_xx.append(f_x)
@@ -225,8 +217,7 @@ class Rocket(object):
             x_fa_nos_cill = L_nos - W_nos / S_f + Tabl.tab_5_7(mach, l_nos, l_cil, L_nos)
             x_ffa_nos_cill.append(x_fa_nos_cill)
             x_fa_korm = L_f - 0.5 * L_korm
-            """ + cy_korm * x_fa_korm"""
-            x_fa_f = 1 / cy1_alf_f * (cy_nos * x_fa_nos_cill)
+            x_fa_f = 1 / cy1_alf_f * (cy_nos * x_fa_nos_cill + cy_korm * x_fa_korm)
             # print(cy_korm)
             x_ffa_f.append(x_fa_f)
 
@@ -274,6 +265,8 @@ class Rocket(object):
             print(x_fa_kr)
             x_ffa_kr.append(x_fa_kr)
 
+            x_fa = 1 / cy1_alf * ((cy1_alf_f * S__f * x_fa_f) + cy1_alf_op * S__op * x_fa_op * k_t_op + cy1_alf_kr * S__kr * x_fa_kr * k_t_kr)
+
             # координаты фокуса рулей (передних консолей) по углам отклонения
 
             x_fd_op = 1 / K_delt_0_op * (k_delt_0_op * x_f_iz_op + (K_delt_0_op - k_delt_0_op) * x_f_ind_op)
@@ -290,18 +283,33 @@ class Rocket(object):
             x__ct_kr = (self.x_ct - x_b_a_kr) / b_a_kr
             m_z_wz_iz_kr = -57.3 * (cy1_alf_op * (x__ct_kr - 1 / 2) ** 2 * K_aa_kr)
             m_z_wz_kr = m_z_wz_iz_kr * K_aa_kr + m_z_wz_delt_kr
-            
 
-            # mz_alf = -cy1_alf * (x_fa_f - x_t) / L_f
+            m_z_wz = m_z_wz_f * S__f * L__f ** 2 + m_z_wz_op * S__op * b__a_op * kk.sqrt(k_t_op) + m_z_wz_kr * S__kr * b_a_kr * kk.sqrt(k_t_kr)
+            m_zz_wz.append(m_z_wz)
+
+            m_z_delt_op = cy1_delt_op * (self.x_ct - x_fd_op) / L_f
+            m_z_alf = cy1_alf * (self.x_ct - x_fa) / L_f
+
+            da_ball.append(-m_z_alf / m_z_delt_op)
 
             t += dt
             i += 1
             v_sr += self.v
 
+            # функция наведения (Метод наведения и кинематические параметры перехвата)
+
+            par_1 = self.fi_viz
+            self.fi_viz = kk.atan((target.y - self.y) / (target.x - self.x))
+            self.d_fi_viz = (self.fi_viz - par_1) / dt
+            self.d_omega = a_m * self.d_fi_viz
+
+            n_y_a = self.v * self.d_omega / g + kk.cos(self.omega)
+
             self.x += (self.v + self.v1) / 2 * kk.cos(self.fi_viz) * dt
             self.y += (self.v + self.v1) / 2 * kk.sin(self.fi_viz) * dt
-            """khi = cy_delt * self.delt / cy1_alf
-            self.alf_potr = (n_y_a * self.m * g) / (cy1_alf * q * Sf * (1 + khi) + p / 57.3)"""
+
+            """khi = cy1_delt_op * self.delt / cy1_alf
+            self.alf_potr = (n_y_a * self.m * g) / (cy1_alf * q * Sf * (1 + khi) + self.p / 57.3)"""
             target.next_coord()
             xx.append(self.x)
             yy.append(self.y)
@@ -310,8 +318,6 @@ class Rocket(object):
             vv.append(self.v)
             tt.append(t)
             print(t, self.v, self.v_)
-            """if (self.v >= 650) and (self.v <= 660):
-                print(t)"""
             if t <= t_st:
                 self.p = self.p1
                 self.x_ct += dx_cm1 * dt
@@ -326,12 +332,7 @@ class Rocket(object):
                 self.p = self.p3
                 self.v_ = 1 / self.m * (self.p - f_x) - g * kk.sin(self.omega)
             self.v += self.v_ * dt
-            """if self.v < 650:
-                self.v = self.v1
-                self.v1 += a * dt
-            elif self.v < 887:
-                self.v = self.v1
-                self.v1 += a1 * dt"""
+
         """plt.plot(tt, cyy_nos)
         plt.axis([-0.1, t, 0, 0.06])
         plt.grid(True)
@@ -350,16 +351,27 @@ class Rocket(object):
         plt.show()"""
         print(v_sr / i)
 
-        plt.plot(x_ffa_op, tt)
+        """plt.plot(x_ffa_op, tt)
         plt.plot(x_ffa_kr, tt)
         plt.plot(x_ffa_f, tt)
         plt.grid(True)
         plt.axis([0, 1.7, 0, 16])
-        plt.show()
+        plt.show()"""
 
-        plt.plot(tt, x_ffa_f)
-        #plt.plot(tt, cyy_op)
-        #plt.plot(tt, cyy1_delt_op)
+        """plt.plot(tt, machh)
+        plt.grid(True)
+        plt.show()"""
+
+        plt.plot(tt, cyy_op, 'r')
+        plt.plot(tt, cyy_kr, 'g')
+        plt.plot(tt, cyy1_alf, 'b')
+        plt.plot(tt, cyy_korm, 'y')
+        plt.plot(tt, cyy_nos, 'k')
+        # plt.plot(tt, da_ball)
+        # plt.plot(tt, m_zz_wz)
+        # plt.axis([0, 16, -5, 5])
+        # plt.plot(tt, cyy_op)
+        # plt.plot(tt, cyy1_delt_op)
         plt.grid(True)
         plt.show()
 
@@ -387,7 +399,7 @@ dm1 = (11.292 - 8.996) / t_st
 dm2 = (8.996 - 7.3) / t_m
 dx_cm1 = (0.671 - 0.78) / t_st
 dx_cm2 = (0.637 - 0.671) / t_m
-# (abs(target.y - self.y) > 25) or
+
 vertel = Target()
 igla = Rocket()
 d = 0.072  # диаметр миделевого сечения
@@ -395,6 +407,20 @@ d = 0.072  # диаметр миделевого сечения
 # параметры для метода наведения:
 
 a_m = 2  # коэффициент быстроты реакции ракеты на маневр цели (от 1 до бесконечности)
+eps_krit = 38  # предельное отклонение координатора головки самонаведения
+
+L_f = 1.626  # длина корпуса
+L__f = L_f / L_f
+L_nos = 0.155  # длина носовой части
+W_nos = 0.00053  # Объем носовой части
+L_korm = 0.160
+S_dn = kk.pi * 0.05 ** 2 / 4
+n_korm = 0.05 / 0.072
+W_korm = 0.114 * S_dn + 0.000136
+S_f = kk.pi * d ** 2 / 4
+Ff = 0.3619  # площадь обтекаемой потоком поверхности корпуса (без донного среза)
+Sf = kk.pi * (d ** 2) / 4  # площадь миделя
+f_t = 0.045216
 
 l_cil = 45.5 / 8
 l_nos = 12.5 / 8
@@ -404,6 +430,7 @@ l_kr = 1.46  # относительное удлинение крыла
 L_k_kr = 0.146 - 0.072  # размах консолей крыла
 b_kr = 0.1061  # ширина крыла у корпуса
 b_a_kr = 0.101  # САХ консоли крыльев
+b__a_kr = b_a_kr / L_f
 x_b_a_kr = 1.183  # координата начала САХ крыла
 x_b_kr = 1.178  # координата начала бортовой хорды крыла
 a_kr = 0.098  # ширина крыла у корпуса (меньшая грань трапеции)
@@ -417,6 +444,7 @@ l_op = 7.888  # относительное удлинение оперения l
 L_k_op = 0.25 - 0.72  # размах консолей оперения
 b_op = 0.032  # ширина оперения у корпуса
 b_a_op = 0.029  # САХ консоли оперения
+b__a_op = b_a_op / L_f
 x_c_pl_ba = 0.349  # координата цт площади передних консолей (середина САХ консолей)
 x_b_a_op = 0.334  # коордигата начала САХ консоли опрения
 x_b_op = 0.334  # координата начала бортовой хорды оперения
@@ -430,8 +458,8 @@ print(koef_kr, koef_op, "koef")
 b_ak_kr = 0.094
 x_otn_op_kr = 0.846 / b_ak_kr  # относительное расстояние между оперением и средней хордой крыльев
 S__f = kk.pi * (d ** 2) / 4 / (kk.pi * (d ** 2) / 4)  # относительная площадь корпуса
-S_op = 0.0078575 / (kk.pi * (d ** 2) / 4)  # относительная площадь передних несущих поверхностей
-S_kr = 0.015 / (kk.pi * (d ** 2) / 4)  # относительная площадь задних несущих поверхностей
+S__op = 0.0078575 / (kk.pi * (d ** 2) / 4)  # относительная площадь передних несущих поверхностей
+S__kr = 0.015 / (kk.pi * (d ** 2) / 4)  # относительная площадь задних несущих поверхностей
 
 D_kr = 0.072 / 0.146  # отерсительный диаметр корпуса
 nu_k_kr = 1.322  # относительное сужение консоли задней несущей поверхности
@@ -439,18 +467,6 @@ c_const_kr = (4 + 1 / nu_k_kr) * (1 + 8 * D_kr ** 2)  # коэффициент �
 D_op = 0.072 / 0.25  # относительный диаметр корпуса
 nu_k_op = 1.069  # относительное сужение консоли передней несущей поверхности
 c_const_op = (4 + 1 / nu_k_op) * (1 + 8 * D_op ** 2)  # коэффициент формы эпюры погонной нагрузки для оперения
-
-L_f = 1.626  # длина корпуса
-L_nos = 0.155  # длина носовой части
-W_nos = 0.00053  # Объем носовой части
-L_korm = 0.160
-S_dn = kk.pi * 0.05 ** 2 / 4
-n_korm = 0.05 / 0.072
-W_korm = 0.114 * S_dn + 0.000136
-S_f = kk.pi * d ** 2 / 4
-Ff = 0.3619  # площадь обтекаемой потоком поверхности корпуса (без донного среза)
-Sf = kk.pi * (d ** 2) / 4  # площадь миделя
-f_t = 0.045216
 
 l_zat = 23.49 / 62.59  # относительное удлинение затупления носовой части
 r_ = 2 * 0.0329 / d
