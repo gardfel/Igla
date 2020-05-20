@@ -321,14 +321,14 @@ class Rocket(object):
             delt_r.append(self.delt * 180 / kk.pi)
 
             n_y_a = kk.fabs(self.v * self.d_omega / g + kk.cos(self.omega))
-            print(self.omega * 180 / kk.pi,self.d_omega * 180 / kk.pi)
+            # print(self.omega * 180 / kk.pi,self.d_omega * 180 / kk.pi)
             # print(n_y_a)
 
             khi = cy1_delt_op * self.delt / cy1_alf
-            print(khi)
+            # print(khi)
             q = Tabl.tab_atm(self.y, 4) * self.v ** 2 / 2
-            print(n_y_a * self.m * g)
-            print(cy1_alf * q * Sf * (1 + khi), self.p / 57.3)
+            # print(n_y_a * self.m * g)
+            # print(cy1_alf * q * Sf * (1 + khi), self.p / 57.3)
             self.alf_potr = (n_y_a * self.m * g) / (cy1_alf * q * Sf * (1 + khi) + self.p / 57.3)
             alff.append(self.alf_potr)
 
