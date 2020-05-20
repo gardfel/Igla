@@ -9,11 +9,11 @@ def Cy_nos(*args):
     :return:
     """
 
-    Cy1 = args[0]
-    Cy1_1 = args[1]
-    Cy2 = args[2]
-    Cy2_1 = args[3]
-    Cy3 = args[4]
+    cy1 = args[0]
+    cy1_1 = args[1]
+    cy2 = args[2]
+    cy2_1 = args[3]
+    cy3 = args[4]
 
     r = 4
     r1 = 32.86
@@ -26,9 +26,9 @@ def Cy_nos(*args):
     d_ = d1 / D
 
 
-    Cy1_2 = Cy1 * (1 - r_ ** 2) + Cy1_1 * r_ ** 2
-    Cy2_2 = Cy2 * (1 - r_1 ** 2) + Cy2_1 * r_1 ** 2
-    Cy_ob = Cy2_2 * (1 - d_ ** 2) + Cy3 * d_ ** 2
+    Cy1_2 = cy1 * (1 - r_ ** 2) + cy1_1 * r_ ** 2
+    Cy2_2 = cy2 * (1 - r_1 ** 2) + cy2_1 * r_1 ** 2
+    Cy_ob = Cy2_2 * (1 - d_ ** 2) + cy3 * d_ ** 2
     Cy_iz = Cy1_2 * (2 * r / D) ** 2 + Cy_ob
 
     return Cy_iz

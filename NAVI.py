@@ -10,10 +10,10 @@ import Aero
 class Target(object):
 
     def __init__(self):
-        self.v = random.uniform(200, 320)  # сумарная скорость цели
+        self.v = random.uniform(300, 320)  # сумарная скорость цели
         self.ang = 0
-        self.x = random.uniform(2900, 3000)
-        self.y = random.uniform(1400, 1500)
+        self.x = random.uniform(6000, 6100)
+        self.y = random.uniform(4400, 4500)
         self.alf = 0.1925  # random.uniform(0, 0.3925)
 
     def next_coord(self, *args):
@@ -90,6 +90,9 @@ class Rocket(object):
         m_zz_wz = []
         machh = []
         cyy_korm = []
+        alff = []
+        deltt = []
+        delt_r = []
 
         self.omega = kk.atan((target.y - self.y) / (target.x - self.x))
 
@@ -109,11 +112,6 @@ class Rocket(object):
             cyy_kr.append(cy_kr)
             # if mach * kk.sqrt(Tabl.tab_3_21(mach, l_nos))<= 1.05:
             cy_op = Tabl.tab_3_5(mach * kk.sqrt(Tabl.tab_3_21(mach, l_nos)), l_op, c_op, tan_05_op)
-            print("otnos", l_op * tan_05_op, "krit", l_op * c_op ** (1 / 3), mach * Tabl.tab_3_21(mach, l_nos), mach)
-            if mach < 1:
-                print(l_op * kk.sqrt(- mach ** 2 + 1))
-            if mach > 1:
-                print(l_op * kk.sqrt(mach ** 2 - 1))
 
             cyy_op.append(cy_op)
             cy1_alf_f = cy_nos + cy_korm
@@ -260,9 +258,7 @@ class Rocket(object):
                 x_fa_op = 1 / K_aa_op * (x_f_iz_op + (k_aa_op - 1) * x_f_delt_op + (K_aa_op - k_aa_op) * x_f_ind_op)
                 x_fa_kr = 1 / K_aa_kr * (x_f_iz_kr + (k_aa_kr - 1) * x_f_delt_kr + (K_aa_kr - k_aa_kr) * x_f_ind_kr)
 
-            print(x_fa_op)
             x_ffa_op.append(x_fa_op)
-            print(x_fa_kr)
             x_ffa_kr.append(x_fa_kr)
 
             x_fa = 1 / cy1_alf * ((cy1_alf_f * S__f * x_fa_f) + cy1_alf_op * S__op * x_fa_op * k_t_op + cy1_alf_kr * S__kr * x_fa_kr * k_t_kr)
@@ -303,13 +299,39 @@ class Rocket(object):
             self.d_fi_viz = (self.fi_viz - par_1) / dt
             self.d_omega = a_m * self.d_fi_viz
 
-            n_y_a = self.v * self.d_omega / g + kk.cos(self.omega)
+            if (kk.fabs(self.d_omega) <= d_omega_max):
+                self.omega += self.d_omega * dt
+            elif (self.d_omega >= 0):
+                self.omega += d_omega_max * dt
+            else:
+                self.omega -= d_omega_max * dt
 
-            self.x += (self.v + self.v1) / 2 * kk.cos(self.fi_viz) * dt
-            self.y += (self.v + self.v1) / 2 * kk.sin(self.fi_viz) * dt
+            if kk.fabs(self.omega - self.fi_viz) <= (15 * kk.pi / 180):
+                self.delt_potr = self.fi_viz - self.omega
+            elif (self.fi_viz - self.omega) < 0:
+                self.delt_potr = delta_max
+            else:
+                self.delt_potr = - delta_max
 
-            """khi = cy1_delt_op * self.delt / cy1_alf
-            self.alf_potr = (n_y_a * self.m * g) / (cy1_alf * q * Sf * (1 + khi) + self.p / 57.3)"""
+            if (self.delt - self.delt_potr) <= 0:
+                self.delt += d_delta_max * dt
+            else:
+                self.delt -= d_delta_max * dt
+            deltt.append(self.delt_potr * 180 / kk.pi)
+            delt_r.append(self.delt * 180 / kk.pi)
+
+            n_y_a = kk.fabs(self.v * self.d_omega / g + kk.cos(self.omega))
+            print(self.omega * 180 / kk.pi,self.d_omega * 180 / kk.pi)
+            # print(n_y_a)
+
+            khi = cy1_delt_op * self.delt / cy1_alf
+            print(khi)
+            q = Tabl.tab_atm(self.y, 4) * self.v ** 2 / 2
+            print(n_y_a * self.m * g)
+            print(cy1_alf * q * Sf * (1 + khi), self.p / 57.3)
+            self.alf_potr = (n_y_a * self.m * g) / (cy1_alf * q * Sf * (1 + khi) + self.p / 57.3)
+            alff.append(self.alf_potr)
+
             target.next_coord()
             xx.append(self.x)
             yy.append(self.y)
@@ -317,7 +339,7 @@ class Rocket(object):
             yt.append(target.y)
             vv.append(self.v)
             tt.append(t)
-            print(t, self.v, self.v_)
+            # print(t, self.v, self.v_)
             if t <= t_st:
                 self.p = self.p1
                 self.x_ct += dx_cm1 * dt
@@ -331,7 +353,10 @@ class Rocket(object):
             else:
                 self.p = self.p3
                 self.v_ = 1 / self.m * (self.p - f_x) - g * kk.sin(self.omega)
+            self.v1 = self.v
             self.v += self.v_ * dt
+            self.x += (self.v + self.v1) / 2 * kk.cos(self.omega) * dt
+            self.y += (self.v + self.v1) / 2 * kk.sin(self.omega) * dt
 
         """plt.plot(tt, cyy_nos)
         plt.axis([-0.1, t, 0, 0.06])
@@ -358,9 +383,12 @@ class Rocket(object):
         plt.axis([0, 1.7, 0, 16])
         plt.show()"""
 
-        """plt.plot(tt, machh)
+        plt.plot(tt, alff, 'r')
+        plt.plot(tt, deltt, 'g')
+        plt.plot(tt, delt_r, 'b')
+        plt.axis([0, 16, -15, 15])
         plt.grid(True)
-        plt.show()"""
+        plt.show()
 
         plt.plot(tt, cyy_op, 'r')
         plt.plot(tt, cyy_kr, 'g')
@@ -393,10 +421,13 @@ class Rocket(object):
 
 dt = 10 ** -4
 g = 9.80665
+
 t_st = 2.7
 t_m = 8.3
+
 dm1 = (11.292 - 8.996) / t_st
 dm2 = (8.996 - 7.3) / t_m
+
 dx_cm1 = (0.671 - 0.78) / t_st
 dx_cm2 = (0.637 - 0.671) / t_m
 
@@ -407,7 +438,10 @@ d = 0.072  # диаметр миделевого сечения
 # параметры для метода наведения:
 
 a_m = 2  # коэффициент быстроты реакции ракеты на маневр цели (от 1 до бесконечности)
-eps_krit = 38  # предельное отклонение координатора головки самонаведения
+eps_krit = 38 * kk.pi / 180  # предельное отклонение координатора головки самонаведения
+d_omega_max = 40 * kk.pi / 180
+delta_max = 15 * kk.pi / 180
+d_delta_max = 35 * kk.pi / 180
 
 L_f = 1.626  # длина корпуса
 L__f = L_f / L_f
