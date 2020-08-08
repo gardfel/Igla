@@ -1,7 +1,5 @@
 import math as kk
 import matplotlib.pyplot as plt
-# import plotly.graph_objs as go
-# import numpy as np
 import random
 import Tabl
 import Aero
@@ -10,18 +8,24 @@ import Aero
 class Target(object):
 
     def __init__(self):
-        self.v = random.uniform(300, 320)  # сумарная скорость цели
+        self.v = random.uniform(200, 200)  # сумарная скорость цели
         self.ang = 0
-        self.x = random.uniform(6000, 6100)
-        self.y = random.uniform(4400, 4500)
-        self.alf = 0.1925  # random.uniform(0, 0.3925)
+        self.x = random.uniform(6000, 6000)
+        self.y = random.uniform(4100, 4100)
+        self.alf = -0.0925  # random.uniform(0, 0.3925)
 
     def next_coord(self, *args):
 
+        flag_t = args[0]
         # self.alf += random.uniform(-0.0086, +0.0086)
-
-        self.x += self.v * kk.cos(self.alf) * dt
-        self.y += self.v * kk.sin(self.alf) * dt
+        if flag_t <= 2:
+            self.x += self.v * kk.cos(self.alf) * dt
+            self.y += self.v * kk.sin(self.alf) * dt
+        else:
+            self.v += 10 * dt
+            self.alf = -0.0925 + 0.1 * (flag_t - 2)
+            self.x += self.v * kk.cos(self.alf) * dt
+            self.y += self.v * kk.sin(self.alf) * dt
 
 
 class Rocket(object):
@@ -93,11 +97,24 @@ class Rocket(object):
         alff = []
         deltt = []
         delt_r = []
+        flag_v = []
+        x_ffa = []
+        m_zz_wz_f = []
+        m_zz_wz_op = []
+        m_zz_wz_kr = []
+
+        cyy_sum = []
+        cxx_sum = []
+
+        f_yy_exp = []
+        f_xx_exp = []
+
+
 
         self.omega = kk.atan((target.y - self.y) / (target.x - self.x))
-
-        while ((abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5)) and (t < 16):
-
+        # ((abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5)) and
+        while (t < 16):
+            flag_v.append(650)
             # self.delt = kk.asin()
             mach = self.v / Tabl.tab_atm(self.y, 2)
             machh.append(mach)
@@ -119,6 +136,13 @@ class Rocket(object):
             K_aa_kr = 1 + 3 * D_kr - (D_kr * (1 - D_kr)) / nu_k_kr
             k_aa_kr = (1 + 0.41 * D_kr) ** 2 * ((1 + 3 * D_kr - 1 / nu_k_kr * D_kr * (1 - D_kr)) / (1 + D_kr) ** 2)
             eps_sr_alf = 0  # для "утки"
+            z_b = Tabl.tab_3_16(mach, l_op, nu_k_op, tan_05_op) # относительная координата вихря (по рис 3.16)
+            i_ = 1 # Tabl.tab_3_17() # коэффициент интерференции вихрей
+            if mach >= 1.3:
+                fi_eps = 1 # отношение площади задней консоли, находящейся в конусе Маха, ко всей плозади консоли
+            else:
+                fi_eps = 0.3
+            eps_sr_alf = 57.3 / (2 * kk.pi) * i_ / z_b * L_k_op / L_k_kr * (cy1_alf_op / l_op) * k_aa_op / K_aa_kr * fi_eps
             cy1_alf_kr = (cy_kr * K_aa_kr) * (1 - eps_sr_alf)
 
             K_aa_op = 1 + 3 * D_op - (D_op * (1 - D_op)) / nu_k_op
@@ -135,8 +159,10 @@ class Rocket(object):
             k_delt_0_op = k_aa_op ** 2 / K_aa_op
             k_delt_0_kr = k_aa_kr ** 2 / K_aa_kr
 
-            if mach <= 1.4:
+            if mach <= 1:
                 k_sh = 0.85
+            elif mach <= 1.4 and mach > 1:
+                k_sh = 0.85 + 0.14 * (mach - 1) / 0.4
             else:
                 k_sh = 0.99
             n_ef = k_sh * kk.cos(0)
@@ -209,6 +235,21 @@ class Rocket(object):
             # индуктивное сопротивление
             delt_cx1 = 2 * Tabl.tab_4_40(mach, l_nos, 1) * kk.sin(self.alf) ** 2
             cx_f_ind = cy1_alf_f * kk.sin(self.alf) + delt_cx1 * kk.cos(self.alf)
+            D_0_op = K_aa_op - 57.3 * 0.2 * 0.3 * cy1_alf_op * k_aa_op ** 2
+            D_1_op = k_aa_op * (1 - 57.3 * 0.2 * 0.3 * cy1_alf_op * k_delt_0_op * n_ef) + K_delt_0_op * n_ef
+            D_2_op = k_delt_0_op * n_ef * (1 - 57.3 * 0.2 * 0.3 * cy1_alf_op * k_delt_0_op * n_ef)
+
+            D_0_kr = K_aa_kr - 57.3 * 0.2 * 0.3 * cy1_alf_kr * k_aa_kr ** 2
+            D_1_kr = -K_aa_kr + 2 * 57.3 * 0.2 * 0.3 * cy1_alf_kr * k_aa_kr
+            D_2_kr = -57.3 * 0.2 * 0.3 * cy1_alf_kr * k_aa_kr
+
+            if self.alf < 0.5:
+                cx_op_ind = cy1_alf_op * (D_0_op + D_1_op * self.delt / 0.5 + D_2_op * (self.delt / 0.5) ** 2) * self.alf / 57.3
+                cx_kr_ind = cy1_alf_kr * (D_0_kr + D_1_kr * self.delt / 0.5 + D_2_kr * (self.delt / 0.5) ** 2) * self.alf / 57.3
+            else:
+                cx_op_ind = cy1_alf_op * (D_0_op + D_1_op * self.delt / self.alf + D_2_op * (self.delt / self.alf) ** 2) * self.alf / 57.3
+                cx_kr_ind = cy1_alf_kr * (D_0_kr + D_1_kr * self.delt / self.alf + D_2_kr * (self.delt / self.alf) ** 2) * self.alf / 57.3
+            cx_ind = cx_f_ind * S__f + cx_op_ind * k_t_op * S__op + cx_kr_ind * k_t_kr * S__kr
             # cx_op_ind = cy
 
             # фокусы отдельных частей ЛА по углу атаки
@@ -263,6 +304,8 @@ class Rocket(object):
 
             x_fa = 1 / cy1_alf * ((cy1_alf_f * S__f * x_fa_f) + cy1_alf_op * S__op * x_fa_op * k_t_op + cy1_alf_kr * S__kr * x_fa_kr * k_t_kr)
 
+            x_ffa.append(x_fa)
+
             # координаты фокуса рулей (передних консолей) по углам отклонения
 
             x_fd_op = 1 / K_delt_0_op * (k_delt_0_op * x_f_iz_op + (K_delt_0_op - k_delt_0_op) * x_f_ind_op)
@@ -271,19 +314,23 @@ class Rocket(object):
             # x_c_ob - координата центра тяжести объема тела вращения
             x_c_ob = L_f * ((2 * (l_nos + l_cil)**2 - l_nos**2) / (4*(l_nos+l_cil) * (l_nos+l_cil - 2/3*l_nos)))
             m_z_wz_f = -2 * (1 - self.x_ct / L_f + (self.x_ct / L_f) ** 2 - x_c_ob / L_f)
+            m_zz_wz_f.append(m_z_wz_f)
 
             x__ct_op = (self.x_ct - x_b_a_op) / b_a_op  # координата центра тяжести, измеренная от начала САХ рулей
             m_z_wz_op = -57.3 * (cy1_alf_op * (x__ct_op - 1 / 2) ** 2 * K_aa_op)
+            m_zz_wz_op.append(m_z_wz_op)
 
             m_z_wz_delt_kr = -57.3 * (cy1_alf_kr * K_aa_kr) * eps_sr_alf * (self.x_ct - x_c_pl_ba) / b_a_kr * (self.x_ct - x_fa_kr) / b_a_kr
             x__ct_kr = (self.x_ct - x_b_a_kr) / b_a_kr
-            m_z_wz_iz_kr = -57.3 * (cy1_alf_op * (x__ct_kr - 1 / 2) ** 2 * K_aa_kr)
+            m_z_wz_iz_kr = -57.3 * (cy1_alf_kr * (x__ct_kr - 1 / 2) ** 2 * K_aa_kr)
             m_z_wz_kr = m_z_wz_iz_kr * K_aa_kr + m_z_wz_delt_kr
+            m_zz_wz_kr.append(m_z_wz_kr)
 
             m_z_wz = m_z_wz_f * S__f * L__f ** 2 + m_z_wz_op * S__op * b__a_op * kk.sqrt(k_t_op) + m_z_wz_kr * S__kr * b_a_kr * kk.sqrt(k_t_kr)
             m_zz_wz.append(m_z_wz)
 
             m_z_delt_op = cy1_delt_op * (self.x_ct - x_fd_op) / L_f
+
             m_z_alf = cy1_alf * (self.x_ct - x_fa) / L_f
 
             da_ball.append(-m_z_alf / m_z_delt_op)
@@ -331,8 +378,20 @@ class Rocket(object):
             # print(cy1_alf * q * Sf * (1 + khi), self.p / 57.3)
             self.alf_potr = (n_y_a * self.m * g) / (cy1_alf * q * Sf * (1 + khi) + self.p / 57.3)
             alff.append(self.alf_potr)
+            if self.alf < self.alf_potr:
+                self.alf += (d_delta_max) / 3 * dt
+            elif self.alf > self.alf_potr:
+                self.alf -= (d_delta_max) / 3 * dt
+            cy_sum = cy1_alf * self.alf * kk.pi / 180 + cy1_alf + cy1_delt_op * self.delt * kk.pi / 180
+            cyy_sum.append(cy_sum)
+            cx_sum = cx_0 + cx_ind
+            cxx_sum.append(cx_sum)
+            f_x_exp = cx_sum * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8
+            f_y_exp = cy_sum * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8
+            f_yy_exp.append(cy_sum * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8)
+            f_xx_exp.append(cx_sum * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8)
 
-            target.next_coord()
+            target.next_coord(t)
             xx.append(self.x)
             yy.append(self.y)
             xt.append(target.x)
@@ -344,19 +403,20 @@ class Rocket(object):
                 self.p = self.p1
                 self.x_ct += dx_cm1 * dt
                 self.m -= dm1 * dt
-                self.v_ = 1 / self.m * (self.p - f_x) - g * kk.sin(self.omega)
+                self.v_ = 1 / self.m * (self.p - f_x_exp) - g * kk.sin(self.omega)
             elif (t > t_st) and (t <= t_st + t_m):
                 self.p = self.p2
                 self.x_ct += dx_cm2 * dt
                 self.m -= dm2 * dt
-                self.v_ = 1 / self.m * (self.p - f_x) - g * kk.sin(self.omega)
+                self.v_ = 1 / self.m * (self.p - f_x_exp) - g * kk.sin(self.omega)
             else:
                 self.p = self.p3
-                self.v_ = 1 / self.m * (self.p - f_x) - g * kk.sin(self.omega)
+                self.v_ = 1 / self.m * (self.p - f_x_exp) - g * kk.sin(self.omega)
             self.v1 = self.v
             self.v += self.v_ * dt
             self.x += (self.v + self.v1) / 2 * kk.cos(self.omega) * dt
             self.y += (self.v + self.v1) / 2 * kk.sin(self.omega) * dt
+            print(self.v)
 
         """plt.plot(tt, cyy_nos)
         plt.axis([-0.1, t, 0, 0.06])
@@ -376,30 +436,124 @@ class Rocket(object):
         plt.show()"""
         print(v_sr / i)
 
-        """plt.plot(x_ffa_op, tt)
-        plt.plot(x_ffa_kr, tt)
-        plt.plot(x_ffa_f, tt)
+        plt.plot(tt, f_yy_exp, 'r', label = 'Подъемная сила')
+        plt.plot(tt, f_xx_exp, 'g', label = 'Сила лобового сопротивления')
         plt.grid(True)
-        plt.axis([0, 1.7, 0, 16])
+        plt.legend()
+        plt.xlabel('t, [c]')
+        plt.ylabel('F, [H]')
+        plt.show()
+
+        plt.plot(tt, cyy_sum, 'r', label = 'Коэффициент подъемной силы')
+        plt.plot(tt, cxx_sum, 'g', label = 'Коэффициент лобового сопротивления')
+        plt.grid(True)
+        plt.xlabel('t, [c]')
+        plt.ylabel('Cy, Cx')
+        plt.legend()
+        plt.show()
+
+        """plt.plot(tt, da_ball)
+        plt.ylabel('delta/alf')
+        plt.xlabel('t, [с]')
+        plt.grid(True)
         plt.show()"""
 
-        plt.plot(tt, alff, 'r')
-        plt.plot(tt, deltt, 'g')
-        plt.plot(tt, delt_r, 'b')
+        """plt.plot(x_ffa_op, tt, 'r', label = 'Координата фокуса оперения')
+        plt.plot(x_ffa_kr, tt, 'g', label = 'Координата фокуса крыльев')
+        plt.plot(x_ffa_f, tt, 'b', label = 'Координата фокуса корпуса')
+        plt.plot(x_ffa, tt, 'y', label = 'Координата фокуса Ла')
+        plt.grid(True)
+        plt.axis([0, 1.7, 0, 16])
+        plt.ylabel('t, [с]')
+        plt.xlabel('x_fa, [м]')
+        plt.legend()
+        plt.show()"""
+
+        plt.plot(tt, machh)
+        plt.grid(True)
+        plt.ylabel('M')
+        plt.xlabel('t, [с]')
+        plt.show()
+
+        plt.plot(xx, yy, 'r', label = 'Траектория ракеты')
+        plt.plot(xt, yt, 'g', label = 'Траектория цели')
+        plt.grid(True)
+        plt.xlabel('x, [м]')
+        plt.ylabel('y, [м]')
+        plt.legend()
+        plt.show()
+
+        plt.plot(tt, alff, 'r', label = 'Угол атаки')
+        plt.plot(tt, deltt, 'g', label = 'Потребный угол отклоения рулей')
+        plt.plot(tt, delt_r, 'b', label = 'Реальный угол отклонения рулей')
         plt.axis([0, 16, -15, 15])
+        plt.xlabel('t, [c]')
+        plt.ylabel('alf, delt, [град]')
+        plt.legend()
         plt.grid(True)
         plt.show()
 
-        plt.plot(tt, cyy_op, 'r')
-        plt.plot(tt, cyy_kr, 'g')
-        plt.plot(tt, cyy1_alf, 'b')
-        plt.plot(tt, cyy_korm, 'y')
-        plt.plot(tt, cyy_nos, 'k')
+        plt.plot(tt, cyy_op, 'r', label = 'Cy_alf_op')
+        plt.plot(tt, cyy_kr, 'g', label = 'Cy_alf_kr')
+        plt.plot(tt, cyy1_alf, 'b', label = 'Cy1_alf')
+        plt.plot(tt, cyy_korm, 'y', label = 'Cy_alf_korm')
+        plt.plot(tt, cyy_nos, 'k', label = 'Cy_alf_nos')
         # plt.plot(tt, da_ball)
         # plt.plot(tt, m_zz_wz)
         # plt.axis([0, 16, -5, 5])
         # plt.plot(tt, cyy_op)
         # plt.plot(tt, cyy1_delt_op)
+        plt.ylabel('Cy1_alf')
+        plt.xlabel('t, [с]')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+
+        plt.plot(tt, cxx_nos, 'r', label = 'Сопротивление носовой части')
+        plt.plot(tt, cxx_0f, 'g', label = 'Сумарное сопротивление корпуса')
+        plt.plot(tt, cxx_korm, 'b', label = 'Сопротивление кормы')
+        plt.plot(tt, cxx_tr, 'y', label = 'Сопротивление трению')
+        plt.ylabel('Cx')
+        plt.xlabel('t, [с]')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+
+        plt.plot(tt, cxx_kr_pr, 'r', label = 'Профильное сопротивление')
+        plt.plot(tt, cxx_kr_vol, 'g', label = 'Волновое сопротивление')
+        plt.plot(tt, cxx_0_kr, 'b', label = 'Суммарное сопротивление крыльев')
+        plt.ylabel('Cx')
+        plt.xlabel('t, [с]')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+
+        plt.plot(tt, cxx_op_pr, 'r', label = 'Профильное сопротивление')
+        plt.plot(tt, cxx_op_vol, 'g', label = 'Волновое сопротивление')
+        plt.plot(tt, cxx_0_op, 'b', label = 'Суммарное сопротивление оперения')
+        plt.ylabel('Cx_0')
+        plt.xlabel('t, [с]')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+
+        plt.plot(tt, cxx_0_op, 'r', label = 'Суммарное лобовое сопротивление')
+        plt.plot(tt, cxx_0, 'g', label = 'Лобовое сопротивление оперения')
+        plt.plot(tt, cxx_0_kr, 'b', label = 'Лобовое сопротивление крыльев')
+        plt.plot(tt, cxx_0f, 'y', label = 'Лобовое сопротивление корпуса')
+        plt.ylabel('Cx_0')
+        plt.xlabel('t, [с]')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+
+        plt.plot(tt, m_zz_wz, 'r', label = 'Суммарный демпфирующий момент')
+        plt.plot(tt, m_zz_wz_kr, 'g', label = 'Демпфирующий момент крыльев')
+        plt.plot(tt, m_zz_wz_op, 'b', label = 'Демпфирующий момент оперения')
+        plt.plot(tt, m_zz_wz_f, 'y', label = 'Демпфирующий момент корпуса')
+        plt.ylabel('mz_wz')
+        plt.xlabel('t, [с]')
+        plt.legend()
         plt.grid(True)
         plt.show()
 
@@ -410,12 +564,17 @@ class Rocket(object):
 
         plt.plot(xx, yy)
         plt.plot(xt, yt)
+        plt.grid(True)
         plt.show()
         plt.plot(tt, yy)
         plt.show()
         plt.plot(tt, xx)
         plt.show()
         plt.plot(tt, vv)
+        plt.plot(tt, flag_v, '--')
+        plt.ylabel('V, [м/с]')
+        plt.xlabel('t, [с]')
+        plt.grid(True)
         plt.show()
 
 
