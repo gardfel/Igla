@@ -10,9 +10,12 @@ class Target(object):
     def __init__(self):
         self.v = random.uniform(200, 200)  # сумарная скорость цели
         self.ang = 0
-        self.x = random.uniform(6000, 6000)
-        self.y = random.uniform(4100, 4100)
-        self.alf = -0.0925  # random.uniform(0, 0.3925)
+        self.x0 = random.uniform(6000, 6000)
+        self.y0 = random.uniform(4100, 4100)
+        self.alf0 = -0.0925  # random.uniform(0, 0.3925)
+        self.x = self.x0
+        self.y = self.y0
+        self.alf = self.alf0
 
     def next_coord(self, *args):
 
@@ -59,6 +62,8 @@ class Rocket(object):
         a = 249.7
         a1 = 29
         target = args[0]
+        # form_nos = args[1]
+
         t = 0
         yt, xt, xx, yy, tt = [], [], [], [], []
         vv = []
@@ -109,7 +114,8 @@ class Rocket(object):
         f_yy_exp = []
         f_xx_exp = []
 
-
+        fxx_t = []
+        fyy_t = []
 
         self.omega = kk.atan((target.y - self.y) / (target.x - self.x))
         # ((abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5)) and
@@ -118,11 +124,22 @@ class Rocket(object):
             # self.delt = kk.asin()
             mach = self.v / Tabl.tab_atm(self.y, 2)
             machh.append(mach)
+            """
+            значение коэффициента подъемной силы носовой части сложной формы (насадок + носовая часть корпуса)
+            вычисляется через соотношения:
+            """
+            cy1_nos = Tabl.tab_3_2(mach, l_nos_nas, l_cil_nas)  # значение Су конической части АД насадка
+            cy1_1_nos = Tabl.tab_3_4(mach, 0, l_cil_nas)  # значение Су сферической части АД насадка
+            cy2_nos = Tabl.tab_3_2(mach, l_nos, l_cil)  # значение Су конической части нос. части без АД насадка
+            cy2_1_nos = Tabl.tab_3_4(mach, 0, l_cil)  # значеное Су сферической части нос. части без АД насадка
+            cy3_nos =  Tabl.tab_3_4(mach, 1, l_cil + l_nos)  # значение Су для цилиндра с плоским торцом (нос. часть без насадка)
 
-            cy_nos = Aero.Cy_nos(Tabl.tab_3_2(mach, l_nos, l_cil), Tabl.tab_3_4(mach, 0, l_cil),
-                                 Tabl.tab_3_2(mach, 1.32, 22.43), Tabl.tab_3_4(mach, 0, 22.43),
-                                 Tabl.tab_3_4(mach, 1, 23.75))
+            Cy1_2 = cy1_nos * (1 - r_ ** 2) + cy1_1_nos * r_ ** 2  # значение Су конуса со сферическим затуплением носовой части АД насадка
+            Cy2_2 = cy2_nos * (1 - r_1 ** 2) + cy2_1_nos * r_1 ** 2  # значение Су конуса со сферическим затуплением без АД насадка
+            Cy_ob = Cy2_2 * (1 - d_ ** 2) + cy3_nos * d_ ** 2  # значение Су носовой части с плоским затуплением
+            cy_nos = Cy1_2 * (2 * r_n / D) ** 2 + Cy_ob  # значение Су носовой части
             cyy_nos.append(cy_nos)
+
             cy_korm = -0.2 * 2 / 57.3 * (1 - n_korm ** 2)
             cyy_korm.append(cy_korm)
             cy_kr = Tabl.tab_3_5(mach * kk.sqrt(Tabl.tab_3_22(mach, x_otn_op_kr)), l_kr, c_kr, tan_05_kr)
@@ -142,7 +159,7 @@ class Rocket(object):
                 fi_eps = 1 # отношение площади задней консоли, находящейся в конусе Маха, ко всей плозади консоли
             else:
                 fi_eps = 0.3
-            eps_sr_alf = 57.3 / (2 * kk.pi) * i_ / z_b * L_k_op / L_k_kr * (cy1_alf_op / l_op) * k_aa_op / K_aa_kr * fi_eps
+            # eps_sr_alf = 57.3 / (2 * kk.pi) * i_ / z_b * L_k_op / L_k_kr * (cy1_alf_op / l_op) * k_aa_op / K_aa_kr * fi_eps
             cy1_alf_kr = (cy_kr * K_aa_kr) * (1 - eps_sr_alf)
 
             K_aa_op = 1 + 3 * D_op - (D_op * (1 - D_op)) / nu_k_op
@@ -391,6 +408,9 @@ class Rocket(object):
             f_yy_exp.append(cy_sum * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8)
             f_xx_exp.append(cx_sum * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8)
 
+            fxx_t.append(f_x_exp * dt)
+            fyy_t.append(f_y_exp * dt)
+
             target.next_coord(t)
             xx.append(self.x)
             yy.append(self.y)
@@ -416,7 +436,9 @@ class Rocket(object):
             self.v += self.v_ * dt
             self.x += (self.v + self.v1) / 2 * kk.cos(self.omega) * dt
             self.y += (self.v + self.v1) / 2 * kk.sin(self.omega) * dt
-            print(self.v)
+            # print(self.v)
+        print(v_sr / i)
+        return sum(fxx_t), sum(fyy_t)
 
         """plt.plot(tt, cyy_nos)
         plt.axis([-0.1, t, 0, 0.06])
@@ -434,7 +456,7 @@ class Rocket(object):
         plt.grid(True)
         # plt.axis([-0.1, t, 0, 0.4])
         plt.show()"""
-        print(v_sr / i)
+        # print(v_sr / i)
 
         plt.plot(tt, f_yy_exp, 'r', label = 'Подъемная сила')
         plt.plot(tt, f_xx_exp, 'g', label = 'Сила лобового сопротивления')
@@ -468,7 +490,7 @@ class Rocket(object):
         plt.xlabel('x_fa, [м]')
         plt.legend()
         plt.show()"""
-
+        """
         plt.plot(tt, machh)
         plt.grid(True)
         plt.ylabel('M')
@@ -575,23 +597,23 @@ class Rocket(object):
         plt.ylabel('V, [м/с]')
         plt.xlabel('t, [с]')
         plt.grid(True)
-        plt.show()
+        plt.show()"""
 
 
-dt = 10 ** -4
+
+
+dt = 10 ** -3
 g = 9.80665
 
-t_st = 2.7
-t_m = 8.3
+t_st = 2.7  # время стартового участка
+t_m = 8.3  # время маршевого участка
 
-dm1 = (11.292 - 8.996) / t_st
-dm2 = (8.996 - 7.3) / t_m
+dm1 = (11.292 - 8.996) / t_st  # производная изменения массы на стартовом участке
+dm2 = (8.996 - 7.3) / t_m  # производная изменения массы на маршевом участке
 
-dx_cm1 = (0.671 - 0.78) / t_st
-dx_cm2 = (0.637 - 0.671) / t_m
+dx_cm1 = (0.671 - 0.78) / t_st  # скорость изменения цм на стартовом участке
+dx_cm2 = (0.637 - 0.671) / t_m  # скорость изменеия цт на маршевом учестке
 
-vertel = Target()
-igla = Rocket()
 d = 0.072  # диаметр миделевого сечения
 
 # параметры для метода наведения:
@@ -602,28 +624,49 @@ d_omega_max = 40 * kk.pi / 180
 delta_max = 15 * kk.pi / 180
 d_delta_max = 35 * kk.pi / 180
 
+# геометрические параметры ракеты:
+
+# геометрические параметры корпуса
 L_f = 1.626  # длина корпуса
-L__f = L_f / L_f
-L_nos = 0.155  # длина носовой части
+L__f = L_f / L_f  # относительная длина корпуса
+L_nos = 0.0974  # длина носовой части
 W_nos = 0.00053  # Объем носовой части
-L_korm = 0.160
-S_dn = kk.pi * 0.05 ** 2 / 4
-n_korm = 0.05 / 0.072
-W_korm = 0.114 * S_dn + 0.000136
-S_f = kk.pi * d ** 2 / 4
+L_korm = 0.160  # длина кормовой части
+S_dn = kk.pi * 0.05 ** 2 / 4  # площадь донного среза
+n_korm = 0.05 / 0.072  # относительное сужение кормовой части
+W_korm = 0.114 * S_dn + 0.000136  # объем кормовой части
+S_f = kk.pi * d ** 2 / 4  # площадь миделевого сечения корпуса
 Ff = 0.3619  # площадь обтекаемой потоком поверхности корпуса (без донного среза)
 Sf = kk.pi * (d ** 2) / 4  # площадь миделя
 f_t = 0.045216
 
-l_cil = 45.5 / 8
-l_nos = 12.5 / 8
+l_cil_nas = 45.5 / 8  # относительное удлинение циллиндрической части АД насадка
+l_nos_nas = 12.5 / 8  # относительное удлинение носовой части АД насадка
+l_korp = 1650 / 72 # относительное удлинение корпуса
+l_nos = 97.4 / 72  # тносительное удлинение носовой части корпуса
+l_cil = l_korp - 160 / 72 - l_nos  # относительное удлинение циллиндрической части корпуса
+
+"""L_kr = 1.46  # размах крыла
+L_k_kr = L_kr - d"""
+
+# геометрические параметры АД насадка
+r_n = 4  # радиус сферического наконечника АД насадка
+r1_n = 32.86  # ражиус сферической части носовой части
+d_n = 14  # диаметр
+d1_n = 8  # диаметр циллиндрической части АД насадка
+D = 72  # миделевый диаметр в мм
+
+r_ = 2 * r_n / d_n
+r_1 = 2 * r1_n / D
+d_ = d1_n / D
+
 
 tan_05_kr = 0.307  # тангенс среднего угла крыла
 l_kr = 1.46  # относительное удлинение крыла
 L_k_kr = 0.146 - 0.072  # размах консолей крыла
 b_kr = 0.1061  # ширина крыла у корпуса
 b_a_kr = 0.101  # САХ консоли крыльев
-b__a_kr = b_a_kr / L_f
+b__a_kr = b_a_kr / L_f  # относительное значение САХ консоли крыльев
 x_b_a_kr = 1.183  # координата начала САХ крыла
 x_b_kr = 1.178  # координата начала бортовой хорды крыла
 a_kr = 0.098  # ширина крыла у корпуса (меньшая грань трапеции)
@@ -637,18 +680,18 @@ l_op = 7.888  # относительное удлинение оперения l
 L_k_op = 0.25 - 0.72  # размах консолей оперения
 b_op = 0.032  # ширина оперения у корпуса
 b_a_op = 0.029  # САХ консоли оперения
-b__a_op = b_a_op / L_f
+b__a_op = b_a_op / L_f  # относительное значение САХ консоли оперения
 x_c_pl_ba = 0.349  # координата цт площади передних консолей (середина САХ консолей)
 x_b_a_op = 0.334  # коордигата начала САХ консоли опрения
 x_b_op = 0.334  # координата начала бортовой хорды оперения
-a_op = 0.015
+a_op = 0.015  # ширина оперения у корпуса
 c_op = 0.03  # относительная толщина профиля оперения
 L_hv_op = 0.933  # Расстояние от конца бортовой хорды оперения до кормового среза корпуса
 L1_op = 0.35  # Расстояние от носика корпуса до серидины бортовой хорды оперения
-koef_op = 1 / (1 - a_op / b_op)
+koef_op = 1 / (1 - a_op / b_op)  # коэффициент перехода от ромбовидного к шестиугольному профилю оперения
 print(koef_kr, koef_op, "koef")
 
-b_ak_kr = 0.094
+b_ak_kr = 0.094  # средняя ад хорда консоли крыла
 x_otn_op_kr = 0.846 / b_ak_kr  # относительное расстояние между оперением и средней хордой крыльев
 S__f = kk.pi * (d ** 2) / 4 / (kk.pi * (d ** 2) / 4)  # относительная площадь корпуса
 S__op = 0.0078575 / (kk.pi * (d ** 2) / 4)  # относительная площадь передних несущих поверхностей
@@ -674,4 +717,36 @@ h = 6.3 * 10 ** -6  # Примерная высота бугоров на пов
 nu_kor = 0.047 / d  # относительное сужение кормовой части
 l_korm = 0.0463 / d  # относительное удлинение кормовой части
 
-igla.navigation(vertel)
+param1 = 0
+p11 = 0
+param2 = 0
+p22 = 0
+
+vertel = Target()
+igla = Rocket()
+Sfx, Sfy = igla.navigation(vertel)
+print("работа сил сопротивления", Sfx, "работа подъемной силы", Sfy)
+p11 = Sfx
+p1_var = Sfx
+p22 = Sfy
+p2_var = Sfx
+
+while param1 <= 0 and param2 <= 0.10:
+    l_cil += l_nos  # относительное удлинение циллиндрической части корпуса
+    if l_nos <= 3:
+        l_nos += 0.1
+    else:
+        l_nos = l_nos
+    l_cil -= l_nos
+    W_nos = W_nos / L_nos
+    L_nos = l_nos * 0.072
+    W_nos = W_nos * L_nos
+    print(l_nos, 'lambd')
+    vertel = Target()
+    igla = Rocket()
+    Sfx, Sfy = igla.navigation(vertel)
+    param1 = Sfx - p1_var
+    print(param1)
+    param2 = (-Sfy + p22) / p22
+    print(param2)
+    print("работа сил сопротивления", Sfx, "работа подъемной силы", Sfy)
