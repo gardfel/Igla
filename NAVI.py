@@ -1,18 +1,20 @@
 import math as kk
 import matplotlib.pyplot as plt
+import numpy as np
 import random
 import Tabl
 import Aero
+import time
 
 
 class Target(object):
 
-    def __init__(self):
-        self.v = random.uniform(200, 200)  # сумарная скорость цели
+    def __init__(self, *args):
+        self.v = args[2]  # random.uniform(200, 200)  # сумарная скорость цели
         self.ang = 0
-        self.x0 = random.uniform(6000, 6000)
-        self.y0 = random.uniform(4100, 4100)
-        self.alf0 = -0.0925  # random.uniform(0, 0.3925)
+        self.x0 = args[0]  # random.uniform(6000, 6000)
+        self.y0 = args[1]  # random.uniform(4100, 4100)
+        self.alf0 = 0  # -0.0925  # random.uniform(0, 0.3925)
         self.x = self.x0
         self.y = self.y0
         self.alf = self.alf0
@@ -26,14 +28,14 @@ class Target(object):
             self.y += self.v * kk.sin(self.alf) * dt
         else:
             self.v += 10 * dt
-            self.alf = -0.0925 + 0.1 * (flag_t - 2)
+            # self.alf = -0.0925 + 0.1 * (flag_t - 2)
             self.x += self.v * kk.cos(self.alf) * dt
             self.y += self.v * kk.sin(self.alf) * dt
 
 
 class Rocket(object):
 
-    def __init__(self):
+    def __init__(self, *args):  # 0 - коорд у цели, 1 - коорд х цели
         self.m = 11.29
         self.w0 = 2.296
         self.w1 = 1.696
@@ -46,13 +48,14 @@ class Rocket(object):
         self.alf_potr = 0
         self.delt = 0
         self.delt_potr = 0
-        self.omega = 0
+        self.omega = kk.atan((args[0] - self.y) / (args[1] - self.x))
+        print(kk.atan((args[0] - self.y) / (args[1] - self.x)), "start omega")
         self.d_omega = 0
-        self.fi_viz = 0
+        self.fi_viz = kk.atan((args[0] - self.y) / (args[1] - self.x))
         self.d_fi_viz = 0
         self.p = 2768
         self.p1 = 2768  # сила тяги на первом режиме
-        self.p2 = 900  # сила тяги на втором режиме
+        self.p2 = 1275  # сила тяги на втором режиме
         self.p3 = 0
         self.x_ct = 0.78
         self.q = 0
@@ -117,9 +120,10 @@ class Rocket(object):
         fxx_t = []
         fyy_t = []
 
-        self.omega = kk.atan((target.y - self.y) / (target.x - self.x))
+
         # ((abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5)) and
-        while (t < 16):
+        # while (t < 16):
+        while (kk.sqrt((target.y - self.y) ** 2 + (target.x - self.x) ** 2) >= 5) and (t <= 16):
             flag_v.append(650)
             # self.delt = kk.asin()
             mach = self.v / Tabl.tab_atm(self.y, 2)
@@ -130,11 +134,13 @@ class Rocket(object):
             """
             cy1_nos = Tabl.tab_3_2(mach, l_nos_nas, l_cil_nas)  # значение Су конической части АД насадка
             cy1_1_nos = Tabl.tab_3_4(mach, 0, l_cil_nas)  # значение Су сферической части АД насадка
-            cy2_nos = Tabl.tab_3_2(mach, l_nos, l_cil)  # значение Су конической части нос. части без АД насадка
+            cy2_nos = 2 / 57.3 * kk.cos(Omega_con1) ** 2
+            # cy2_nos = Tabl.tab_3_2(mach, l_con, l_cil)  # значение Су конической части нос. части без АД насадка
             cy2_1_nos = Tabl.tab_3_4(mach, 0, l_cil)  # значеное Су сферической части нос. части без АД насадка
             cy3_nos =  Tabl.tab_3_4(mach, 1, l_cil + l_nos)  # значение Су для цилиндра с плоским торцом (нос. часть без насадка)
 
             Cy1_2 = cy1_nos * (1 - r_ ** 2) + cy1_1_nos * r_ ** 2  # значение Су конуса со сферическим затуплением носовой части АД насадка
+
             Cy2_2 = cy2_nos * (1 - r_1 ** 2) + cy2_1_nos * r_1 ** 2  # значение Су конуса со сферическим затуплением без АД насадка
             Cy_ob = Cy2_2 * (1 - d_ ** 2) + cy3_nos * d_ ** 2  # значение Су носовой части с плоским затуплением
             cy_nos = Cy1_2 * (2 * r_n / D) ** 2 + Cy_ob  # значение Су носовой части
@@ -192,9 +198,10 @@ class Rocket(object):
             re_t = Tabl.tab_4_5(mach, re_f, 7, L_f)
 
             x_tt = re_t * ni_atm / self.v
-            if x_tt >= (0.26 / L_f):
+            if x_tt >= (0.26 / L_f) or x_tt <= 0:
                 x_tt = f_t / Ff
-
+            print(self.v, "V")
+            print(x_tt)
             cx_tr = Tabl.tab_4_2(re_f, x_tt) / 2 * Ff / Sf
             cxx_tr.append(cx_tr)
 
@@ -362,7 +369,10 @@ class Rocket(object):
             self.fi_viz = kk.atan((target.y - self.y) / (target.x - self.x))
             self.d_fi_viz = (self.fi_viz - par_1) / dt
             self.d_omega = a_m * self.d_fi_viz
-
+            """if (t <= 0.01) and (t >= 0):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+                print(self.omega, kk.atan((target.y - self.y) / (target.x - self.x)))
+            """
             if (kk.fabs(self.d_omega) <= d_omega_max):
                 self.omega += self.d_omega * dt
             elif (self.d_omega >= 0):
@@ -423,22 +433,68 @@ class Rocket(object):
                 self.p = self.p1
                 self.x_ct += dx_cm1 * dt
                 self.m -= dm1 * dt
-                self.v_ = 1 / self.m * (self.p - f_x_exp) - g * kk.sin(self.omega)
+                self.v_ = 1 / self.m * (self.p * kk.cos(self.alf) - f_x_exp) - g * kk.sin(self.omega + self.alf)
             elif (t > t_st) and (t <= t_st + t_m):
                 self.p = self.p2
                 self.x_ct += dx_cm2 * dt
                 self.m -= dm2 * dt
-                self.v_ = 1 / self.m * (self.p - f_x_exp) - g * kk.sin(self.omega)
+                self.v_ = 1 / self.m * (self.p * kk.cos(self.alf) - f_x_exp) - g * kk.sin(self.omega + self.alf)
             else:
                 self.p = self.p3
-                self.v_ = 1 / self.m * (self.p - f_x_exp) - g * kk.sin(self.omega)
+                self.v_ = 1 / self.m * (self.p * kk.cos(self.alf) - f_x_exp) - g * kk.sin(self.omega + self.alf)
             self.v1 = self.v
             self.v += self.v_ * dt
             self.x += (self.v + self.v1) / 2 * kk.cos(self.omega) * dt
             self.y += (self.v + self.v1) / 2 * kk.sin(self.omega) * dt
             # print(self.v)
-        print(v_sr / i)
-        return sum(fxx_t), sum(fyy_t)
+            """
+            if (t <= 1.01) and(t >= 1):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+                print(self.omega)
+            if (t <= 2.01) and(t >= 2):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+                print(self.omega)
+            if (t <= 3.01) and(t >= 3):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+                print(self.omega)
+            if (t <= 4.01) and(t >= 4):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+                print(self.omega)
+            if (t <= 5.01) and(t >= 5):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+                print(self.omega)
+            if (t <= 6.01) and(t >= 6):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+            if (t <= 7.01) and(t >= 7):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+            if (t <= 8.01) and(t >= 8):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+            if (t <= 9.01) and(t >= 9):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+            if (t <= 10.01) and(t >= 10):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+            if (t <= 11.01) and(t >= 11):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+            if (t <= 12.01) and(t >= 12):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+            if (t <= 13.01) and(t >= 13):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+            if (t <= 14.01) and(t >= 14):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+            if (t <= 15.01) and(t >= 15):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+            if (t <= 16.01) and(t >= 16):
+                plt.plot([self.x, target.x], [self.y, target.y], '--')
+                print(self.omega)"""
+        #print(v_sr / i, t, kk.sqrt((target.y - self.y) ** 2 + (target.x - self.x) ** 2))
+        """plt.plot(tt, vv)
+        plt.plot(tt, flag_v, '--')
+        plt.ylabel('V, [м/с]')
+        plt.xlabel('t, [с]')
+        plt.grid(True)
+        plt.show()"""
+        return self.x, self.y
+        # return sum(fxx_t), sum(fyy_t)
 
         """plt.plot(tt, cyy_nos)
         plt.axis([-0.1, t, 0, 0.06])
@@ -457,7 +513,7 @@ class Rocket(object):
         # plt.axis([-0.1, t, 0, 0.4])
         plt.show()"""
         # print(v_sr / i)
-
+        """
         plt.plot(tt, f_yy_exp, 'r', label = 'Подъемная сила')
         plt.plot(tt, f_xx_exp, 'g', label = 'Сила лобового сопротивления')
         plt.grid(True)
@@ -472,7 +528,7 @@ class Rocket(object):
         plt.xlabel('t, [c]')
         plt.ylabel('Cy, Cx')
         plt.legend()
-        plt.show()
+        plt.show()"""
 
         """plt.plot(tt, da_ball)
         plt.ylabel('delta/alf')
@@ -489,13 +545,14 @@ class Rocket(object):
         plt.ylabel('t, [с]')
         plt.xlabel('x_fa, [м]')
         plt.legend()
-        plt.show()"""
-        """
+        plt.show()
+
         plt.plot(tt, machh)
         plt.grid(True)
         plt.ylabel('M')
         plt.xlabel('t, [с]')
         plt.show()
+        """
 
         plt.plot(xx, yy, 'r', label = 'Траектория ракеты')
         plt.plot(xt, yt, 'g', label = 'Траектория цели')
@@ -505,7 +562,7 @@ class Rocket(object):
         plt.legend()
         plt.show()
 
-        plt.plot(tt, alff, 'r', label = 'Угол атаки')
+        """plt.plot(tt, alff, 'r', label = 'Угол атаки')
         plt.plot(tt, deltt, 'g', label = 'Потребный угол отклоения рулей')
         plt.plot(tt, delt_r, 'b', label = 'Реальный угол отклонения рулей')
         plt.axis([0, 16, -15, 15])
@@ -513,8 +570,8 @@ class Rocket(object):
         plt.ylabel('alf, delt, [град]')
         plt.legend()
         plt.grid(True)
-        plt.show()
-
+        plt.show()"""
+        """
         plt.plot(tt, cyy_op, 'r', label = 'Cy_alf_op')
         plt.plot(tt, cyy_kr, 'g', label = 'Cy_alf_kr')
         plt.plot(tt, cyy1_alf, 'b', label = 'Cy1_alf')
@@ -583,7 +640,8 @@ class Rocket(object):
         plt.plot(tt, f_yy)
         plt.grid(True)
         plt.show()
-
+        """
+        """
         plt.plot(xx, yy)
         plt.plot(xt, yt)
         plt.grid(True)
@@ -597,12 +655,12 @@ class Rocket(object):
         plt.ylabel('V, [м/с]')
         plt.xlabel('t, [с]')
         plt.grid(True)
-        plt.show()"""
+        plt.show()
+        """
 
 
 
-
-dt = 10 ** -3
+dt = 10 ** -2
 g = 9.80665
 
 t_st = 2.7  # время стартового участка
@@ -618,11 +676,11 @@ d = 0.072  # диаметр миделевого сечения
 
 # параметры для метода наведения:
 
-a_m = 2  # коэффициент быстроты реакции ракеты на маневр цели (от 1 до бесконечности)
+a_m = 2.8  # коэффициент быстроты реакции ракеты на маневр цели (от 1 до бесконечности)
 eps_krit = 38 * kk.pi / 180  # предельное отклонение координатора головки самонаведения
 d_omega_max = 40 * kk.pi / 180
-delta_max = 15 * kk.pi / 180
-d_delta_max = 35 * kk.pi / 180
+delta_max = 15 * kk.pi / 180  # предельный угол отклонения рулей
+d_delta_max = 35 * kk.pi / 180 * 20 * 4  # скорость отклонения рулей
 
 # геометрические параметры ракеты:
 
@@ -645,6 +703,12 @@ l_nos_nas = 12.5 / 8  # относительное удлинение носов
 l_korp = 1650 / 72 # относительное удлинение корпуса
 l_nos = 97.4 / 72  # тносительное удлинение носовой части корпуса
 l_cil = l_korp - 160 / 72 - l_nos  # относительное удлинение циллиндрической части корпуса
+
+Omega_con1 = 3.64  # угол полураствора конуса носовой части (градусы)
+Omega_con2 = 1.58  # предельный угол полураствора конуса носовой части (градусы)
+
+l_con = 565 / 72  # относительное удлинение конической части НЧ без сферического затупления
+l_con_max = 1305 / 72  # максимальное относ. удлинение конческой части НЧ без сферического затупления
 
 """L_kr = 1.46  # размах крыла
 L_k_kr = L_kr - d"""
@@ -722,26 +786,87 @@ p11 = 0
 param2 = 0
 p22 = 0
 
-vertel = Target()
-igla = Rocket()
-Sfx, Sfy = igla.navigation(vertel)
+"""
+igla = Rocket()"""
+v_target_max = 320
+v_target_min = 120
+v_target = 320  # скорость и направление (+ догонный курс, - навстречу) цели
+param_x = 6000
+param_y = 3500
+num_x = 12
+num_y = 13
+d_x = (param_x - 500) / (num_x - 1)
+d_y = (param_y - 10) / (num_y - 1)
+# vertel = Target(param_x, param_y)
+param_y_0 = param_y
+# start_time = time.time()
+koord_iniz_x = np.zeros((num_x, num_y))
+koord_iniz_y = np.zeros((num_x, num_y))
+koord_nach_x = np.zeros((num_x, num_y))
+koord_nach_y = np.zeros((num_x, num_y))
+dt = 10 ** -2
+for i in range(0, num_x):
+    param_y = param_y_0
+    for j in range(0, num_y):
+        vertel = Target(param_x, param_y, v_target)
+        igla = Rocket(vertel.y, vertel.x)
+        print(param_x, param_y)
+        koord_nach_x[i][j] = param_x
+        koord_nach_y[i][j] = param_y
+        koord_iniz_x[i][j], koord_iniz_y[i][j] = igla.navigation(vertel)
+        param_y -= d_y
+    param_x -= d_x
+    # plt.plot(koord_nach_x[i], koord_nach_y[i], 'r')
+    # plt.plot(koord_iniz_x[i], koord_iniz_y[i], 'g')
+plt.plot(koord_nach_x[0], koord_nach_y[0], 'r')
+plt.plot(koord_iniz_x[0], koord_iniz_y[0], 'g')
+plt.plot(koord_nach_x[11], koord_nach_y[11], 'r')
+plt.plot(koord_iniz_x[11], koord_iniz_y[11], 'g')
+plt.plot([koord_nach_x[11][0], koord_nach_x[0][0]], [koord_nach_y[11][0], koord_nach_y[0][0]], 'r')
+plt.plot([koord_nach_x[11][16], koord_nach_x[0][16]], [koord_nach_y[11][16], koord_nach_y[0][16]], 'r')
+plt.plot([koord_iniz_x[0][0], koord_iniz_x[11][0]], [koord_iniz_y[11][0], koord_iniz_y[0][0]], 'g')
+plt.plot([koord_iniz_x[11][16], koord_iniz_x[0][16]], [koord_iniz_y[11][16], koord_iniz_y[0][16]], 'g')
+plt.axis([0, 15000, 0, 6000])
+plt.show()
+# print("Time", time.time() - start_time)
+"""Sfx, Sfy = igla.navigation(vertel)
 print("работа сил сопротивления", Sfx, "работа подъемной силы", Sfy)
 p11 = Sfx
 p1_var = Sfx
 p22 = Sfy
 p2_var = Sfx
+m_0_w = 7.3
+m_nos = 1.3
+m_0_w_0 = m_0_w
+kritt = []
+l_nos = 1
+lambdd = []
+m_0_w = m_0_w - m_nos
+m_nos = m_nos / W_nos
+W_nos = W_nos / L_nos
 
-while param1 <= 0 and param2 <= 0.10:
+L_nos = l_nos * 0.072
+W_nos = W_nos * L_nos
+m_nos = m_nos * W_nos
+m_0_w = m_0_w + m_nos
+
+for i in range(0, 19):
     l_cil += l_nos  # относительное удлинение циллиндрической части корпуса
-    if l_nos <= 3:
+    if i >= 1:
         l_nos += 0.1
     else:
         l_nos = l_nos
     l_cil -= l_nos
+    m_0_w = m_0_w - m_nos
+    m_nos = m_nos / W_nos
     W_nos = W_nos / L_nos
+
     L_nos = l_nos * 0.072
     W_nos = W_nos * L_nos
+    m_nos = m_nos * W_nos
+    m_0_w = m_0_w + m_nos
     print(l_nos, 'lambd')
+    print('mass 0 w:', m_0_w, 'mass nos:', m_nos)
     vertel = Target()
     igla = Rocket()
     Sfx, Sfy = igla.navigation(vertel)
@@ -749,4 +874,11 @@ while param1 <= 0 and param2 <= 0.10:
     print(param1)
     param2 = (-Sfy + p22) / p22
     print(param2)
+    krit = (m_0_w / m_0_w_0) ** (-2) * (Sfy / p22) ** (2) * (Sfx / p11) ** (-4)
+    kritt.append(krit)
+    lambdd.append(l_nos)
     print("работа сил сопротивления", Sfx, "работа подъемной силы", Sfy)
+print(l_nos)
+plt.plot(lambdd, kritt)
+plt.show()
+"""
