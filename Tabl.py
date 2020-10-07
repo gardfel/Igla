@@ -748,6 +748,11 @@ def tab_3_22(*args):
     else:
         k = int(mah // 0.5 + 3)
 
+    if k <= 0:
+        k = 0
+    elif k >= 12:
+        k = 12
+
     if x_ == 0:
         k_t = interpol(k_t_00[k], k_t_00[k - 1], procent(mah, mah_tab[k - 1], mah_tab[k]))
     elif (x_ <= 0.2) and (x_ >= 0):
@@ -821,7 +826,8 @@ def tab_4_2(*args):
         if re_ <= re_mas[i]:
             if re_ >= re_mas[i - 1]:
                 k = i
-
+    if k >= 21:
+        k = 21
     if x_t == 0:
         d_cf = interpol(d_cf_0[k], d_cf_0[k - 1], procent(kk.log(re_, 10), kk.log(re_mas[k - 1], 10),
                                                           kk.log(re_mas[k], 10)))
@@ -1686,6 +1692,10 @@ def tab_4_40(*args):
         razmm = kk.sqrt(mah ** 2 - 1) / lambd_nos
 
     k = int(razmm // 0.4 + 3)
+    if k <= 0:
+        k = 0
+    elif k >= 9:
+        k = 9
     ksi = 0
 
     if param == 0:
@@ -1735,6 +1745,10 @@ def tab_5_7(*args):
         razmm = kk.sqrt(mah ** 2 - 1) / lambd_nos
 
     k = int(razmm // 0.2 + 5)
+    if k <= 0:
+        k = 0
+    elif k >= 16:
+        k = 16
 
     param = lambd_korp / lambd_nos
 
@@ -2049,6 +2063,11 @@ def tab_atm(*args):
         k = int(h // 500 + 5)
     else:
         k = int(h // 1000 + 8)
+
+    if k <= 0:
+        k = 0
+    elif k >= 18:
+        k = 17
 
     if param == 1:
         return interpol(t_atm[k], t_atm[k - 1], procent(h, h_tab[k - 1], h_tab[k]))
