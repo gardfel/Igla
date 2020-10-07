@@ -5,6 +5,8 @@ import random
 import Tabl
 import Aero
 import time
+from mpl_toolkits.mplot3d import Axes3D
+from tqdm import *
 
 
 class Target(object):
@@ -49,7 +51,7 @@ class Rocket(object):
         self.delt = 0
         self.delt_potr = 0
         self.omega = kk.atan((args[0] - self.y) / (args[1] - self.x))
-        print(kk.atan((args[0] - self.y) / (args[1] - self.x)), "start omega")
+        # print(kk.atan((args[0] - self.y) / (args[1] - self.x)), "start omega")
         self.d_omega = 0
         self.fi_viz = kk.atan((args[0] - self.y) / (args[1] - self.x))
         self.d_fi_viz = 0
@@ -119,7 +121,7 @@ class Rocket(object):
 
         fxx_t = []
         fyy_t = []
-
+        n_max = 0
 
         # ((abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5)) and
         # while (t < 16):
@@ -200,8 +202,8 @@ class Rocket(object):
             x_tt = re_t * ni_atm / self.v
             if x_tt >= (0.26 / L_f) or x_tt <= 0:
                 x_tt = f_t / Ff
-            print(self.v, "V")
-            print(x_tt)
+            #print(self.v, "V")
+            #print(x_tt)
             cx_tr = Tabl.tab_4_2(re_f, x_tt) / 2 * Ff / Sf
             cxx_tr.append(cx_tr)
 
@@ -395,6 +397,8 @@ class Rocket(object):
             delt_r.append(self.delt * 180 / kk.pi)
 
             n_y_a = kk.fabs(self.v * self.d_omega / g + kk.cos(self.omega))
+            if kk.fabs(n_y_a) >= kk.fabs(n_max):
+                n_max = n_y_a
             # print(self.omega * 180 / kk.pi,self.d_omega * 180 / kk.pi)
             # print(n_y_a)
 
@@ -404,11 +408,14 @@ class Rocket(object):
             # print(n_y_a * self.m * g)
             # print(cy1_alf * q * Sf * (1 + khi), self.p / 57.3)
             self.alf_potr = (n_y_a * self.m * g) / (cy1_alf * q * Sf * (1 + khi) + self.p / 57.3)
+            #print(self.alf_potr)
             alff.append(self.alf_potr)
             if self.alf < self.alf_potr:
                 self.alf += (d_delta_max) / 3 * dt
             elif self.alf > self.alf_potr:
                 self.alf -= (d_delta_max) / 3 * dt
+            if self.alf <= 0:
+                self.alf = 0
             cy_sum = cy1_alf * self.alf * kk.pi / 180 + cy1_alf + cy1_delt_op * self.delt * kk.pi / 180
             cyy_sum.append(cy_sum)
             cx_sum = cx_0 + cx_ind
@@ -433,7 +440,7 @@ class Rocket(object):
                 self.p = self.p1
                 self.x_ct += dx_cm1 * dt
                 self.m -= dm1 * dt
-                self.v_ = 1 / self.m * (self.p * kk.cos(self.alf) - f_x_exp) - g * kk.sin(self.omega + self.alf)
+                self.v_ = 1 / self.m * (self.p - f_x_exp) - g * kk.sin(self.omega + self.alf)
             elif (t > t_st) and (t <= t_st + t_m):
                 self.p = self.p2
                 self.x_ct += dx_cm2 * dt
@@ -493,7 +500,7 @@ class Rocket(object):
         plt.xlabel('t, [с]')
         plt.grid(True)
         plt.show()"""
-        return self.x, self.y
+        return self.x, self.y, t, n_max, n_y_a
         # return sum(fxx_t), sum(fyy_t)
 
         """plt.plot(tt, cyy_nos)
@@ -793,21 +800,30 @@ v_target_min = 120
 v_target = 320  # скорость и направление (+ догонный курс, - навстречу) цели
 param_x = 6000
 param_y = 3500
-num_x = 12
-num_y = 13
+param_v = v_target
+num_x = 2
+num_y = 2
+num_v = 9
 d_x = (param_x - 500) / (num_x - 1)
 d_y = (param_y - 10) / (num_y - 1)
+d_v = (v_target_max - v_target_min) / (num_v - 1)
 # vertel = Target(param_x, param_y)
 param_y_0 = param_y
+param_x_0 = param_x
 # start_time = time.time()
+
 koord_iniz_x = np.zeros((num_x, num_y))
 koord_iniz_y = np.zeros((num_x, num_y))
 koord_nach_x = np.zeros((num_x, num_y))
 koord_nach_y = np.zeros((num_x, num_y))
 dt = 10 ** -2
-for i in range(0, num_x):
+koord_v = [] * 10
+"""for i in range(num_x):
+    """
+"""for i in range(0, num_x):
     param_y = param_y_0
     for j in range(0, num_y):
+        # koord_v[k_v].append(param_v)
         vertel = Target(param_x, param_y, v_target)
         igla = Rocket(vertel.y, vertel.x)
         print(param_x, param_y)
@@ -815,19 +831,79 @@ for i in range(0, num_x):
         koord_nach_y[i][j] = param_y
         koord_iniz_x[i][j], koord_iniz_y[i][j] = igla.navigation(vertel)
         param_y -= d_y
-    param_x -= d_x
+    param_x -= d_x"""
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+t_in = np.zeros((num_x, num_y))
+dict_igla = []
+# for k_v in tqdm(range(0, num_v)):
+for k_v in range(0, num_v):
+    koord_iniz_x = np.zeros((num_x, num_y))
+    koord_iniz_y = np.zeros((num_x, num_y))
+    koord_nach_x = np.zeros((num_x, num_y))
+    koord_nach_y = np.zeros((num_x, num_y))
+    t_in = np.zeros((num_x, num_y))
+    n_max_ = np.zeros((num_x, num_y))
+    n_kon = np.zeros((num_x, num_y))
+    param_x = param_x_0
+    koord_v = []
+    for i in range(0, num_x):
+        param_y = param_y_0
+        for j in range(0, num_y):
+            koord_v.append(param_v)
+            vertel = Target(param_x, param_y, param_v)
+            igla = Rocket(vertel.y, vertel.x)
+            # print(param_x, param_y)
+            koord_nach_x[i][j] = param_x
+            koord_nach_y[i][j] = param_y
+            koord_iniz_x[i][j], koord_iniz_y[i][j], t_in[i][j], n_max_[i][j], n_kon[i][j] = igla.navigation(vertel)
+            param_y -= d_y
+        param_x -= d_x
+
+    """plt.plot(koord_nach_x[0], koord_nach_y[0], 'r')
+    plt.plot(koord_iniz_x[0], koord_iniz_y[0], 'g')
+    plt.plot(koord_nach_x[num_x - 1], koord_nach_y[num_x - 1], 'r')
+    plt.plot(koord_iniz_x[num_x - 1], koord_iniz_y[num_x - 1], 'g')
+    plt.plot([koord_nach_x[num_x - 1][0], koord_nach_x[0][0]], [koord_nach_y[num_x - 1][0], koord_nach_y[0][0]], 'r')
+    plt.plot([koord_nach_x[num_x - 1][num_y - 1], koord_nach_x[0][num_y - 1]],
+             [koord_nach_y[num_x - 1][num_y - 1], koord_nach_y[0][num_y - 1]], 'r')
+    plt.plot([koord_iniz_x[0][0], koord_iniz_x[num_x - 1][0]], [koord_iniz_y[0][0], koord_iniz_y[num_x - 1][0]], 'g')
+    plt.plot([koord_iniz_x[num_x - 1][num_y - 1], koord_iniz_x[0][num_y - 1]],
+             [koord_iniz_y[num_x - 1][num_y - 1], koord_iniz_y[0][num_y - 1]], 'g')
+    plt.axis([0, 15000, 0, 6000])
+    print(param_v)
+    plt.grid(True)
+    plt.title('Догонный курс ' + str(param_v))
+    plt.show()"""
+    x1 = [koord_nach_x[num_x - 1][0], koord_nach_x[0][0], koord_nach_x[0][num_y - 1], koord_nach_x[num_x - 1][num_y - 1], koord_nach_x[num_x - 1][0]]
+    y1 = [koord_nach_y[num_x - 1][0], koord_nach_y[0][0], koord_nach_y[0][num_y - 1], koord_nach_y[num_x - 1][num_y - 1], koord_nach_y[num_x - 1][0]]
+    z1 = [koord_v[0],koord_v[1], koord_v[2], koord_v[3], koord_v[0]]
+    x2 = [koord_iniz_x[0][0], koord_iniz_x[num_x - 1][0], koord_iniz_x[num_x - 1][num_y - 1], koord_iniz_x[0][num_y - 1], koord_iniz_x[0][0]]
+    y2 = [koord_iniz_y[num_x - 1][0], koord_iniz_y[0][0], koord_iniz_y[num_x - 1][num_y - 1], koord_iniz_y[0][num_y - 1], koord_iniz_y[num_x - 1][0]]
+    z2 = [koord_v[0],koord_v[1], koord_v[2], koord_v[3], koord_v[0]]
+
+    ax.plot(z2, x2, y2, 'g')
+    ax.plot(z1, x1, y1, 'r')
+    param_v -= d_v
+    print(t_in, n_max_, n_kon)
+    paramz = {'t_kon' : t_in, 'n_max' : n_max_, 'n_kon' : n_kon}
+    dict_igla.append(paramz)
+
+plt.show()
+print(dict_igla[0]['t_kon'])
     # plt.plot(koord_nach_x[i], koord_nach_y[i], 'r')
     # plt.plot(koord_iniz_x[i], koord_iniz_y[i], 'g')
-plt.plot(koord_nach_x[0], koord_nach_y[0], 'r')
+"""plt.plot(koord_nach_x[0], koord_nach_y[0], 'r')
 plt.plot(koord_iniz_x[0], koord_iniz_y[0], 'g')
-plt.plot(koord_nach_x[11], koord_nach_y[11], 'r')
-plt.plot(koord_iniz_x[11], koord_iniz_y[11], 'g')
-plt.plot([koord_nach_x[11][0], koord_nach_x[0][0]], [koord_nach_y[11][0], koord_nach_y[0][0]], 'r')
-plt.plot([koord_nach_x[11][16], koord_nach_x[0][16]], [koord_nach_y[11][16], koord_nach_y[0][16]], 'r')
-plt.plot([koord_iniz_x[0][0], koord_iniz_x[11][0]], [koord_iniz_y[11][0], koord_iniz_y[0][0]], 'g')
-plt.plot([koord_iniz_x[11][16], koord_iniz_x[0][16]], [koord_iniz_y[11][16], koord_iniz_y[0][16]], 'g')
+plt.plot(koord_nach_x[num_x - 1], koord_nach_y[num_x - 1], 'r')
+plt.plot(koord_iniz_x[num_x - 1], koord_iniz_y[num_x - 1], 'g')
+plt.plot([koord_nach_x[num_x - 1][0], koord_nach_x[0][0]], [koord_nach_y[num_x - 1][0], koord_nach_y[0][0]], 'r')
+plt.plot([koord_nach_x[num_x - 1][num_y - 1], koord_nach_x[0][num_y - 1]], [koord_nach_y[num_x - 1][num_y - 1], koord_nach_y[0][num_y - 1]], 'r')
+plt.plot([koord_iniz_x[0][0], koord_iniz_x[num_x - 1][0]], [koord_iniz_y[num_x - 1][0], koord_iniz_y[0][0]], 'g')
+plt.plot([koord_iniz_x[num_x - 1][num_y - 1], koord_iniz_x[0][num_y - 1]], [koord_iniz_y[num_x - 1][num_y - 1], koord_iniz_y[0][num_y - 1]], 'g')
 plt.axis([0, 15000, 0, 6000])
-plt.show()
+plt.show()"""
+
 # print("Time", time.time() - start_time)
 """Sfx, Sfy = igla.navigation(vertel)
 print("работа сил сопротивления", Sfx, "работа подъемной силы", Sfy)
