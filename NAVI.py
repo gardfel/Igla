@@ -7,6 +7,7 @@ import Aero
 import time
 from mpl_toolkits.mplot3d import Axes3D
 from tqdm import *
+import cProfile
 
 
 class Target(object):
@@ -57,7 +58,7 @@ class Rocket(object):
         self.d_fi_viz = 0
         self.p = 2768
         self.p1 = 2768  # сила тяги на первом режиме
-        self.p2 = 1275  # сила тяги на втором режиме
+        self.p2 = 950  # 1275  # сила тяги на втором режиме
         self.p3 = 0
         self.x_ct = 0.78
         self.q = 0
@@ -125,7 +126,11 @@ class Rocket(object):
 
         # ((abs(target.y - self.y) > 5) or (abs(target.x - self.x) > 5)) and
         # while (t < 16):
-        while (kk.sqrt((target.y - self.y) ** 2 + (target.x - self.x) ** 2) >= 5) and (t <= 16):
+        ind = 0
+        jam = 0
+        rast_min = kk.sqrt((target.y - self.y) ** 2 + (target.x - self.x) ** 2)
+        rast_krit = kk.sqrt((target.y - self.y) ** 2 + (target.x - self.x) ** 2)
+        while (rast_min >= 5) and (t <= 16) and ((rast_krit - rast_min) <= 200):
             flag_v.append(650)
             # self.delt = kk.asin()
             mach = self.v / Tabl.tab_atm(self.y, 2)
@@ -420,6 +425,8 @@ class Rocket(object):
             cyy_sum.append(cy_sum)
             cx_sum = cx_0 + cx_ind
             cxx_sum.append(cx_sum)
+            if jam <= cy1_alf_op * self.alf * kk.pi / 180 * self.v ** 2 * d ** 2 * kk.pi / 8 *  Tabl.tab_atm(self.y, 4):
+                jam = cy1_alf_op * self.alf * kk.pi / 180 * self.v ** 2 * d ** 2 * kk.pi / 8 *  Tabl.tab_atm(self.y, 4)
             f_x_exp = cx_sum * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8
             f_y_exp = cy_sum * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8
             f_yy_exp.append(cy_sum * Tabl.tab_atm(self.y, 4) * self.v ** 2 * d ** 2 * kk.pi / 8)
@@ -453,6 +460,13 @@ class Rocket(object):
             self.v += self.v_ * dt
             self.x += (self.v + self.v1) / 2 * kk.cos(self.omega) * dt
             self.y += (self.v + self.v1) / 2 * kk.sin(self.omega) * dt
+
+            if self.v >= 450:
+                rast_krit = kk.sqrt((target.y - self.y) ** 2 + (target.x - self.x) ** 2)
+                if rast_min >= rast_krit:
+                    rast_min = rast_krit
+
+            ind += 1
             # print(self.v)
             """
             if (t <= 1.01) and(t >= 1):
@@ -494,13 +508,9 @@ class Rocket(object):
                 plt.plot([self.x, target.x], [self.y, target.y], '--')
                 print(self.omega)"""
         #print(v_sr / i, t, kk.sqrt((target.y - self.y) ** 2 + (target.x - self.x) ** 2))
-        """plt.plot(tt, vv)
-        plt.plot(tt, flag_v, '--')
-        plt.ylabel('V, [м/с]')
-        plt.xlabel('t, [с]')
-        plt.grid(True)
-        plt.show()"""
-        return self.x, self.y, t, n_max, n_y_a
+        print(jam, "Y_op")
+        print('ind =', ind, self.y, self.x)
+        return self.x, self.y, t, n_max, n_y_a, kk.sqrt((target.y - self.y) ** 2 + (target.x - self.x) ** 2)
         # return sum(fxx_t), sum(fyy_t)
 
         """plt.plot(tt, cyy_nos)
@@ -561,13 +571,13 @@ class Rocket(object):
         plt.show()
         """
 
-        plt.plot(xx, yy, 'r', label = 'Траектория ракеты')
+        """plt.plot(xx, yy, 'r', label = 'Траектория ракеты')
         plt.plot(xt, yt, 'g', label = 'Траектория цели')
         plt.grid(True)
         plt.xlabel('x, [м]')
         plt.ylabel('y, [м]')
         plt.legend()
-        plt.show()
+        plt.show()"""
 
         """plt.plot(tt, alff, 'r', label = 'Угол атаки')
         plt.plot(tt, deltt, 'g', label = 'Потребный угол отклоения рулей')
@@ -666,8 +676,6 @@ class Rocket(object):
         """
 
 
-
-dt = 10 ** -2
 g = 9.80665
 
 t_st = 2.7  # время стартового участка
@@ -687,7 +695,7 @@ a_m = 2.8  # коэффициент быстроты реакции ракеты
 eps_krit = 38 * kk.pi / 180  # предельное отклонение координатора головки самонаведения
 d_omega_max = 40 * kk.pi / 180
 delta_max = 15 * kk.pi / 180  # предельный угол отклонения рулей
-d_delta_max = 35 * kk.pi / 180 * 20 * 4  # скорость отклонения рулей
+d_delta_max = 35 * kk.pi / 180 # * 20 * 4  # скорость отклонения рулей
 
 # геометрические параметры ракеты:
 
@@ -708,7 +716,7 @@ f_t = 0.045216
 l_cil_nas = 45.5 / 8  # относительное удлинение циллиндрической части АД насадка
 l_nos_nas = 12.5 / 8  # относительное удлинение носовой части АД насадка
 l_korp = 1650 / 72 # относительное удлинение корпуса
-l_nos = 97.4 / 72  # тносительное удлинение носовой части корпуса
+l_nos = 97.4 / 72  # относительное удлинение носовой части корпуса
 l_cil = l_korp - 160 / 72 - l_nos  # относительное удлинение циллиндрической части корпуса
 
 Omega_con1 = 3.64  # угол полураствора конуса носовой части (градусы)
@@ -795,12 +803,11 @@ p22 = 0
 
 """
 igla = Rocket()"""
-v_target_max = 320
-v_target_min = 120
-v_target = 320  # скорость и направление (+ догонный курс, - навстречу) цели
+v_target_max = 320  # скорость и направление (+ догонный курс, - навстречу) цели
+v_target_min = 120  # скорость и направление (+ догонный курс, - навстречу) цели
 param_x = 6000
 param_y = 3500
-param_v = v_target
+param_v = v_target_max
 num_x = 2
 num_y = 2
 num_v = 9
@@ -810,28 +817,17 @@ d_v = (v_target_max - v_target_min) / (num_v - 1)
 # vertel = Target(param_x, param_y)
 param_y_0 = param_y
 param_x_0 = param_x
-# start_time = time.time()
+start_time = time.time()
 
 koord_iniz_x = np.zeros((num_x, num_y))
 koord_iniz_y = np.zeros((num_x, num_y))
 koord_nach_x = np.zeros((num_x, num_y))
 koord_nach_y = np.zeros((num_x, num_y))
+
 dt = 10 ** -2
 koord_v = [] * 10
-"""for i in range(num_x):
-    """
-"""for i in range(0, num_x):
-    param_y = param_y_0
-    for j in range(0, num_y):
-        # koord_v[k_v].append(param_v)
-        vertel = Target(param_x, param_y, v_target)
-        igla = Rocket(vertel.y, vertel.x)
-        print(param_x, param_y)
-        koord_nach_x[i][j] = param_x
-        koord_nach_y[i][j] = param_y
-        koord_iniz_x[i][j], koord_iniz_y[i][j] = igla.navigation(vertel)
-        param_y -= d_y
-    param_x -= d_x"""
+
+
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 t_in = np.zeros((num_x, num_y))
@@ -852,45 +848,105 @@ for k_v in range(0, num_v):
         for j in range(0, num_y):
             koord_v.append(param_v)
             vertel = Target(param_x, param_y, param_v)
+            start_time_var = time.time()
             igla = Rocket(vertel.y, vertel.x)
             # print(param_x, param_y)
             koord_nach_x[i][j] = param_x
             koord_nach_y[i][j] = param_y
-            koord_iniz_x[i][j], koord_iniz_y[i][j], t_in[i][j], n_max_[i][j], n_kon[i][j] = igla.navigation(vertel)
+            koord_iniz_x[i][j], koord_iniz_y[i][j], t_in[i][j], n_max_[i][j], n_kon[i][j], rast = igla.navigation(vertel)
+            print("Time", time.time() - start_time_var)
             param_y -= d_y
         param_x -= d_x
-
-    """plt.plot(koord_nach_x[0], koord_nach_y[0], 'r')
-    plt.plot(koord_iniz_x[0], koord_iniz_y[0], 'g')
-    plt.plot(koord_nach_x[num_x - 1], koord_nach_y[num_x - 1], 'r')
-    plt.plot(koord_iniz_x[num_x - 1], koord_iniz_y[num_x - 1], 'g')
-    plt.plot([koord_nach_x[num_x - 1][0], koord_nach_x[0][0]], [koord_nach_y[num_x - 1][0], koord_nach_y[0][0]], 'r')
-    plt.plot([koord_nach_x[num_x - 1][num_y - 1], koord_nach_x[0][num_y - 1]],
-             [koord_nach_y[num_x - 1][num_y - 1], koord_nach_y[0][num_y - 1]], 'r')
-    plt.plot([koord_iniz_x[0][0], koord_iniz_x[num_x - 1][0]], [koord_iniz_y[0][0], koord_iniz_y[num_x - 1][0]], 'g')
-    plt.plot([koord_iniz_x[num_x - 1][num_y - 1], koord_iniz_x[0][num_y - 1]],
-             [koord_iniz_y[num_x - 1][num_y - 1], koord_iniz_y[0][num_y - 1]], 'g')
-    plt.axis([0, 15000, 0, 6000])
-    print(param_v)
-    plt.grid(True)
-    plt.title('Догонный курс ' + str(param_v))
-    plt.show()"""
-    x1 = [koord_nach_x[num_x - 1][0], koord_nach_x[0][0], koord_nach_x[0][num_y - 1], koord_nach_x[num_x - 1][num_y - 1], koord_nach_x[num_x - 1][0]]
-    y1 = [koord_nach_y[num_x - 1][0], koord_nach_y[0][0], koord_nach_y[0][num_y - 1], koord_nach_y[num_x - 1][num_y - 1], koord_nach_y[num_x - 1][0]]
-    z1 = [koord_v[0],koord_v[1], koord_v[2], koord_v[3], koord_v[0]]
-    x2 = [koord_iniz_x[0][0], koord_iniz_x[num_x - 1][0], koord_iniz_x[num_x - 1][num_y - 1], koord_iniz_x[0][num_y - 1], koord_iniz_x[0][0]]
-    y2 = [koord_iniz_y[num_x - 1][0], koord_iniz_y[0][0], koord_iniz_y[num_x - 1][num_y - 1], koord_iniz_y[0][num_y - 1], koord_iniz_y[num_x - 1][0]]
-    z2 = [koord_v[0],koord_v[1], koord_v[2], koord_v[3], koord_v[0]]
+    x1 = [koord_nach_x[num_x - 1][0], koord_nach_x[0][0], koord_nach_x[0][num_y - 1],
+          koord_nach_x[num_x - 1][num_y - 1], koord_nach_x[num_x - 1][0]]
+    y1 = [koord_nach_y[num_x - 1][0], koord_nach_y[0][0], koord_nach_y[0][num_y - 1],
+          koord_nach_y[num_x - 1][num_y - 1], koord_nach_y[num_x - 1][0]]
+    z1 = [koord_v[0], koord_v[1], koord_v[2], koord_v[3], koord_v[0]]
+    x2 = [koord_iniz_x[num_x - 1][0], koord_iniz_x[0][0], koord_iniz_x[0][num_y - 1],
+          koord_iniz_x[num_x - 1][num_y - 1], koord_iniz_x[num_x - 1][0]]
+    y2 = [koord_iniz_y[num_x - 1][0], koord_iniz_y[0][0], koord_iniz_y[0][num_y - 1],
+          koord_iniz_y[num_x - 1][num_y - 1], koord_iniz_y[num_x - 1][0]]
+    z2 = [koord_v[0], koord_v[1], koord_v[2], koord_v[3], koord_v[0]]
 
     ax.plot(z2, x2, y2, 'g')
     ax.plot(z1, x1, y1, 'r')
     param_v -= d_v
     print(t_in, n_max_, n_kon)
-    paramz = {'t_kon' : t_in, 'n_max' : n_max_, 'n_kon' : n_kon}
+    paramz = {'t_kon': t_in, 'n_max': n_max_, 'n_kon': n_kon}
     dict_igla.append(paramz)
 
+v_target_min = -120
+v_target_max = -400
+param_x = 9000
+param_y = 3500
+param_v = v_target_max
+num_x = 2
+num_y = 2
+num_v = 9
+d_x = (param_x - 2000) / (num_x - 1)
+d_y = (param_y - 10) / (num_y - 1)
+d_v = (v_target_max - v_target_min) / (num_v - 1)
+# vertel = Target(param_x, param_y)
+param_y_0 = param_y
+param_x_0 = param_x
+start_time = time.time()
+
+koord_v = [] * 10
+
+
+fig = plt.figure()
+for k_v in range(0, num_v):
+    koord_iniz_x = np.zeros((num_x, num_y))
+    koord_iniz_y = np.zeros((num_x, num_y))
+    koord_nach_x = np.zeros((num_x, num_y))
+    koord_nach_y = np.zeros((num_x, num_y))
+    t_in = np.zeros((num_x, num_y))
+    n_max_ = np.zeros((num_x, num_y))
+    n_kon = np.zeros((num_x, num_y))
+    param_x = param_x_0
+    koord_v = []
+    for i in range(0, num_x):
+        param_y = param_y_0
+        for j in range(0, num_y):
+            koord_v.append(param_v)
+            vertel = Target(param_x, param_y, param_v)
+            start_time_var = time.time()
+            igla = Rocket(vertel.y, vertel.x)
+            # print(param_x, param_y)
+            koord_nach_x[i][j] = param_x
+            koord_nach_y[i][j] = param_y
+            koord_iniz_x[i][j], koord_iniz_y[i][j], t_in[i][j], n_max_[i][j], n_kon[i][j], rast = igla.navigation(vertel)
+            # print("Time", time.time() - start_time_var)
+            param_y -= d_y
+            print(param_y, param_x, param_v)
+        param_x -= d_x
+    x1 = [-koord_nach_x[num_x - 1][0], -koord_nach_x[0][0], -koord_nach_x[0][num_y - 1],
+          -koord_nach_x[num_x - 1][num_y - 1], -koord_nach_x[num_x - 1][0]]
+    y1 = [koord_nach_y[num_x - 1][0], koord_nach_y[0][0], koord_nach_y[0][num_y - 1],
+          koord_nach_y[num_x - 1][num_y - 1], koord_nach_y[num_x - 1][0]]
+    # z1 = [koord_v[0], koord_v[1], koord_v[2], koord_v[3], koord_v[0]]
+    x2 = [-koord_iniz_x[num_x - 1][0], -koord_iniz_x[0][0], -koord_iniz_x[0][num_y - 1],
+          -koord_iniz_x[num_x - 1][num_y - 1], -koord_iniz_x[num_x - 1][0]]
+    y2 = [koord_iniz_y[num_x - 1][0], koord_iniz_y[0][0], koord_iniz_y[0][num_y - 1],
+          koord_iniz_y[num_x - 1][num_y - 1], koord_iniz_y[num_x - 1][0]]
+    z2 = [-koord_v[0], -koord_v[1], -koord_v[2], -koord_v[3], -koord_v[0]]
+
+    ax.plot(z2, x2, y2, 'g')
+    ax.plot(z2, x1, y1, 'r')
+    param_v -= d_v
+print("Time", time.time() - start_time)
 plt.show()
 print(dict_igla[0]['t_kon'])
+
+
+for k_l_nos in range():
+    l_nos =
+
+    for k_l_korm in range():
+        l_korm =
+
+        for k_
+
     # plt.plot(koord_nach_x[i], koord_nach_y[i], 'r')
     # plt.plot(koord_iniz_x[i], koord_iniz_y[i], 'g')
 """plt.plot(koord_nach_x[0], koord_nach_y[0], 'r')
