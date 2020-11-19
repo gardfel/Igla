@@ -363,6 +363,11 @@ class Rocket(object):
             m_z_delt_op = cy1_delt_op * (self.x_ct - x_fd_op) / L_f
 
             m_z_alf = cy1_alf * (self.x_ct - x_fa) / L_f
+            h_alf = x_fd_op - 0.333
+            m_sharn_alf = -cy1_alf_op * h_alf / b_a_op
+            h_delt = x_fd_op - 0.333
+            m_sharn_delt = -cy1_delt_op * h_delt / b_a_op
+            m_sharn = m_sharn_alf + m_sharn_delt
 
             da_ball.append(-m_z_alf / m_z_delt_op)
 
@@ -510,7 +515,7 @@ class Rocket(object):
         #print(v_sr / i, t, kk.sqrt((target.y - self.y) ** 2 + (target.x - self.x) ** 2))
         print(jam, "Y_op")
         print('ind =', ind, self.y, self.x)
-        return self.x, self.y, t, n_max, n_y_a, kk.sqrt((target.y - self.y) ** 2 + (target.x - self.x) ** 2)
+        return self.x, self.y, t, n_max, n_y_a, kk.sqrt((target.y - self.y) ** 2 + (target.x - self.x) ** 2), sum(fxx_t), sum(fyy_t), m_sharn
         # return sum(fxx_t), sum(fyy_t)
 
         """plt.plot(tt, cyy_nos)
@@ -796,13 +801,7 @@ h = 6.3 * 10 ** -6  # Примерная высота бугоров на пов
 nu_kor = 0.047 / d  # относительное сужение кормовой части
 l_korm = 0.0463 / d  # относительное удлинение кормовой части
 
-param1 = 0
-p11 = 0
-param2 = 0
-p22 = 0
 
-"""
-igla = Rocket()"""
 v_target_max = 320  # скорость и направление (+ догонный курс, - навстречу) цели
 v_target_min = 120  # скорость и направление (+ догонный курс, - навстречу) цели
 param_x = 6000
@@ -810,7 +809,7 @@ param_y = 3500
 param_v = v_target_max
 num_x = 2
 num_y = 2
-num_v = 9
+num_v = 2
 d_x = (param_x - 500) / (num_x - 1)
 d_y = (param_y - 10) / (num_y - 1)
 d_v = (v_target_max - v_target_min) / (num_v - 1)
@@ -828,11 +827,14 @@ dt = 10 ** -2
 koord_v = [] * 10
 
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+"""fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')"""
 t_in = np.zeros((num_x, num_y))
 dict_igla = []
 # for k_v in tqdm(range(0, num_v)):
+pp1 = []
+pp2 = []
+pp3 = []
 for k_v in range(0, num_v):
     koord_iniz_x = np.zeros((num_x, num_y))
     koord_iniz_y = np.zeros((num_x, num_y))
@@ -853,11 +855,14 @@ for k_v in range(0, num_v):
             # print(param_x, param_y)
             koord_nach_x[i][j] = param_x
             koord_nach_y[i][j] = param_y
-            koord_iniz_x[i][j], koord_iniz_y[i][j], t_in[i][j], n_max_[i][j], n_kon[i][j], rast = igla.navigation(vertel)
+            koord_iniz_x[i][j], koord_iniz_y[i][j], t_in[i][j], n_max_[i][j], n_kon[i][j], rast, fx_t, fy_t, m_shar = igla.navigation(vertel)
             print("Time", time.time() - start_time_var)
+            pp1.append(fx_t)
+            pp2.append(fy_t)
+            pp3.append(m_shar)
             param_y -= d_y
         param_x -= d_x
-    x1 = [koord_nach_x[num_x - 1][0], koord_nach_x[0][0], koord_nach_x[0][num_y - 1],
+    """x1 = [koord_nach_x[num_x - 1][0], koord_nach_x[0][0], koord_nach_x[0][num_y - 1],
           koord_nach_x[num_x - 1][num_y - 1], koord_nach_x[num_x - 1][0]]
     y1 = [koord_nach_y[num_x - 1][0], koord_nach_y[0][0], koord_nach_y[0][num_y - 1],
           koord_nach_y[num_x - 1][num_y - 1], koord_nach_y[num_x - 1][0]]
@@ -869,12 +874,12 @@ for k_v in range(0, num_v):
     z2 = [koord_v[0], koord_v[1], koord_v[2], koord_v[3], koord_v[0]]
 
     ax.plot(z2, x2, y2, 'g')
-    ax.plot(z1, x1, y1, 'r')
+    ax.plot(z1, x1, y1, 'r')"""
     param_v -= d_v
     print(t_in, n_max_, n_kon)
     paramz = {'t_kon': t_in, 'n_max': n_max_, 'n_kon': n_kon}
     dict_igla.append(paramz)
-
+"""
 v_target_min = -120
 v_target_max = -400
 param_x = 9000
@@ -892,9 +897,8 @@ param_x_0 = param_x
 start_time = time.time()
 
 koord_v = [] * 10
-
-
-fig = plt.figure()
+"""
+"""
 for k_v in range(0, num_v):
     koord_iniz_x = np.zeros((num_x, num_y))
     koord_iniz_y = np.zeros((num_x, num_y))
@@ -936,19 +940,264 @@ for k_v in range(0, num_v):
     param_v -= d_v
 print("Time", time.time() - start_time)
 plt.show()
-print(dict_igla[0]['t_kon'])
+print(dict_igla[0]['t_kon'])"""
+
+m_0_w = 7.3
+m_nos = 1.3
+m_0_w_0 = m_0_w
+kritt = []
+l_cil += l_nos
+l_nos = 1
+l_cil -= l_nos
+lambdd = []
+m_0_w = m_0_w - m_nos
+m_nos = m_nos / W_nos
+W_nos = W_nos / L_nos
+
+L_nos = l_nos * 0.072
+W_nos = W_nos * L_nos
+m_nos = m_nos * W_nos
+m_0_w = m_0_w + m_nos
+
+krit_l = []
+
+for k_l_nos in range(0, 19):
+    l_cil += l_nos # относительное удлинение циллиндрической части корпуса
+    if i >= 1:
+        l_nos += 0.1
+    else:
+        l_nos = l_nos
+    l_cil -= l_nos
+    m_0_w = m_0_w - m_nos
+    m_nos = m_nos / W_nos
+    W_nos = W_nos / L_nos
+
+    L_nos = l_nos * 0.072
+    W_nos = W_nos * L_nos
+    m_nos = m_nos * W_nos
+    m_0_w = m_0_w + m_nos
+
+    l_cil += l_korm
+
+    v_target_max = 320  # скорость и направление (+ догонный курс, - навстречу) цели
+    v_target_min = 120  # скорость и направление (+ догонный курс, - навстречу) цели
+    param_x = 6000
+    param_y = 3500
+    param_v = v_target_max
+    num_x = 2
+    num_y = 2
+    num_v = 9
+    d_x = (param_x - 500) / (num_x - 1)
+    d_y = (param_y - 10) / (num_y - 1)
+    d_v = (v_target_max - v_target_min) / (num_v - 1)
+    # vertel = Target(param_x, param_y)
+    param_y_0 = param_y
+    param_x_0 = param_x
+    start_time = time.time()
+
+    koord_iniz_x = np.zeros((num_x, num_y))
+    koord_iniz_y = np.zeros((num_x, num_y))
+    koord_nach_x = np.zeros((num_x, num_y))
+    koord_nach_y = np.zeros((num_x, num_y))
+
+    dt = 10 ** -2
+    koord_v = [] * 10
+
+    t_in = np.zeros((num_x, num_y))
+    dict_igla = []
+    # for k_v in tqdm(range(0, num_v)):
+    v_target_max = 320  # скорость и направление (+ догонный курс, - навстречу) цели
+    v_target_min = 120  # скорость и направление (+ догонный курс, - навстречу) цели
+    param_x = 6000
+    param_y = 3500
+    param_v = v_target_max
+    num_x = 2
+    num_y = 2
+    num_v = 2
+    d_x = (param_x - 500) / (num_x - 1)
+    d_y = (param_y - 10) / (num_y - 1)
+    d_v = (v_target_max - v_target_min) / (num_v - 1)
+    # vertel = Target(param_x, param_y)
+    param_y_0 = param_y
+    param_x_0 = param_x
+    start_time = time.time()
+
+    koord_iniz_x = np.zeros((num_x, num_y))
+    koord_iniz_y = np.zeros((num_x, num_y))
+    koord_nach_x = np.zeros((num_x, num_y))
+    koord_nach_y = np.zeros((num_x, num_y))
+
+    dt = 10 ** -2
+    koord_v = [] * 10
+    krit_ind = 0
+    k_paramz = 0
+    for k_v in range(0, num_v):
+        koord_iniz_x = np.zeros((num_x, num_y))
+        koord_iniz_y = np.zeros((num_x, num_y))
+        koord_nach_x = np.zeros((num_x, num_y))
+        koord_nach_y = np.zeros((num_x, num_y))
+        t_in = np.zeros((num_x, num_y))
+        n_max_ = np.zeros((num_x, num_y))
+        n_kon = np.zeros((num_x, num_y))
+        param_x = param_x_0
+        koord_v = []
+        for i in range(0, num_x):
+            param_y = param_y_0
+            for j in range(0, num_y):
+                koord_v.append(param_v)
+                vertel = Target(param_x, param_y, param_v)
+                start_time_var = time.time()
+                igla = Rocket(vertel.y, vertel.x)
+                # print(param_x, param_y)
+                koord_nach_x[i][j] = param_x
+                koord_nach_y[i][j] = param_y
+                koord_iniz_x[i][j], koord_iniz_y[i][j], t_in[i][j], n_max_[i][j], n_kon[i][j], rast, Sfx, Sfy, m_shar = igla.navigation(
+                    vertel)
+                print("Time", time.time() - start_time_var)
+                krit_ind += (m_0_w / m_0_w_0) ** (-2) * (Sfy / pp2[k_paramz]) ** (2) * (Sfx / pp1[k_paramz]) ** (-4) * (m_shar / pp3[k_paramz]) ** (-2)
+                k_paramz += 1
+                param_y -= d_y
+            param_x -= d_x
+
+        param_v -= d_v
+        print(t_in, n_max_, n_kon)
+        paramz = {'t_kon': t_in, 'n_max': n_max_, 'n_kon': n_kon}
+        dict_igla.append(paramz)
+    krit_l.append(krit_ind / k_paramz)
+    print(krit_l)
+    lambdd.append(l_nos)
+
+plt.plot(lambdd, krit_l)
+plt.grid(True)
+plt.show()
+krit_max = 0
+for i in range(len(krit_l)):
+    if krit_l[i] >= krit_max:
+        l_nos_par = 1 + 0.1 * i
+        krit_max = krit_l[i]
+l_cil += l_nos
+l_cil -= l_nos_par
+m_0_w = m_0_w - m_nos
+m_nos = m_nos / W_nos
+W_nos = W_nos / L_nos
+
+L_nos = l_nos_par * 0.072
+W_nos = W_nos * L_nos
+m_nos = m_nos * W_nos
+m_0_w = m_0_w + m_nos
+l_nos = l_nos_par
+
+krit_korm = []
+lambd_k = []
+l_korm = 0.278
+for k_l_korm in range(0, 19):
+    l_cil += l_korm
+    if i >= 1:
+        l_korm += 0.05
+    else:
+        l_korm = l_korm
+    l_cil -= l_korm
+
+    v_target_max = 320  # скорость и направление (+ догонный курс, - навстречу) цели
+    v_target_min = 120  # скорость и направление (+ догонный курс, - навстречу) цели
+    param_x = 6000
+    param_y = 3500
+    param_v = v_target_max
+    num_x = 2
+    num_y = 2
+    num_v = 9
+    d_x = (param_x - 500) / (num_x - 1)
+    d_y = (param_y - 10) / (num_y - 1)
+    d_v = (v_target_max - v_target_min) / (num_v - 1)
+    # vertel = Target(param_x, param_y)
+    param_y_0 = param_y
+    param_x_0 = param_x
+    start_time = time.time()
+
+    koord_iniz_x = np.zeros((num_x, num_y))
+    koord_iniz_y = np.zeros((num_x, num_y))
+    koord_nach_x = np.zeros((num_x, num_y))
+    koord_nach_y = np.zeros((num_x, num_y))
+
+    dt = 10 ** -2
+    koord_v = [] * 10
+
+    t_in = np.zeros((num_x, num_y))
+    dict_igla = []
+    # for k_v in tqdm(range(0, num_v)):
+    v_target_max = 320  # скорость и направление (+ догонный курс, - навстречу) цели
+    v_target_min = 120  # скорость и направление (+ догонный курс, - навстречу) цели
+    param_x = 6000
+    param_y = 3500
+    param_v = v_target_max
+    num_x = 2
+    num_y = 2
+    num_v = 2
+    d_x = (param_x - 500) / (num_x - 1)
+    d_y = (param_y - 10) / (num_y - 1)
+    d_v = (v_target_max - v_target_min) / (num_v - 1)
+    # vertel = Target(param_x, param_y)
+    param_y_0 = param_y
+    param_x_0 = param_x
+    start_time = time.time()
+
+    koord_iniz_x = np.zeros((num_x, num_y))
+    koord_iniz_y = np.zeros((num_x, num_y))
+    koord_nach_x = np.zeros((num_x, num_y))
+    koord_nach_y = np.zeros((num_x, num_y))
+
+    dt = 10 ** -2
+    koord_v = [] * 10
+    krit_ind = 0
+    k_paramz = 0
+    for k_v in range(0, num_v):
+        koord_iniz_x = np.zeros((num_x, num_y))
+        koord_iniz_y = np.zeros((num_x, num_y))
+        koord_nach_x = np.zeros((num_x, num_y))
+        koord_nach_y = np.zeros((num_x, num_y))
+        t_in = np.zeros((num_x, num_y))
+        n_max_ = np.zeros((num_x, num_y))
+        n_kon = np.zeros((num_x, num_y))
+        param_x = param_x_0
+        koord_v = []
+        for i in range(0, num_x):
+            param_y = param_y_0
+            for j in range(0, num_y):
+                koord_v.append(param_v)
+                vertel = Target(param_x, param_y, param_v)
+                start_time_var = time.time()
+                igla = Rocket(vertel.y, vertel.x)
+                # print(param_x, param_y)
+                koord_nach_x[i][j] = param_x
+                koord_nach_y[i][j] = param_y
+                koord_iniz_x[i][j], koord_iniz_y[i][j], t_in[i][j], n_max_[i][j], n_kon[i][
+                    j], rast, Sfx, Sfy, m_shar = igla.navigation(
+                    vertel)
+                print("Time", time.time() - start_time_var)
+                krit_ind += (m_0_w / m_0_w_0) ** (-2) * (Sfy / pp2[k_paramz]) ** (2) * (Sfx / pp1[k_paramz]) ** (-4) * (
+                            m_shar / pp3[k_paramz]) ** (-2)
+                k_paramz += 1
+                param_y -= d_y
+            param_x -= d_x
+
+        param_v -= d_v
+        print(t_in, n_max_, n_kon)
+        paramz = {'t_kon': t_in, 'n_max': n_max_, 'n_kon': n_kon}
+        dict_igla.append(paramz)
+    krit_korm.append(krit_ind / k_paramz)
+    print(krit_l)
+    lambd_k.append(l_korm)
+
+plt.plot(lambd_k, krit_korm)
+plt.grid(True)
+plt.show()
+# for k_l_kr in range(0, 10):
 
 
-for k_l_nos in range():
-    l_nos =
 
-    for k_l_korm in range():
-        l_korm =
 
-        for k_
-
-    # plt.plot(koord_nach_x[i], koord_nach_y[i], 'r')
-    # plt.plot(koord_iniz_x[i], koord_iniz_y[i], 'g')
+# plt.plot(koord_nach_x[i], koord_nach_y[i], 'r')
+# plt.plot(koord_iniz_x[i], koord_iniz_y[i], 'g')
 """plt.plot(koord_nach_x[0], koord_nach_y[0], 'r')
 plt.plot(koord_iniz_x[0], koord_iniz_y[0], 'g')
 plt.plot(koord_nach_x[num_x - 1], koord_nach_y[num_x - 1], 'r')
