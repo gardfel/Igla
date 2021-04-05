@@ -380,7 +380,7 @@ def graph_test_5_11():
 # graph_test_3_5()
 # graph_test_3_21()
 # graph_test_3_22()
-# graph_test_4_2()
+graph_test_4_2()
 # graph_test_4_3()
 # graph_test_4_11()
 # graph_test_4_13()

@@ -1711,6 +1711,8 @@ def tab_4_32(*args):
         k = int(razmm // 0.25 + 1)
         if k >= 10:
             k = 10
+        elif k <= 0:
+            k = 0
         fi = interpol(fi_tab[k], fi_tab[k - 1], procent(razmm, razm[k - 1], razm[k]))
         return fi
 
@@ -2155,6 +2157,38 @@ def tab_int_ver(*args):
         return 0.99999
 
     return interpol(F_x[k], F_x[k - 1], procent(x, xx[k - 1], xx[k]))
+
+
+def tab_pi_H(*args):
+
+    """
+    вывод удельной нагрузки на крыло
+    :param args: высота
+    :return:
+    """
+
+    H = args[0]
+
+    p_ud = [500, 400, 300, 250, 200, 150, 100]
+    H_tab = [1, 5, 10, 20, 25, 30, 35]
+
+    if H <= 1:
+        return p_ud[0]
+    elif H <= 5:
+        return interpol(p_ud[1], p_ud[0], procent(H, H_tab[0], H_tab[1]))
+    elif H <= 10:
+        return interpol(p_ud[2], p_ud[1], procent(H, H_tab[1], H_tab[2]))
+    elif H <= 20:
+        return interpol(p_ud[3], p_ud[2], procent(H, H_tab[2], H_tab[3]))
+    elif H <= 25:
+        return interpol(p_ud[4], p_ud[3], procent(H, H_tab[3], H_tab[4]))
+    elif H <= 30:
+        return interpol(p_ud[5], p_ud[4], procent(H, H_tab[4], H_tab[5]))
+    elif H <= 35:
+        return interpol(p_ud[6], p_ud[5], procent(H, H_tab[5], H_tab[6]))
+    else:
+        return p_ud[6]
+
 
 
 cy1iz = np.array([[-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6],

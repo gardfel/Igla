@@ -1282,7 +1282,7 @@ W_korm = 0.114 * S_dn + 0.000136  # объем кормовой части
 S_f = kk.pi * d ** 2 / 4  # площадь миделевого сечения корпуса
 Ff = 0.3619  # площадь обтекаемой потоком поверхности корпуса (без донного среза)
 Sf = kk.pi * (d ** 2) / 4  # площадь миделя
-f_t = 0.045216
+f_t = 0.045216  #
 
 l_cil_nas = 45.5 / 8  # относительное удлинение циллиндрической части АД насадка
 l_nos_nas = 12.5 / 8  # относительное удлинение носовой части АД насадка
@@ -1555,88 +1555,66 @@ for k_l_nos in tqdm(range(0, 19)):
     m_nos = m_nos * W_nos
     m_0_w = m_0_w + m_nos
 
-    l_cil += l_korm
 
-    l_korm = 0.278
-    krit_korm = []
-    lambd_k = []
-    print("l_korm:")
-    for k_l_korm in tqdm(range(0, 19)):
-        l_cil += l_korm
-        if i >= 1:
-            l_korm += 0.05
-        else:
-            l_korm = l_korm
-        l_cil -= l_korm
 
+    koord_iniz_x = np.zeros((num_x, num_y))
+    koord_iniz_y = np.zeros((num_x, num_y))
+    koord_nach_x = np.zeros((num_x, num_y))
+    koord_nach_y = np.zeros((num_x, num_y))
+
+    t_in = np.zeros((num_x, num_y))
+    dict_igla = []
+
+    v_target_max = 320  # скорость и направление (+ догонный курс, - навстречу) цели
+    v_target_min = 120  # скорость и направление (+ догонный курс, - навстречу) цели
+    param_x = 6000
+    param_y = 3500
+    param_v = v_target_max
+    num_x = 2
+    num_y = 2
+    num_v = 2
+    d_x = (param_x - 500) / (num_x - 1)
+    d_y = (param_y - 10) / (num_y - 1)
+    d_v = (v_target_max - v_target_min) / (num_v - 1)
+    param_y_0 = param_y
+    param_x_0 = param_x
+    start_time = time.time()
+
+    koord_iniz_x = np.zeros((num_x, num_y))
+    koord_iniz_y = np.zeros((num_x, num_y))
+    koord_nach_x = np.zeros((num_x, num_y))
+    koord_nach_y = np.zeros((num_x, num_y))
+
+    koord_v = [] * 10
+    krit_ind = 0
+    k_paramz = 0
+    for k_v in range(0, num_v):
         koord_iniz_x = np.zeros((num_x, num_y))
         koord_iniz_y = np.zeros((num_x, num_y))
         koord_nach_x = np.zeros((num_x, num_y))
         koord_nach_y = np.zeros((num_x, num_y))
-
         t_in = np.zeros((num_x, num_y))
-        dict_igla = []
+        n_max_ = np.zeros((num_x, num_y))
+        n_kon = np.zeros((num_x, num_y))
+        param_x = param_x_0
+        koord_v = []
+        for i in range(0, num_x):
+            param_y = param_y_0
+            for j in range(0, num_y):
+                koord_v.append(param_v)
+                vertel = Target(param_x, param_y, param_v)
+                start_time_var = time.time()
+                igla = Rocket(vertel.y, vertel.x)
+                koord_nach_x[i][j] = param_x
+                koord_nach_y[i][j] = param_y
+                koord_iniz_x[i][j], koord_iniz_y[i][j], t_in[i][j], n_max_[i][j], n_kon[i][j], rast, Sfx, Sfy, m_shar = igla.navigation(
+                    vertel)
+                krit_ind += krit_maxi(m_0_w, Sfy, Sfx)
+                k_paramz += 1
+                param_y -= d_y
+            param_x -= d_x
+        param_v -= d_v
 
-        v_target_max = 320  # скорость и направление (+ догонный курс, - навстречу) цели
-        v_target_min = 120  # скорость и направление (+ догонный курс, - навстречу) цели
-        param_x = 6000
-        param_y = 3500
-        param_v = v_target_max
-        num_x = 2
-        num_y = 2
-        num_v = 2
-        d_x = (param_x - 500) / (num_x - 1)
-        d_y = (param_y - 10) / (num_y - 1)
-        d_v = (v_target_max - v_target_min) / (num_v - 1)
-        param_y_0 = param_y
-        param_x_0 = param_x
-        start_time = time.time()
-
-        koord_iniz_x = np.zeros((num_x, num_y))
-        koord_iniz_y = np.zeros((num_x, num_y))
-        koord_nach_x = np.zeros((num_x, num_y))
-        koord_nach_y = np.zeros((num_x, num_y))
-
-        koord_v = [] * 10
-        krit_ind = 0
-        k_paramz = 0
-        for k_v in range(0, num_v):
-            koord_iniz_x = np.zeros((num_x, num_y))
-            koord_iniz_y = np.zeros((num_x, num_y))
-            koord_nach_x = np.zeros((num_x, num_y))
-            koord_nach_y = np.zeros((num_x, num_y))
-            t_in = np.zeros((num_x, num_y))
-            n_max_ = np.zeros((num_x, num_y))
-            n_kon = np.zeros((num_x, num_y))
-            param_x = param_x_0
-            koord_v = []
-            for i in range(0, num_x):
-                param_y = param_y_0
-                for j in range(0, num_y):
-                    koord_v.append(param_v)
-                    vertel = Target(param_x, param_y, param_v)
-                    start_time_var = time.time()
-                    igla = Rocket(vertel.y, vertel.x)
-                    koord_nach_x[i][j] = param_x
-                    koord_nach_y[i][j] = param_y
-                    koord_iniz_x[i][j], koord_iniz_y[i][j], t_in[i][j], n_max_[i][j], n_kon[i][j], rast, Sfx, Sfy, m_shar = igla.navigation(
-                        vertel)
-                    krit_ind += krit_maxi(m_0_w, Sfy, Sfx)
-                    k_paramz += 1
-                    param_y -= d_y
-                param_x -= d_x
-            param_v -= d_v
-        krit_korm.append(krit_ind / k_paramz)
-        lambd_k.append(l_korm)
-    for i in range(len(krit_korm)):
-        if krit_korm[i] >= krit_max:
-            l_korm_par = lambd_k[i]
-            krit_max = krit_korm[i]
-    l_cil += l_korm
-    l_cil -= l_korm_par
-
-    l_korm = l_korm_par
-    print("l_korm", l_korm, "l_cil", l_cil)
     krit_l.append(krit_ind / k_paramz)
     lambdd.append(l_nos)
 
