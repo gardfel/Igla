@@ -79,29 +79,32 @@ class Rocket(object):
 
         #
 
+        def navigation(self, *args):
+
         # вычисление формы крыльев:
+
         c_kr = 0.03  # относительная толщина профиля крыла
-        l_kr = L_kr ** 2 / S_kr  # относительное удлинение крыльев
-        nu_kr = ((S_kr / (L_kr * b_0_kr) - 0.5) ** (-1) / 2)  # относительное сужение крыльев
-        b_1_kr = b_0_kr / nu_kr  # концевая хорда крыльев
-        b_a_kr = 4 / 3 * S_kr / L_kr * (1 - (nu_kr / (nu_kr + 1) ** 2))  # САХ
-        z_a_kr = L_kr / 6 * ((nu_kr + 2) / (nu_kr + 1))  # расстояние от САХ до оси ЛА
-        b_kr = b_0_kr * (1 - (nu_kr - 1) / nu_kr * d_korm / L_kr)  # бортовая хорда крыльев
-        S_k_kr = S_kr * (1 - ((nu_kr - 1) / (nu_kr + 1)) * d_korm / L_kr) * (
-                    1 - d_korm / L_kr)  # площадь консолей крыльев
-        l_k_kr = l_kr * ((1 - d_korm / L_kr) / (
-                    1 - ((nu_kr - 1) / (nu_kr + 1) * d_korm / L_kr)))  # относительное удлинение консолей
-        L_k_kr = L_kr - d_korm  # размах консолей крыльев
-        nu_k_kr = nu_kr - d_korm / L_kr * (nu_kr - 1)
-        tan_05_kr = tan_1_kr + 2 / l_k_kr * (nu_k_kr - 1) / (nu_k_kr + 1)  # средняя стреловидность
-        b_a_k_kr = 4 / 3 * S_k_kr / L_k_kr * (1 - nu_k_kr / (nu_k_kr + 1) ** 2)  # САХ консоли
-        z_a_k_kr = L_k_kr / 6 * (nu_k_kr + 2) / (nu_k_kr + 1)
+        l_kr = self.L_kr ** 2 / self.S_kr  # относительное удлинение крыльев
+        nu_kr = ((self.S_kr / (self.L_kr * srlf.b_0_kr) - 0.5) ** (-1) / 2)  # относительное сужение крыльев
+        b_1_kr = self.b_0_kr / nu_kr  # концевая хорда крыльев
+        b_a_kr = 4 / 3 * self.S_kr / self.L_kr * (1 - (nu_kr / (nu_kr + 1) ** 2))  # САХ
+        z_a_kr = self.L_kr / 6 * ((nu_kr + 2) / (nu_kr + 1))  # расстояние от САХ до оси ЛА
+        b_kr = self.b_0_kr * (1 - (nu_kr - 1) / nu_kr * d_korm / selfL_kr)  # бортовая хорда крыльев
+        S_k_kr = self.S_kr * (1 - ((nu_kr - 1) / (nu_kr + 1)) * d_korm / self.L_kr) * (
+                    1 - d_korm / self.L_kr)  # площадь консолей крыльев
+        l_k_kr = l_kr * ((1 - d_korm / self.L_kr) / (
+                    1 - ((nu_kr - 1) / (nu_kr + 1) * d_korm / self.L_kr)))  # относительное удлинение консолей
+        L_k_kr = self.L_kr - d_korm  # размах консолей крыльев
+        nu_k_kr = nu_kr - d_korm / self.L_kr * (nu_kr - 1)
+        tan_05_kr = self.tan_1_kr + 2 / l_k_kr * (nu_k_kr - 1) / (nu_k_kr + 1)  # средняя стреловидность
+        b_a_k_kr = 4 / 3 * self.S_k_kr / self.L_k_kr * (1 - nu_k_kr / (nu_k_kr + 1) ** 2)  # САХ консоли
+        z_a_k_kr = self.L_k_kr / 6 * (nu_k_kr + 2) / (nu_k_kr + 1)
 
         # вычисление формы рулей:
 
-        l_op = L_op ** 2 / S_op
+        l_op = self.L_op ** 2 / self.S_op
         c_op = 0.03  # относительная толщина профиля оперения
-        tan_05_op = tan_0_op - 2 / l_op * (nu_op - 1) / (nu_op + 1)
+        tan_05_op = self.tan_0_op - 2 / l_op * (nu_op - 1) / (nu_op + 1)
 
         l_korp = L_f / d  # относительное удлинение корпуса
 
@@ -112,7 +115,6 @@ class Rocket(object):
         l_cil = l_korp - 160 / 72 - l_nos  # относительное удлинение циллиндрической части корпуса
         x_otn_op_kr = 0.846 / b_a_k_kr  # относительное расстояние между оперением и средней хордой крыльев
 
-    def navigation(self, *args):
 
         a = 249.7
         a1 = 29
