@@ -64,23 +64,23 @@ class Rocket(object):
         self.q = 0
 
         # крылья:
-        L_kr = args[2]
-        S_kr = args[3]
-        b_0_kr = args[4]
-        tan_1_kr = args[5]
+        self.L_kr = args[2]
+        self.S_kr = args[3]
+        self.b_0_kr = args[4]
+        self.tan_1_kr = args[5]
         # рули:
-        L_op = args[6]
-        S_op = args[7]
-        b_0_op = args[8]
-        tan_0_op = args[9]
+        self.L_op = args[6]
+        self.S_op = args[7]
+        self.b_0_op = args[8]
+        self.tan_0_op = args[9]
         # нососвая часть:
-        L_nos = args[10]
+        self.L_nos = args[10]
         # кормовая часть:
 
         #
 
         # вычисление формы крыльев:
-        self.c_kr = 0.03  # относительная толщина профиля крыла
+        c_kr = 0.03  # относительная толщина профиля крыла
         self.l_kr = L_kr ** 2 / S_kr  # относительное удлинение крыльев
         self.nu_kr = ((S_kr / (L_kr * b_0_kr) - 0.5) ** (-1) / 2)  # относительное сужение крыльев
         self.b_1_kr = b_0_kr / nu_kr  # концевая хорда крыльев
