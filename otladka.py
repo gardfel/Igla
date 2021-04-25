@@ -4,8 +4,10 @@ import Aero
 import math as kk
 import matplotlib.pyplot as plt
 import time
-import numpy
+import numpy as np
 import scipy
+
+# gg = np.array([0.146, 0.0146, 0.12, 0, 0.015, 0.25, 0.00786, 0.033, 0, 0.35, 0.0974, 0.050, 0.160])
 
 
 """x = time.time()
@@ -122,7 +124,7 @@ Cy = Tabl.interpol(Tabl.interpol(Cy_iz[jj][k], Cy_iz[jj][k - 1], Tabl.procent(ra
 print("new", Cy)
 print("old ", Tabl.tab_3_2(M, l_nos, l_cil))
 '''
-# Корпус:
+"""# Корпус:
 # const:
 
 d = 0.072
@@ -210,3 +212,68 @@ print(b_op)
 print(b_1_op)
 print(nu_op)
 print(l_op)
+
+# Вычисление координат крыльев и оперения
+L_f = 1.626  # длина корпуса
+L_hv_kr = 0.015  # Расстояние от конца бортовой хорды крыла до кормового среза
+L1_op = 0.35  # Расстояние от носика корпуса до серидины бортовой хорды оперения
+
+
+L1_kr = L_f - L_hv_kr - b_kr / 2  # расстояние от носика корпуса до середины бортовой хорды крыла
+x_b_kr = L_f - L_hv_kr - b_kr  # координата начала бортовой хорды крыла
+# координата начала САХ крыла:
+if tan_1_kr == 0:
+    x_b_a_kr = L_f - b_a_k_kr - L_hv_kr
+else:
+    x_b_a_kr = L_f - b_a_k_kr - (z_a_k_kr - d / 2) / tan_1_kr - L_hv_kr
+
+print(L1_kr, x_b_kr, x_b_a_kr)
+
+
+x_b_op = L1_op - b_op / 2  # координата начала бортовой хорды оперения
+L_hv_op = L_f - L1_op + b_op / 2  # расстояние от конца бортовой хорды оперения до кормового среза
+
+# координата начала САХ крыла:
+if tan_0_op == 0:
+    x_b_a_op = x_b_op
+else:
+    x_b_a_op = x_b_op + (z_a_k_op - d / 2) / tan_0_op
+x_c_pl_ba = x_b_a_op + b_a_k_op / 2  # координата ЦТ площади передних консолей (середина САХ консолей)
+print(x_b_op, L_hv_op, x_b_a_op, x_c_pl_ba)"""
+
+chromosom = 6
+params_kr = np.zeros((chromosom, 5))
+print(params_kr)
+params_op = np.zeros((chromosom, 5))
+print(params_op)
+
+#params_kr = np.array([[0.096, 0.008912, 0.10568, 0, 0.015],
+#                     [0.04, 0.0022, 0.065, 0, 0.015],
+#                     [0.115, 0.010564, 0.105, 0, 0.015],
+#                     [0.098, 0.00917336, 0.10568, 0, 0.015]])
+
+# ограничение по длине: 0.04...0.115
+# ограничение по площади: 0.002336 ... 0.010564
+# ограничение по бортовой хорде: 0.065 ... 0.105
+# ограничение по расстоянию до кормового среза: 0.0 ... 0.032
+
+# ограничение по длине: 0.05...0.18
+# ограничение по площади: 0.002 ... 0.0052
+# ограничение по корневой хорде: 0.02 ... 0.034
+# ограничение по расстоянию от носика: 0.328 ... 0.0356
+for i in range(chromosom):
+    params_kr[i][0] = random.uniform(0.04, 0.115)
+    params_kr[i][1] = random.uniform(0.002336, 0.010564)
+    params_kr[i][2] = random.uniform(0.065, 0.105)
+    params_kr[i][4] = random.uniform(0, 0.032)
+
+    params_op[i][0] = random.uniform(0.05, 0.18)
+    params_op[i][1] = random.uniform(0.002, 0.0052)
+    params_op[i][2] = random.uniform(0.02, 0.034)
+    params_op[i][4] = random.uniform(0.328, 0.0356)
+
+print(params_kr)
+print(params_op)
+
+
+
