@@ -122,8 +122,12 @@ def tab_3_4(*args):
     else:
         razmm = -kk.sqrt(1 - mah ** 2) / lambd_cil
 
-    k = int(razmm // 0.1 + 5)
 
+    k = int(razmm // 0.1 + 5)
+    if k >= 14:
+        k = 14
+    if k <= 1:
+        k = 1
     if krit == 0:
         cy1 = interpol(cy1iz_sph[k], cy1iz_sph[k - 1], procent(razmm, razm[k - 1], razm[k]))
     elif krit == 1:
@@ -639,7 +643,8 @@ def tab_3_16(*args):
                             k = i
                 z_v = interpol(z_v_2_2[1][k + 1], z_v_2_2[1][k], procent(razm, z_v_2_2[0][k], z_v_2_2[0][k + 1]))
 
-    elif nu <= 1000:
+
+    else:
         if param == 0:
             for i in range(len(z_v_2_0) - 1):
                 if razm >= z_v_2_0[0][i]:

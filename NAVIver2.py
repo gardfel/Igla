@@ -598,8 +598,8 @@ class Rocket(object):
         #print(jam, "Y_op")
         #print('ind =', ind, self.y, self.x)
         if fin_ch <= 0:
-            print(sum(fxx_t), sum(fyy_t), sum(da_ball) / ind)
-            return krit_maxi(self.m0, sum(fyy_t), sum(fxx_t), sum(da_ball) / ind)
+            print(sum(fxx_t)/ind, sum(fyy_t)/ind, sum(da_ball) / ind)
+            return krit_maxi(self.m0, sum(fyy_t)/ind, sum(fxx_t)/ind, sum(da_ball) / ind)
         else:
             plt.plot(tt, f_yy_exp, 'r', label = 'Подъемная сила')
             plt.plot(tt, f_xx_exp, 'g', label = 'Сила лобового сопротивления')
@@ -751,12 +751,12 @@ def krit_maxi(m_0_w, Sfy, Sfx, dealf):
 
 
 fin_ch = 0
-dt = 10 ** -3
+dt = 10 ** -2
 g = 9.80665
 h = 6.3 * 10 ** -6  # Примерная высота бугоров на поверхности корпуса (в зависимости от класса чистоты) (для 7-го)
 m_0_w_0 = 7.3
-pp1 = [5725]
-pp2 = [4506]
+pp1 = [0.5289038465393716]
+pp2 = [0.4127488674733952]
 pp3 = [5.547746942079459]  # среднее значение отношения delta/alf
 
 # параметры для метода наведения:
