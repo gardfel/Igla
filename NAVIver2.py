@@ -161,7 +161,7 @@ class Rocket(object):
         if self.tan_0_op == 0:
             x_b_a_op = x_b_op
         else:
-            x_b_a_op = x_b_op + (z_a_k_op - d / 2) / self.tan_0_op
+            x_b_a_op = x_b_op + (z_a_k_op - self.d / 2) / self.tan_0_op
         x_c_pl_ba = x_b_a_op + b_a_k_op / 2  # координата ЦТ площади передних консолей (середина САХ консолей)
 
 
